@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoo Arcadia - Habitats</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+        .content {
+            flex: 1;
+        }
+        .habitat-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .habitat-item {
+            margin: 10px;
+            text-align: center;
+        }
+        .habitat-item img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        .habitat-item img:hover {
+            transform: scale(1.05);
+        }
+        .animals-table {
+            margin-top: 20px;
+        }
+        footer {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-success text-white text-center py-3">
+        <h1>Nos Habitats</h1>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="habitats.html">Habitats</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html">Connexion</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="content">
+        <main class="container mt-5">
+            <div class="habitat-container">
+                <!-- Les habitats seront insérés ici -->
+            </div>
+            <table id="animals-table" class="table animals-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th>Santé</th>
+                        <th>Poids</th>
+                        <th>Nourriture</th>
+                        <th>Quantité</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Les animaux seront insérés ici -->
+                </tbody>
+            </table>
+        </main>
+    </div>
+    <footer>
+        <p>© 2024 Zoo Arcadia. Tous droits réservés.</p>
+    </footer>
+
+    <!-- Lien vers jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Lien vers Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <!-- Lien vers le fichier JavaScript de Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        const baseURL = 'http://localhost:3002/api/habitats'; // Base URL pour les requêtes API
+        const imagesBaseURL = '/pictures'; // URL relative pour les images
+
+        // Fonction pour afficher les habitats
+        async function fetchHabitats() {
+            try {
+                const response = await fetch(baseURL);
+                if (!response.ok) throw new Error('Erreur réseau');
+                const habitats = await response.json();
+
+                const habitatContainer = document.querySelector('.habitat-container');
+                habitatContainer.innerHTML = ''; // Vider le conteneur avant d'ajouter les nouvelles données
+
+                habitats.forEach(habitat => {
+                    const habitatElement = document.createElement('div');
+                    habitatElement.className = 'habitat-item';
+                    habitatElement.innerHTML = `
+                        <img src="${imagesBaseURL}/${habitat.image.split('/').pop()}" alt="${habitat.nom}" data-habitat="${habitat.nom}">
+                        <h3>${habitat.nom}</h3>
+                    `;
+                    habitatContainer.appendChild(habitatElement);
+                });
+
+                // Ajouter les écouteurs d'événements après avoir ajouté les éléments
+                document.querySelectorAll('.habitat-item img').forEach(img => {
+                    img.addEventListener('click', function() {
+                        const habitatName = this.dataset.habitat;
+                        fetchAnimalsForHabitat(habitatName);
+                    });
+                });
+
+            } catch (error) {
+                console.error('Erreur lors de la récupération des habitats:', error);
+            }
+        }
+
+        // Fonction pour afficher les animaux pour un habitat donné
+        async function fetchAnimalsForHabitat(habitatName) {
+            try {
+                const response = await fetch(`${baseURL}/${encodeURIComponent(habitatName)}`);
+                if (!response.ok) throw new Error('Erreur réseau');
+                const habitat = await response.json();
+
+                const animalsTableBody = document.querySelector('#animals-table tbody');
+                animalsTableBody.innerHTML = ''; // Vider le tableau avant d'ajouter les nouvelles données
+
+                habitat.animaux.forEach(animal => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><img src="${imagesBaseURL}/${animal.url.split('/').pop()}" alt="${animal.nom}" style="width: 100px;"></td>
+                        <td>${animal.nom}</td>
+                        <td>${animal.description || 'N/A'}</td>
+                        <td>${animal.sante || 'N/A'}</td>
+                        <td>${animal.poids || 'N/A'} kg</td>
+                        <td>${animal.nourriture || 'N/A'}</td>
+                        <td>${animal.quantite || 'N/A'}</td>
+                    `;
+                    animalsTableBody.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error('Erreur lors de la récupération des animaux pour l\'habitat:', error);
+            }
+        }
+
+        // Charger les habitats lors du chargement de la page
+        document.addEventListener('DOMContentLoaded', fetchHabitats);
+    </script>
+</body>
+</html>
