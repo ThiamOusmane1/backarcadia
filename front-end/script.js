@@ -1,6 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Variables pour le carrousel
+    let slideIndex = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+        const slidesContainer = document.querySelector('.carousel-slides');
+        slideIndex = (index + totalSlides) % totalSlides;
+        slidesContainer.style.transform = `translateX(-${slideIndex * 100}%)`;
+    }
+
+    document.getElementById('prevButton')?.addEventListener('click', () => {
+        showSlide(slideIndex - 1);
+    });
+
+    document.getElementById('nextButton')?.addEventListener('click', () => {
+        showSlide(slideIndex + 1);
+    });
+
+    // Optionnel: faire défiler automatiquement
+    setInterval(() => {
+        showSlide(slideIndex + 1);
+    }, 5000);
     const animalGallery = document.getElementById('animal-gallery');
-    const habitatsCardsDiv = document.getElementById('habitats-list');
+    //const habitatsCardsDiv = document.getElementById('habitats-list');
 
     // Fonction pour récupérer les animaux d'un habitat
     function fetchAnimals(habitatName) {
@@ -12,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(data => {
-                animalGallery.innerHTML = ''; // Clear previous results
+                animalGallery.innerHTML = ''; 
                 
                 if (data.length === 0) {
                     animalGallery.innerHTML = '<p>Aucun animal trouvé pour cet habitat.</p>';
@@ -39,11 +62,43 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Ajouter des écouteurs d'événements aux cartes d'habitats
+    // écouteurs d'événements aux cartes d'habitats
     document.querySelectorAll('.ha-card').forEach(card => {
         card.addEventListener('click', () => {
             const habitatName = card.getAttribute('data-habitat');
             fetchAnimals(habitatName);
         });
     });
+// Gestion du formulaire de connexion
+document.getElementById('loginForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault(); // Empêche le formulaire de se soumettre normalement
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Sauvegarder le token dans le stockage local ou les cookies
+            localStorage.setItem('token', data.token);
+            
+            // Redirection vers la page dashboard
+            window.location.href = '/dashboard.html';
+        } else {
+            alert(data.message || 'Erreur de connexion');
+        }
+    } catch (error) {
+        console.error('Erreur lors de la connexion:', error);
+        alert('Erreur serveur');
+    }
+});
 });

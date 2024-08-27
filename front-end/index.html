@@ -4,89 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zoo Arcadia - Accueil</title>
-    <!-- Lien vers le fichier CSS de Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Votre fichier CSS personnalisé -->
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            background: url('pictures/alpaca-7169208_640.jpg') no-repeat center center fixed;
-            background-size: cover;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            margin: 0;
-        }
-
-        main {
-            flex: 1;
-        }
-
-        .carousel-container {
-            position: relative;
-            width: 80%;
-            max-width: 800px;
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 10px;
-            background-color: rgba(0, 0, 0, 0.7); /* Fond légèrement opaque */
-        }
-
-        .carousel-slides {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .carousel-slide {
-            min-width: 100%;
-            box-sizing: border-box;
-            padding: 20px;
-            color: white;
-            text-align: center;
-        }
-
-        .carousel-footer {
-            margin-top: 10px;
-            font-style: italic;
-        }
-
-        .carousel-controls {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-        }
-
-        .carousel-button {
-            background-color: #28a745; /* Couleur verte de Bootstrap */
-            border: none;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 50%;
-            transition: background-color 0.3s;
-        }
-
-        .carousel-button:hover {
-            background-color: #218838; /* Teinte plus foncée au survol */
-        }
-
-        .carousel-button:focus {
-            outline: none; /* Retire le contour par défaut */
-        }
-
-        footer {
-            background-color: rgba(0, 0, 0, 0.6);
-            text-align: center;
-            padding: 10px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="bg-success text-white text-center py-3">
@@ -149,45 +68,16 @@
                 </div>
             </div>
         </section>
-
-        <a href="index.html" class="bg-success text-white btn">Retour</a>
     </main>
     
     <footer class="bg-success text-white text-center py-3">
         <p>© 2024 Zoo Arcadia. Tous droits réservés.</p>
     </footer>
 
-    <!-- Lien vers jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <!-- Lien vers Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <!-- Lien vers le fichier JavaScript de Bootstrap -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script>
-        let slideIndex = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
-        const totalSlides = slides.length;
-
-        function showSlide(index) {
-            const slidesContainer = document.querySelector('.carousel-slides');
-            slideIndex = (index + totalSlides) % totalSlides;
-            slidesContainer.style.transform = `translateX(-${slideIndex * 100}%)`;
-        }
-
-        document.getElementById('prevButton').addEventListener('click', () => {
-            showSlide(slideIndex - 1);
-        });
-
-        document.getElementById('nextButton').addEventListener('click', () => {
-            showSlide(slideIndex + 1);
-        });
-
-        // Optionnel: faire défiler automatiquement
-        setInterval(() => {
-            showSlide(slideIndex + 1);
-        }, 5000); // Change slide every 5 seconds
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
 

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const { authenticateToken, authorizeRoles } = require('./routes/auth');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
@@ -87,7 +88,7 @@ function authMiddleware(req, res, next) {
 }
 
 // Protéger certaines routes avec le middleware d'authentification
-app.get('/dashboard.html', authMiddleware, (req, res) => {
+app.get('/dashboard.html', authMiddleware, authorizeRoles('admin', 'vet', 'enploye'), (req, res) => {
     res.sendFile(path.join(__dirname, '../front-end', 'dashboard.html'));
 });
 
