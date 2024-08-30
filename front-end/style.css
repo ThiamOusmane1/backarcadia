@@ -1,38 +1,41 @@
 body {
-    background: url('pictures/alpaca-7169208_640.jpg') no-repeat center center fixed;
+    background: url('pictures/fond.jpg') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     margin: 0;
-    font-family: Arial, sans-serif; /* Ajouté pour la cohérence */
+    font-family: Arial, sans-serif;
 }
 
 main {
     flex: 1;
 }
 
-.carousel-container {
-    position: relative;
-    width: 80%;
-    max-width: 800px;
-    margin: 0 auto;
-    overflow: hidden;
+/* Styles pour les images du carrousel de présentation */
+#presentationCarousel .carousel-item img {
+    width: 100%; 
+    height: 400px; 
+    object-fit: cover; 
+    display: block; 
     border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.7); /* Fond légèrement opaque */
 }
 
-.carousel-slides {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
+.carousel-item {
+    text-align: center; 
 }
 
-.carousel-slide {
-    min-width: 100%;
-    box-sizing: border-box;
-    padding: 20px;
-    color: white;
-    text-align: center;
+.carousel-caption {
+    background-color: rgba(34, 139, 34, 0.4); 
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #556b2f;
+    border-radius: 50%;
+    padding: 10px;
 }
 
 .carousel-footer {
@@ -40,58 +43,137 @@ main {
     font-style: italic;
 }
 
-.carousel-controls {
-    position: absolute;
-    top: 50%;
+section.section-presentation {
+    background-color: rgba(231, 156, 52, 0.3); 
+    color: #a05621; 
+    border-radius: 10px;
+    padding: 20px;
+}
+
+section.section-presentation h2,
+section.section-presentation p,
+section.section-presentation a {
+    color: #c2f6f3; 
+}
+
+section.section-presentation a.btn-primary {
+    background-color: #007bff; 
+    border-color: #007bff; 
+}
+
+section.section-presentation a.btn-primary:hover {
+    background-color: #0056b3; 
+    border-color: #0056b3; 
+}
+
+/* Styles pour la galerie du zoo */
+.zoo-gallery .gallery-card-deck .gallery-card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.zoo-gallery .gallery-card-deck .gallery-card img {
+    border-radius: 15px 15px 0 0;
+}
+
+.zoo-gallery .gallery-card-deck .gallery-card h5 {
+    color: #007b5e;
+}
+
+/* Styles pour les cartes de services */
+.zoo-services .service-card {
+    border: none; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.zoo-services .service-card img {
     width: 100%;
+    height: 200px; /* Ajustez la hauteur pour les images des cartes */
+    object-fit: cover; 
+    border-bottom: 1px solid #ddd; /* Ligne de séparation entre l'image et le corps de la carte */
+}
+
+.zoo-services .service-card .card-body {
+    padding: 15px;
+    text-align: center;
+}
+
+.zoo-services .service-card .card-title {
+    font-size: 1.25rem; 
+    margin-bottom: 0.5rem;
+}
+
+.zoo-services .service-card .card-text {
+    font-size: 1rem; 
+    color: #666; 
+}
+
+/* Effet de survol pour les cartes de services */
+.zoo-services .service-card:hover {
+    transform: scale(1.05); 
+    transition: transform 0.3s ease; 
+}
+/*stylle pour carroussel avis*/
+#reviewCarousel .carousel-caption {
+    background-color: rgba(0, 0, 0, 0.6); 
+    color: #fff; 
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#reviewCarousel .carousel-caption p {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+}
+
+#reviewCarousel .carousel-footer {
+    font-size: 1rem;
+    margin-top: 10px;
+    font-style: italic;
+    color: #ccc; 
+}
+
+
+#reviewCarousel .carousel-item {
+    min-height: 150px; 
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: transform 0.6s ease-in-out; 
+}
+
+#reviewCarousel .carousel-item.active {
     display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
+    justify-content: center;
+    align-items: center;
 }
 
-.carousel-button {
-    background-color: #28a745; 
-    border: none;
-    color: white;
-    font-size: 2rem;
-    cursor: pointer;
-    padding: 10px;
+#reviewCarousel .carousel-control-prev-icon,
+#reviewCarousel .carousel-control-next-icon {
+    background-color: rgba(0, 0, 0, 0.6); 
     border-radius: 50%;
-    transition: background-color 0.3s;
+    padding: 10px;
 }
-
-.carousel-button:hover {
-    background-color: #218838; 
-}
-
-.carousel-button:focus {
-    outline: none; 
-}
-
 footer {
     background-color: rgba(0, 0, 0, 0.6);
+    color: blanchedalmond;
     text-align: center;
     padding: 10px;
-    position: absolute;
-    bottom: 0;
+    position: relative;
     width: 100%;
-}
-
-/* Ajout des styles supplémentaires */
-.habitat-container {
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
-.habitat-item {
-    margin: 10px;
-    text-align: center;
-}
+/* Styles pour les cartes d'habitat */
 
-.habitat-item img {
-    width: 300px;
+.habitat-card img {
+    width: 100%;
     height: 200px;
     object-fit: cover;
     cursor: pointer;
@@ -99,10 +181,36 @@ footer {
     transition: transform 0.3s;
 }
 
-.habitat-item img:hover {
+.habitat-card img:hover {
     transform: scale(1.05);
 }
 
-.animals-table {
-    margin-top: 20px;
+@media (max-width: 768px) {
+    #reviewCarousel .carousel-caption {
+        padding: 15px;
+    }
+    .navbar {
+        display: flex;
+        justify-content: flex-end; /* Aligne le bouton "burger" à droite */
+    }
+
+    .navbar-collapse {
+        text-align: right; /* Assure que les éléments du menu sont alignés à droite */
+    }
+
+    .navbar-nav {
+        text-align: right; /* Assure que les éléments de la liste du menu sont alignés à droite */
+    }
+
+    .navbar-toggler {
+        margin-left: auto; /* Pousse le bouton "burger" à droite */
+    }
+
+    .dropdown-menu {
+        position: static; /* Menu déroulant en bas du bouton */
+        float: none;
+    }
 }
+
+
+

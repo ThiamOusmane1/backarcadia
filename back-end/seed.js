@@ -3,12 +3,12 @@ const Animal = require('./models/animals');
 const Habitat = require('./models/habitats');
 
 const animaux = [
-  { nom: 'Lion', sante: 'Bonne', poids: 190, nourriture: 'Viande', quantite: 10, url: 'pictures/Lion.jpg' },
-  { nom: 'Zèbre', sante: 'Excellente', poids: 300, nourriture: 'Herbe', quantite: 5, url: 'pictures/Zèbre.jpg' },
-  { nom: 'Singe', sante: 'Bonne', poids: 35, nourriture: 'Fruits', quantite: 3, url: 'pictures/Singe.jpg' },
-  { nom: 'Tigre', sante: 'Bonne', poids: 220, nourriture: 'Viande', quantite: 8, url: 'pictures/Tigre.jpg' },
-  { nom: 'Crocodile', sante: 'Excellente', poids: 500, nourriture: 'Viande', quantite: 12, url: 'pictures/Crocodile.jpg' },
-  { nom: 'Héron', sante: 'Bonne', poids: 2, nourriture: 'Poisson', quantite: 1, url: 'pictures/Héron.jpg' }
+  { nom: 'Lion', sante: 'Bonne', poids: 190, nourriture: 'Viande', quantite: 10, url: 'Lion.jpg' },
+  { nom: 'Zèbre', sante: 'Excellente', poids: 300, nourriture: 'Herbe', quantite: 5, url: 'Zèbre.jpg' },
+  { nom: 'Singe', sante: 'Bonne', poids: 35, nourriture: 'Fruits', quantite: 3, url: 'Singe.jpg' },
+  { nom: 'Tigre', sante: 'Bonne', poids: 220, nourriture: 'Viande', quantite: 8, url: 'Tigre.jpg' },
+  { nom: 'Crocodile', sante: 'Excellente', poids: 500, nourriture: 'Viande', quantite: 12, url: 'Crocodile.jpg' },
+  { nom: 'Héron', sante: 'Bonne', poids: 2, nourriture: 'Poisson', quantite: 1, url: 'Héron.jpg' }
 ];
 
 const habitats = [
@@ -16,19 +16,19 @@ const habitats = [
     nom: 'Savane',
     description: 'Une vaste étendue herbeuse où vivent de nombreux animaux.',
     image: 'pictures/savane.jpg',
-    animaux: []  // À remplir après l'insertion des animaux
+    animaux: []  // 
   },
   {
     nom: 'Jungle',
     description: 'Une forêt dense avec une grande variété de faune et de flore.',
     image: 'pictures/jungle.jpg',
-    animaux: []  // À remplir après l'insertion des animaux
+    animaux: [] 
   },
   {
     nom: 'Marais',
     description: 'Des zones humides où vivent des reptiles et des oiseaux aquatiques.',
     image: 'pictures/marais.jpg',
-    animaux: []  // À remplir après l'insertion des animaux
+    animaux: []  
   }
 ];
 

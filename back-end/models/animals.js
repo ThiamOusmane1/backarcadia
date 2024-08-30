@@ -6,6 +6,7 @@ const animalSchema = new mongoose.Schema({
   poids: { type: Number, required: true },
   nourriture: { type: String, required: true },
   quantite: { type: Number, required: true },
+  habitat: { type: String, required: true },
   url: { type: String, required: true }
 });
 

@@ -1,39 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Variables pour le carrousel
-    let slideIndex = 0;
-    const slides = document.querySelectorAll('.carousel-slide');
-    const totalSlides = slides.length;
-
-    function showSlide(index) {
-        const slidesContainer = document.querySelector('.carousel-slides');
-        slideIndex = (index + totalSlides) % totalSlides;
-        slidesContainer.style.transform = `translateX(-${slideIndex * 100}%)`;
-    }
-
-    document.getElementById('prevButton')?.addEventListener('click', () => {
-        showSlide(slideIndex - 1);
+    $('#carouselExampleIndicators').carousel({
+        interval: 5000, 
+        wrap: true     
     });
 
-    document.getElementById('nextButton')?.addEventListener('click', () => {
-        showSlide(slideIndex + 1);
+    $('#carouselReviews').carousel({
+        interval: 7000, 
+        wrap: true     
     });
 
-    // Optionnel: faire défiler automatiquement
-    setInterval(() => {
-        showSlide(slideIndex + 1);
-    }, 5000);
     const animalGallery = document.getElementById('animal-gallery');
-    //const habitatsCardsDiv = document.getElementById('habitats-list');
+    const habitatsCardsDiv = document.getElementById('habitats-list');
 
-    // Fonction pour récupérer les animaux d'un habitat
-    function fetchAnimals(habitatName) {
-        fetch(`/api/animals?habitat=${encodeURIComponent(habitatName)}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+     // Fonction pour récupérer les animaux d'un habitat
+     function fetchAnimals(habitatName) {
+        fetch(`http://localhost:3002/api/animals?habitat=${encodeURIComponent(habitatName)}`)
+            .then(response => response.json())
             .then(data => {
                 animalGallery.innerHTML = ''; 
                 
@@ -46,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const animalCard = document.createElement('div');
                     animalCard.className = 'col-md-4 mb-4';
                     animalCard.innerHTML = `
-                        <div class="card">
+                        <div class="card animal-card" data-animal-id="${animal._id}">
                             <img src="/pictures/${animal.url}" class="card-img-top" alt="${animal.nom}">
                             <div class="card-body">
                                 <h5 class="card-title">${animal.nom}</h5>
@@ -56,11 +38,45 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                     animalGallery.appendChild(animalCard);
                 });
+
+                // Ajouter des écouteurs d'événements pour chaque carte d'animal
+                document.querySelectorAll('.animal-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const animalId = card.getAttribute('data-animal-id');
+                        fetchAnimalDetails(animalId);
+                    });
+                });
             })
             .catch(error => {
                 console.error('Erreur lors de la récupération des animaux:', error);
             });
     }
+
+    // Fonction pour récupérer les détails d'un animal
+    function fetchAnimalDetails(animalId) {
+        fetch(`http://localhost:3002/api/animal-details?id=${encodeURIComponent(animalId)}`)
+            .then(response => response.json())
+            .then(animal => {
+                console.log('Animal Details:', animal); 
+                const imageUrl = `/pictures/${animal.url}`;
+                console.log('Image URL:', imageUrl); 
+    
+                document.getElementById('modal-body').innerHTML = `
+                    <img src="${imageUrl}" class="img-fluid mb-3" alt="${animal.nom}">
+                    <h5>${animal.nom}</h5>
+                    <p><strong>Santé:</strong> ${animal.sante}</p>
+                    <p><strong>Poids:</strong> ${animal.poids} kg</p>
+                    <p><strong>Nourriture:</strong> ${animal.nourriture}</p>
+                    <p><strong>Quantité:</strong> ${animal.quantite}</p>
+                    <p><strong>Description:</strong> ${animal.description}</p>
+                `;
+                $('#animalModal').modal('show');
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération des détails de l\'animal:', error);
+            });
+    }
+    
 
     // écouteurs d'événements aux cartes d'habitats
     document.querySelectorAll('.ha-card').forEach(card => {

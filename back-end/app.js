@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 const connectDB = require('./config/connection');
 
-// Importer les modèles pour s'assurer qu'ils sont enregistrés
+// Import des modèles pour s'assurer qu'ils sont enregistrés
 require('./models/animals');
 require('./models/habitats');
 
@@ -19,9 +19,9 @@ const User = require('./models/user');
 const app = express();
 const port = 3002;
 
-// Middleware CORS - Configurer les règles d'accès
+// Middleware CORS 
 app.use(cors({
-    origin: '*', // Permet tout origine pour le développement. Remplacez par des URLs spécifiques en production.
+    origin: '*', // Permet toute origine pour le développement,a remplacer par des URLs spécifiques en production.
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
     res.send('Bienvenue sur l\'API Zoo Arcadia !');
 });
 
-// Utiliser les routeurs pour les routes liées aux animaux et aux habitats
+//  routeurs pour les routes liées aux animaux et aux habitats
 app.use('/api/animals', animalRouter);
 app.use('/api/habitats', habitatRouter);
 
@@ -87,12 +87,12 @@ function authMiddleware(req, res, next) {
     }
 }
 
-// Protéger certaines routes avec le middleware d'authentification
-app.get('/dashboard.html', authMiddleware, authorizeRoles('admin', 'vet', 'enploye'), (req, res) => {
+// Protéger la route avec le middleware d'authentification
+app.get('/dashboard.html', authMiddleware, authorizeRoles('admin', 'vet', 'enployee'), (req, res) => {
     res.sendFile(path.join(__dirname, '../front-end', 'dashboard.html'));
 });
 
-// Démarrer le serveur et la connexion à la base de données
+// Démarre le serveur et la connexion à la base de données
 const startServer = async () => {
     try {
         await connectDB();
