@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord Vétérinaire</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <header>
+    <a href="index.html">
+        <img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo">
+    </a>
+    <h1>Tableau de Bord - Vétérinaire</h1>
+    </header>
+
+    <main>
+        <div class="table-container">
+        <p id="statusMessage"></p> 
+        <table id="animalsTable">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Nom</th>
+                    <th>Habitat</th>
+                    <th>État de santé</th>
+                    <th>Poids</th>
+                    <th>Nourriture</th>
+                    <th>Quantité</th>
+                    <th>Soins</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Les lignes des animaux seront insérées ici -->
+            </tbody>
+        </table>
+        </div>
+
+        <!-- Modal pour modifier l'état de santé -->
+        <div class="form-modal" id="editModal">
+            <div class="form-modal-content">
+                <h3>Mettre à jour les informations de l'animal</h3>
+                <label for="animalHealth">État de santé</label>
+                <input type="text" id="animalHealth">
+                <label for="animalWeight">Poids (kg)</label>
+                <input type="number" id="animalWeight">
+                <label for="animalCare">Soins</label>
+                <textarea id="animalCare"></textarea>
+                <p id="modalStatusMessage"></p>
+                <button id="updateAnimalBtn">Mettre à jour</button>
+                <button class="form-modal-close" id="closeModalBtn">Fermer</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Zoo-Arcadia. Tous droits réservés.</p>
+    </footer>
+
+    <script src="js/vet-dashboard.js"></script>
+</body>
+</html>
+
+
+

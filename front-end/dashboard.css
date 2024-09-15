@@ -1,0 +1,280 @@
+/* Hauteur totale au HTML et au body pour que le footer soit collé en bas */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow-x: hidden; /* Empêche le défilement horizontal global */
+}
+
+/* Styles de base pour le body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    background: url('pictures/Jungle.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column; /* Disposition verticale pour header, main, et footer */
+}
+
+/* Zone de contenu principal qui prend l'espace disponible */
+main {
+    flex: 1; /* Permet à main de s'étendre et de prendre l'espace disponible */
+    padding: 20px;
+}
+
+/* Style pour le titre principal */
+h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+    font-size: 1.75rem; /* Taille du titre adaptée pour tous les écrans */
+}
+
+/* --- Styles pour les tableaux --- */
+
+/* Conteneur du tableau pour s'assurer qu'il s'adapte à l'écran */
+.table-container {
+    width: 100%; /* Utilise toute la largeur du conteneur */
+    overflow-x: auto; /* Permet le défilement horizontal uniquement si nécessaire */
+}
+
+/* Style des tableaux pour une meilleure lisibilité */
+table {
+    width: 100%; /* Utilise toute la largeur du conteneur */
+    border-collapse: collapse; /* Fusionne les bordures des cellules */
+    background-color: rgba(255, 255, 255, 0.9); /* Fond blanc avec opacité pour voir l'image d'arrière-plan */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    table-layout: auto; /* Ajuste automatiquement la largeur des colonnes */
+}
+
+/* Style des en-têtes et cellules des tableaux */
+th, td {
+    padding: 12px; /* Ajuste le padding pour une meilleure lisibilité */
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden; /* Empêche le débordement de contenu */
+    text-overflow: ellipsis; /* Ajoute des points de suspension si le texte déborde */
+    white-space: nowrap; /* Empêche le texte de se casser sur plusieurs lignes */
+}
+
+/* Style des en-têtes de tableau */
+th {
+    background-color: rgba(0, 123, 255, 0.8); /* Couleur de fond bleue avec opacité pour les en-têtes */
+    color: white;
+}
+
+/* Effet de survol des lignes de tableau */
+tr:hover {
+    background-color: rgba(241, 241, 241, 0.8); /* Couleur de survol avec opacité */
+}
+
+/* Assurer que les images dans les tableaux sont réactives */
+td img {
+    max-width: 100%; /* Empêche les images de dépasser la largeur de la cellule */
+    height: auto; /* Maintient le ratio d'aspect */
+    display: block;
+}
+
+/* --- Styles pour les boutons --- */
+
+/* Style de base pour les boutons */
+button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px; /* Coins arrondis pour les boutons */
+    transition: background-color 0.3s ease; /* Transition douce pour le changement de couleur */
+}
+
+/* Effet de survol des boutons */
+button:hover {
+    background-color: #218838;
+}
+
+/* --- Styles pour les éléments de formulaire --- */
+
+/* Styles pour les champs de saisie et les zones de texte */
+input, textarea {
+    padding: 12px;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc; /* Bordure légère pour les champs de saisie */
+    border-radius: 4px; /* Coins arrondis pour les champs de saisie */
+}
+
+/* --- Styles pour les modaux --- */
+
+/* Style de base pour les modaux */
+.form-modal {
+    display: none; /* Caché par défaut */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style du contenu des modaux */
+.form-modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%; /* Largeur du modal pour les petits écrans */
+    max-width: 400px; /* Limite la largeur maximale pour les grands écrans */
+    margin: 0 auto; /* Centre le modal horizontalement */
+}
+
+/* Style du bouton de fermeture dans les modaux */
+.form-modal-close {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px; /* Coins arrondis pour le bouton de fermeture */
+}
+
+/* Effet de survol du bouton de fermeture */
+.form-modal-close:hover {
+    background-color: #c82333;
+}
+
+/* --- Styles pour le header --- */
+
+/* Style du header */
+header {
+    background: linear-gradient(to right, rgba(85, 107, 47, 0.8), rgba(143, 188, 143, 0.8)); /* Dégradé transparent */
+    padding: 10px 20px; /* Ajuste le padding pour une meilleure cohérence */
+    display: flex; /* Flexbox pour l'alignement */
+    align-items: center; /* Centrer verticalement le logo et le texte */
+    justify-content: space-between; /* Espace entre le logo et le contenu du header */
+    border-bottom: 4px solid #3b5323;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%; /* Prend toute la largeur de l'écran */
+    box-sizing: border-box; /* Inclut padding et border dans la largeur totale */
+}
+
+/* Style pour le logo dans le header */
+header .logo {
+    max-width: 60px; /* Largeur maximale du logo */
+    height: auto; /* Hauteur automatique pour maintenir le ratio */
+    margin-right: 20px; /* Espace entre le logo et le texte */
+    cursor: pointer;
+}
+
+/* Style pour le titre dans le header */
+header h1 {
+    font-size: 1.5rem; /* Taille du titre dans le header */
+    margin: 0;
+    font-weight: bold;
+    flex-grow: 1; /* Prend l'espace restant */
+    text-align: left;
+    color: #fff;
+}
+
+/* Style pour le sous-titre dans le header */
+header p {
+    font-size: 1rem; /* Ajuste la taille du sous-titre */
+    margin-top: 5px;
+    color: #fff;
+}
+
+/* --- Styles pour le footer --- */
+
+/* Style du footer */
+footer {
+    background: linear-gradient(to right, rgba(59, 83, 35, 0.8), rgba(85, 107, 47, 0.8)); /* Dégradé transparent */
+    color: blanchedalmond; /* Couleur du texte crème */
+    text-align: center;
+    padding: 10px 20px; /* Ajuste le padding pour une meilleure cohérence */
+    position: relative;
+    width: 100%; /* Prend toute la largeur de l'écran */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 4px solid #556b2f; /* Bordure vert olive foncé */
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    box-sizing: border-box; /* Inclut padding et border dans la largeur totale */
+}
+
+/* Styles pour le formulaire de connexion */
+.login-form {
+    max-width: 400px; /* Largeur maximale pour le formulaire */
+    width: 90%; /* Prend 90% de la largeur du conteneur */
+    margin: 0 auto; /* Centre le formulaire horizontalement */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles pour les champs de saisie et les boutons dans le formulaire de connexion */
+.login-form input, 
+.login-form button {
+    width: calc(100% - 20px); /* Prend la largeur totale en considérant le padding */
+    margin-bottom: 10px;
+}
+
+.login-form button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.login-form button:hover {
+    background-color: #0056b3;
+}
+
+/* --- Design réactif --- */
+
+/* Ajustements réactifs pour les tablettes */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.25rem; /* Ajuste la taille du titre dans le header */
+    }
+
+    header .logo {
+        max-width: 50px; /* Largeur maximale du logo pour les petits écrans */
+    }
+
+    footer {
+        padding: 10px 15px; /* Ajuste le padding du footer pour les petits écrans */
+    }
+
+    h1 {
+        font-size: 1.25rem; /* Ajuste la taille du titre principal */
+    }
+
+    .form-modal-content {
+        width: 90%; /* Largeur du modal pour les petits écrans */
+    }
+}
+
+/* Ajustements réactifs pour les petits écrans */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1rem; /* Ajuste la taille du titre dans le header */
+    }
+
+    header .logo {
+        max-width: 40px; /* Largeur maximale du logo pour les très petits écrans */
+    }
+
+    footer {
+        padding: 10px; /* Ajuste le padding du footer pour les très petits écrans */
+    }
+
+    h1 {
+        font-size: 1rem; /* Ajuste la taille du titre principal */
+    }
+}

@@ -1,11 +1,10 @@
 // routes/auth.js
 const express = require('express');
 const router = express.Router();
-
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');  // Importation du modèle User
 
-// Clé secrète pour les JWT
-const JWT_SECRET = 'votre_clé_secrète_pour_jwt';
+const JWT_SECRET = process.env.JWT_SECRET || 'default JWT_SECRET ';
 
 // Route de connexion
 router.post('/login', async (req, res) => {
@@ -27,23 +26,40 @@ router.post('/login', async (req, res) => {
 });
 
 // Middleware d'authentification
-function authenticateToken(req, res, next) {
-    const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Récupère le token
+
+    console.log('Token reçu:', token); // Pour vérifier que le token est bien reçu
+
     if (!token) return res.status(401).json({ message: 'Token manquant' });
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ message: 'Token invalide' });
-        req.user = user;
+        if (err) {
+            console.log('Erreur lors de la vérification du token:', err);
+            return res.status(403).json({ message: 'Token invalide' });
+        }
+        req.user = user; // Stocker les infos du token décrypté (userId, role)
+        console.log('Utilisateur décodé du token:', req.user); // Pour vérifier les infos du token
         next();
     });
-}
+};
+
 
 // Middleware pour vérifier les rôles
 function authorizeRoles(...roles) {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) return res.status(403).json({ message: 'Accès interdit' });
+        if (!roles.includes(req.user.role)) { 
+            return res.status(403).json({ message: 'Accès interdit' });
+        }
         next();
     };
 }
+
+// Route protégée pour récupérer le rôle de l'utilisateur
+router.get('/getUserRole', authenticateToken, (req, res) => {
+    const { role } = req.user;  // Le rôle est extrait du token JWT
+    res.json({ role });
+});
 
 module.exports = { router, authenticateToken, authorizeRoles };
