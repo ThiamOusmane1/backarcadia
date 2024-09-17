@@ -1,0 +1,92 @@
+/* Styles généraux du site */
+body {
+    background-color: #f7f7f7;
+    font-family: Arial, sans-serif;
+}
+
+/* Container principal du formulaire */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Header & footer */
+header, footer {
+    background-color: #f8f9fa;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-nav .nav-link {
+    font-size: 16px;
+    color: #069d01;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #045d00;
+}
+
+/* Formulaire */
+h2 {
+    color: #069d01;
+}
+
+.form-control {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    background-color: #069d01;
+    border-color: #069d01;
+}
+
+.btn-primary:hover {
+    background-color: #045d00;
+    border-color: #045d00;
+}
+
+/* Bouton Retour */
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Footer */
+footer ul {
+    padding: 0;
+    list-style: none;
+}
+
+footer ul li {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+footer ul li a {
+    text-decoration: none;
+    color: #069d01;
+}
+
+footer ul li a:hover {
+    color: #045d00;
+}
+
+/* Mobile-first */
+@media (max-width: 576px) {
+    .container {
+        padding: 15px;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+}
