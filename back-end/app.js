@@ -43,20 +43,128 @@ app.use(express.static(path.join(__dirname, '../front-end')));
 // Servir les images depuis le répertoire 'front-end/pictures'
 app.use('/pictures', express.static(path.join(__dirname, '../front-end/pictures')));
 
-// Routes
-app.get('/', (req, res) => res.send('Bienvenue sur l\'API Zoo Arcadia !'));
-// Ajoutez ici les autres routes comme celles pour /api/animal-details, /api/update-counter, etc.
+// Route de base pour la racine
+app.get('/', (req, res) => {
+    res.send('Bienvenue sur l\'API Zoo Arcadia !');
+});
 
-// Routeurs pour les différentes API
-app.use('/api/animals', animalRouter);
-app.use('/api/habitats', habitatRouter);
-app.use('/api/reviews', reviewRouter);
-app.use('/api/auth', authRoutes.router);
+// Route pour obtenir les détails d'un animal spécifique
+app.get('/api/animal-details', async (req, res) => {
+    const animalId = req.query.id;
+
+    try {
+        const animal = await Animal.findById(animalId);
+        if (!animal) {
+            return res.status(404).json({ message: 'Animal non trouvé' });
+        }
+
+        // Renvoie les détails de l'animal en JSON
+        res.json({
+            nom: animal.nom,
+            sante: animal.sante,
+            poids: animal.poids,
+            nourriture: animal.nourriture,
+            quantite: animal.quantite,
+            consultations: animal.consultations,
+            url: animal.url 
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des détails de l\'animal:', error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
+// Route pour mettre à jour le compteur de consultations
+app.post('/api/update-counter', async (req, res) => {
+    const { id: animalId } = req.body;
+
+    if (!animalId) {
+        return res.status(400).json({ message: 'Animal ID est requis' });
+    }
+
+    try {
+        const animal = await Animal.findById(animalId);
+
+        if (!animal) {
+            return res.status(404).json({ message: 'Animal non trouvé' });
+        }
+
+        animal.consultations = (animal.consultations || 0) + 1;
+        await animal.save();
+
+        res.json({ consultations: animal.consultations });
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour du compteur:', error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
+// Route pour obtenir les informations vétérinaires des animaux
+app.get('/api/vet/animals', async (req, res) => {
+    try {
+        const animals = await Animal.find()
+            .populate('habitat', 'nom') // Peupler l'habitat avec uniquement le champ nom
+            .select('nom sante poids habitat url nourriture quantite');
+        res.status(200).json(animals);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des informations vétérinaires :', error);
+        res.status(500).json({ message: 'Erreur lors de la récupération des informations vétérinaires' });
+    }
+});
+
+// Route pour mettre à jour un animal par un vétérinaire
+app.put('/api/vet/animals/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { sante, poids, soins } = req.body;
+
+        // Mise à jour de l'animal
+        const updatedAnimal = await Animal.findByIdAndUpdate(id, {
+            sante: sante,
+            poids: poids,
+            soins: soins
+        }, { new: true });
+
+        if (!updatedAnimal) {
+            return res.status(404).json({ message: 'Animal non trouvé' });
+        }
+
+        res.status(200).json(updatedAnimal);
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour de l\'animal :', error);
+        res.status(500).json({ message: 'Erreur lors de la mise à jour de l\'animal' });
+    }
+});
+
+// Route de connexion avec JWT
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (user) {
+            const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+            if (isPasswordCorrect) {
+                const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+                return res.status(200).json({ message: 'Connexion réussie', token });
+            } else {
+                return res.status(401).json({ message: 'Mot de passe incorrect' });
+            }
+        } else {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+    } catch (err) {
+        console.error('Erreur lors de la connexion:', err);
+        return res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
 
 // Middleware pour vérifier le token JWT
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Récupère le token
+    const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
         return res.status(401).json({ message: 'Token manquant' });
@@ -66,7 +174,7 @@ const authenticateToken = (req, res, next) => {
         if (err) {
             return res.status(403).json({ message: 'Token invalide' });
         }
-        req.user = user; // Stocker les infos du token décrypté (userId, role)
+        req.user = user;
         next();
     });
 };
@@ -83,14 +191,36 @@ const authorizeRole = (...allowedRoles) => {
     };
 };
 
-// Routes protégées avec authentification JWT
+// Route protégée avec authentification JWT
 app.get('/api/protected-route', authenticateToken, (req, res) => {
     res.json({ message: 'Accès autorisé', user: req.user });
 });
 
+// Exemple de route protégée avec rôle spécifique
 app.get('/api/admin-dashboard', authenticateToken, authorizeRole('admin'), (req, res) => {
     res.json({ message: 'Bienvenue sur le tableau de bord admin' });
 });
 
-// Exporter l'application Express
-module.exports = app;
+// Routeurs pour les différentes API
+app.use('/api/animals', animalRouter);
+app.use('/api/habitats', habitatRouter);
+app.use('/api/reviews', reviewRouter);
+app.use('/api/auth', authRoutes.router);
+
+// Démarrer le serveur et la connexion à la base de données
+const startServer = async () => {
+    try {
+        await connectDB();
+        console.log('Base de données connectée avec succès !');
+
+        app.listen(port, () => {
+            console.log(`Server running at http://localhost:${port}/`);
+        });
+    } catch (err) {
+        console.error('Erreur lors du démarrage du serveur:', err);
+    }
+};
+
+startServer();
+
+
