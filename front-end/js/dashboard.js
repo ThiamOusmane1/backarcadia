@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('/api/dashboard-data', {
+    fetch('https://backarcadia.vercel.app/api/dashboard-data', {
         method: 'GET',
         credentials: 'include' // Pour envoyer les cookies de session
     })
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         replyForm.onsubmit = function(event) {
             event.preventDefault();
             const response = document.getElementById('response').value;
-            fetch(`/api/reviews/${reviewId}/reply`, {
+            fetch(`https://backarcadia.vercel.app/api/reviews/${reviewId}/reply`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fonction pour éditer un animal (vétérinaire/admin)
     function editAnimal(animalId) {
-        fetch(`/api/animals/${animalId}`)
+        fetch(`https://backarcadia.vercel.app/api/animals/${animalId}`)
             .then(response => response.json())
             .then(animal => {
                 const editForm = `
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sante = document.getElementById('sante').value;
         const poids = document.getElementById('poids').value;
 
-        fetch(`/api/animals/${animalId}`, {
+        fetch(`https://backarcadia.vercel.app/api/animals/${animalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

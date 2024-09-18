@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les animaux depuis l'API
     function loadAnimals() {
-        fetch('/api/vet/animals')  // Requête API pour charger les animaux
+        fetch('https://backarcadia.vercel.app/api/vet/animals')  // Requête API pour charger les animaux
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erreur dans la requête API');
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Envoie la requête PUT à l'API pour mettre à jour l'animal
-        fetch(`/api/vet/animals/${selectedAnimalId}`, {
+        fetch(`https://backarcadia.vercel.app/api/vet/animals/${selectedAnimalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
