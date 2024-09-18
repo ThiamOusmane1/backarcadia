@@ -27,3 +27,4 @@ yarn.lock
 
 # Ignorer les paramètres spécifiques aux environnements de développement (IDE)
 .vscode/
+.vercel
