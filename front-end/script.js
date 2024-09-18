@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const animalGallery = document.getElementById('animal-gallery');
 
     function fetchAnimals(habitatName) {
-        fetch(`http://localhost:3002/api/animals?habitat=${encodeURIComponent(habitatName)}`)
+        fetch(`/api/animals?habitat=${encodeURIComponent(habitatName)}`)
             .then(response => response.json())
             .then(data => {
                 animalGallery.innerHTML = '';
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function fetchAnimalDetails(animalId) {
-        fetch(`http://localhost:3002/api/animal-details?id=${encodeURIComponent(animalId)}`)
+        fetch(`/api/animal-details?id=${encodeURIComponent(animalId)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erreur réseau');
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateConsultationCounter(animalId) {
         console.log('Animal ID:', animalId);
-        fetch('http://localhost:3002/api/update-counter', {
+        fetch('/api/update-counter', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

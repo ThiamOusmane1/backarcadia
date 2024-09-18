@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les animaux depuis l'API
     function loadAnimals() {
-        fetch('http://localhost:3002/api/vet/animals')  // Requête API pour charger les animaux
+        fetch('/api/vet/animals')  // Requête API pour charger les animaux
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erreur dans la requête API');
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Itère sur les animaux pour les afficher
                 animals.forEach(animal => {
 
-                    const imageUrl = `http://localhost:3002/pictures/${animal.url}`;
+                    const imageUrl = `/pictures/${animal.url}`;
                     const row = document.createElement('tr');  // Crée une nouvelle ligne de tableau
 
                     row.innerHTML = `
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Envoie la requête PUT à l'API pour mettre à jour l'animal
-        fetch(`http://localhost:3002/api/vet/animals/${selectedAnimalId}`, {
+        fetch(`/api/vet/animals/${selectedAnimalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

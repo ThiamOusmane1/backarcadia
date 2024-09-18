@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try {
                 // Envoyer les données au serveur
-                const response = await fetch('http://localhost:3002/api/reviews', {
+                const response = await fetch('/api/reviews', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
