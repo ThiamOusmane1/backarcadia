@@ -24,6 +24,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret'; // Secret pou
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
     origin: [
+        'https://backarcadia-3wcdqmpr5-thiamousmane1s-projects.vercel.app',
         'http://127.0.0.1:8080',
         'https://backarcadia.vercel.app',
         'https://backarcadia-git-main-thiamousmane1s-projects.vercel.app',

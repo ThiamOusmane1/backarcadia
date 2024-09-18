@@ -1,34 +1,39 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     const animalGallery = document.getElementById('animal-gallery');
 
     function fetchAnimals(habitatName) {
-        fetch(`https://backarcadia.vercel.app/api/animals?habitat=${encodeURIComponent(habitatName)}`)
-            .then(response => response.json())
-            .then(data => {
-                animalGallery.innerHTML = '';
+        fetch(`https://backarcadia.vercel.app/api/animals?habitat=${encodeURIComponent(habitatName)}`, {
+            method: 'GET',
+            mode: 'cors',  // Ajout de CORS
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            animalGallery.innerHTML = '';
 
-                if (data.length === 0) {
-                    animalGallery.innerHTML = '<p>Aucun animal trouvé pour cet habitat.</p>';
-                    return;
-                }
+            if (data.length === 0) {
+                animalGallery.innerHTML = '<p>Aucun animal trouvé pour cet habitat.</p>';
+                return;
+            }
 
-                data.forEach(animal => {
-                    const animalCard = document.createElement('div');
-                    animalCard.className = 'col-md-4 mb-4';
-                    animalCard.innerHTML = `
-                        <div class="card animal-card" data-animal-id="${animal._id}">
-                            <img src="/pictures/${animal.url}" class="card-img-top" alt="${animal.nom}" style="cursor: pointer;">
-                            <div class="card-body">
-                                <h5 class="card-title">${animal.nom}</h5>
-                                <button class="btn btn-primary view-details-btn" data-animal-id="${animal._id}">Voir les détails</button>
-                            </div>
+            data.forEach(animal => {
+                const animalCard = document.createElement('div');
+                animalCard.className = 'col-md-4 mb-4';
+                animalCard.innerHTML = `
+                    <div class="card animal-card" data-animal-id="${animal._id}">
+                        <img src="/pictures/${animal.url}" class="card-img-top" alt="${animal.nom}" style="cursor: pointer;">
+                        <div class="card-body">
+                            <h5 class="card-title">${animal.nom}</h5>
+                            <button class="btn btn-primary view-details-btn" data-animal-id="${animal._id}">Voir les détails</button>
                         </div>
-                    `;
-                    animalGallery.appendChild(animalCard);
-                });
-            })
-            .catch(error => console.error('Erreur lors de la récupération des animaux:', error));
+                    </div>
+                `;
+                animalGallery.appendChild(animalCard);
+            });
+        })
+        .catch(error => console.error('Erreur lors de la récupération des animaux:', error));
     }
 
     animalGallery.addEventListener('click', (e) => {
@@ -39,7 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function fetchAnimalDetails(animalId) {
-        fetch(`https://backarcadia.vercel.app/api/animal-details?id=${encodeURIComponent(animalId)}`)
+        fetch(`https://backarcadia.vercel.app/api/animal-details?id=${encodeURIComponent(animalId)}`, {
+            method: 'GET',
+            mode: 'cors',  // Ajout de CORS
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erreur réseau');
@@ -69,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Animal ID:', animalId);
         fetch('https://backarcadia.vercel.app/api/update-counter', {
             method: 'POST',
+            mode: 'cors',  // Ajout de CORS
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -86,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Erreur lors de la mise à jour du compteur de consultations:', error));
     }
     
-
     document.getElementById('habitats-list').addEventListener('click', (e) => {
         const habitatCard = e.target.closest('.ha-card');
         if (habitatCard) {
@@ -106,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch('https://backarcadia.vercel.app/api/login', {
                     method: 'POST',
+                    mode: 'cors',  // Ajout de CORS
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -116,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Response data:', data);
                 
                 if (response.ok) {
-
                     if (data.token) {
                         localStorage.setItem('token', data.token);
                         console.log('Token stored:', data.token);
@@ -134,11 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.error('Le formulaire de connexion est introuvable dans le DOM.');
-    };
-
-    
-
+    }
 });
+
 
 
 

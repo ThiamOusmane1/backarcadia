@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Requête pour se connecter et recevoir un token JWT
         fetch('https://backarcadia.vercel.app/api/login', {
             method: 'POST',
+            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -39,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Ensuite, demander le rôle de l'utilisateur avec le token
             return fetch('https://backarcadia.vercel.app/api/auth/getUserRole', {
                 method: 'GET',
+                mode: 'cors',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`,  // Envoi du token dans l'en-tête
                     'Content-Type': 'application/json'
