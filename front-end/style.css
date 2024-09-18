@@ -110,13 +110,13 @@ main {
     padding-bottom: 15px;
     display: flex;
     flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.3); /* Fond blanc avec transparence */
+    background-color: rgba(255, 255, 255, 0.3); 
 }
 
 .zoo-gallery .gallery-card img {
-    width: 100%; /* Prend la largeur entière de la carte */
-    height: 200px; /* Hauteur fixe pour toutes les images */
-    object-fit: cover; /* Couvre la zone sans déformer l'image */
+    width: 100%; 
+    height: 200px; 
+    object-fit: cover; 
     border-bottom: 1px solid #ddd;
 }
 
@@ -148,14 +148,14 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.3); /* Fond blanc avec transparence */
+    background-color: rgba(255, 255, 255, 0.3); 
 }
 
 .zoo-services .service-card img {
-    width: 100%; /* Prend la largeur entière de la carte */
-    height: 200px; /* Hauteur fixe pour toutes les images */
-    object-fit: cover; /* Couvre la zone sans déformer l'image */
-    border-bottom: 1px solid #ddd; /* Ligne de séparation entre l'image et le corps de la carte */
+    width: 100%; 
+    height: 200px; 
+    object-fit: cover; 
+    border-bottom: 1px solid #ddd; 
 }
 
 .zoo-services .service-card .card-body {
@@ -179,13 +179,13 @@ main {
 .zoo-services .service-card:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;
-    background-color: rgba(255, 255, 255, 0.5); /* Légère augmentation de l'opacité au survol */
+    background-color: rgba(255, 255, 255, 0.5); /* augmentation de l'opacité au survol */
 }
 
 /* Stylisation du carrousel d'avis */
 #reviewCarousel {
-    width: 100%; /* Assurez-vous que le carrousel prend toute la largeur disponible */
-    margin-top: 20px; /* Ajouter un espacement au-dessus du carrousel */
+    width: 100%; 
+    margin-top: 20px; 
 }
 
 #reviewCarousel .carousel-inner {
@@ -195,7 +195,7 @@ main {
 }
 
 #reviewCarousel .carousel-item {
-    display: none; /* Par défaut, les items ne sont pas affichés */
+    display: none; 
     justify-content: center;
     align-items: center;
     min-height: 150px;
@@ -204,7 +204,7 @@ main {
 }
 
 #reviewCarousel .carousel-item.active {
-    display: flex; /* Seule la slide active est affichée */
+    display: flex; 
 }
 
 #reviewCarousel .carousel-caption {
@@ -249,7 +249,7 @@ main {
 .ha-card:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;
-    background-color: rgba(255, 255, 255, 0.5); /* Fond blanc avec transparence */
+    background-color: rgba(255, 255, 255, 0.5); 
 }
 
 
@@ -296,7 +296,7 @@ footer {
     color: white;
 }
 
-/* Style général du formulaire */
+/* Formulaire */
 form {
     background-color: rgba(255, 255, 255, 0.85);
     padding: 40px;
