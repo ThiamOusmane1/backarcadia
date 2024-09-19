@@ -18,18 +18,12 @@ const reviewRouter = require('./routes/reviewRoute');
 const authRoutes = require('./routes/auth');
 
 const app = express();
-const port = process.env.PORT || 3002; // Utiliser le port défini par l'environnement
-const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret'; // Secret pour JWT
+const port = process.env.PORT || 3002; // port défini pour l'environnement
+const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret'; 
 
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
-    origin: [
-        'https://backarcadia-3wcdqmpr5-thiamousmane1s-projects.vercel.app',
-        'http://127.0.0.1:8080',
-        'https://backarcadia.vercel.app',
-        'https://backarcadia-git-main-thiamousmane1s-projects.vercel.app',
-        'https://backarcadia-rh95udm9j-thiamousmane1s-projects.vercel.app'
-    ],
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true

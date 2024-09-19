@@ -106,46 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                const response = await fetch('http://localhost:3002/api/login', {
-                    method: 'POST',
-                    mode: 'cors',  // Ajout de CORS
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-                console.log('Response data:', data);
-                
-                if (response.ok) {
-                    if (data.token) {
-                        localStorage.setItem('token', data.token);
-                        console.log('Token stored:', data.token);
-                        window.location.href = '/dashboard.html';
-                    } else {
-                        alert('Aucun token reçu. Vérifiez le serveur.');
-                    }
-                } else {
-                    alert(data.message || 'Erreur de connexion');
-                }
-            } catch (error) {
-                console.error('Erreur lors de la connexion:', error);
-                alert('Erreur serveur');
-            }
-        });
-    } else {
-        console.error('Le formulaire de connexion est introuvable dans le DOM.');
-    }
 });
 
 
