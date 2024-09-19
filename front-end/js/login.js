@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Token JWT reçu:", data.token); // Ajout d'un message de débogage
 
             // Ensuite, demander le rôle de l'utilisateur avec le token
-            return fetch('https://backarcadia.vercel.app/api/auth/getUserRole', {
+            return fetch('https:///api/auth/getUserRole', {
                 method: 'GET',
                 mode: 'cors',
                 headers: {
