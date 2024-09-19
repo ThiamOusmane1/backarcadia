@@ -7,22 +7,23 @@ const jwt = require('jsonwebtoken');
 const connectDB = require('./config/connection');
 
 // Import des modèles pour s'assurer qu'ils sont enregistrés
-require('./backend/models/habitats');
-const Animal = require('./backend/models/animals');
-const User = require('./backend/models/user');
+require('./models/habitats');
+const Animal = require('./models/animals');
+const User = require('./models/user');
 
 // Import des routeurs
-const animalRouter = require('./backend/routes/animals');
-const habitatRouter = require('./backend/routes/habitats');
-const reviewRouter = require('./backend/routes/reviewRoute'); 
-const authRoutes = require('./backend/routes/auth');
+const animalRouter = require('./routes/animals');
+const habitatRouter = require('./routes/habitats');
+const reviewRouter = require('./routes/reviewRoute'); 
+const authRoutes = require('./routes/auth');
 
 const app = express();
+const port = 3002;
 const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret'; // Secret pour JWT
 
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'https://backarcadia.vercel.app',
+    origin: 'http://127.0.0.1:8080',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true
@@ -93,6 +94,8 @@ app.post('/api/update-counter', async (req, res) => {
     }
 });
 
+
+
 // Mise à jour de la route API pour inclure le peuplement de l'habitat
 app.get('/api/vet/animals', async (req, res) => {
     try {
@@ -130,7 +133,9 @@ app.put('/api/vet/animals/:id', async (req, res) => {
     }
 });
 
-// Routeurs pour les différentes API
+
+
+//  Routeurs pour les différentes API
 app.use('/api/animals', animalRouter);
 app.use('/api/habitats', habitatRouter);
 app.use('/api/reviews', reviewRouter);
@@ -201,12 +206,26 @@ app.get('/api/protected-route', authenticateToken, (req, res) => {
     res.json({ message: 'Accès autorisé', user: req.user });
 });
 
-// route protégée avec rôle spécifique
+// Exemple de route protégée avec rôle spécifique
 app.get('/api/admin-dashboard', authenticateToken, authorizeRole('admin'), (req, res) => {
     res.json({ message: 'Bienvenue sur le tableau de bord admin' });
 });
 
-// Exporter l'application pour Vercel
-module.exports = (req, res) => {
-    return app(req, res);
+// Démarre le serveur et la connexion à la base de données
+const startServer = async () => {
+    try {
+        await connectDB();
+        console.log('Base de données connectée avec succès !');
+
+        app.listen(port, () => {
+            console.log(`Server running at http://localhost:${port}/`);
+        });
+    } catch (err) {
+        console.error('Erreur lors du démarrage du serveur:', err);
+    }
 };
+
+startServer();
+
+
+
