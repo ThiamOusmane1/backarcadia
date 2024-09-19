@@ -25,10 +25,10 @@ app.use(express.static(path.join(__dirname, '../front-end')));
 app.use('/pictures', express.static(path.join(__dirname, '../front-end/pictures')));
 
 // Importer et utiliser les routeurs
-const animalRouter = require('./backend/routes/animals');
-const habitatRouter = require('./backend/routes/habitats');
-const reviewRouter = require('./backend/routes/reviews');
-const authRoutes = require('./backend/routes/auth');
+const animalRouter = require('../backend/routes/animals');
+const habitatRouter = require('../backend/routes/habitats');
+const reviewRouter = require('../backend/routes/reviews');
+const authRoutes = require('../backend/routes/auth');
 
 app.use('/api/animals', animalRouter);
 app.use('/api/habitats', habitatRouter);
