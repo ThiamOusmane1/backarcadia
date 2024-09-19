@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const animalGallery = document.getElementById('animal-gallery');
 
     function fetchAnimals(habitatName) {
-        fetch(`https://backarcadia.vercel.app/api/animals?habitat=${encodeURIComponent(habitatName)}`, {
+        fetch(`/api/animals?habitat=${encodeURIComponent(habitatName)}`, {
             method: 'GET',
             mode: 'cors',  // Ajout de CORS
             headers: {
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function fetchAnimalDetails(animalId) {
-        fetch(`https://backarcadia.vercel.app/api/animal-details?id=${encodeURIComponent(animalId)}`, {
+        fetch(`/api/animal-details?id=${encodeURIComponent(animalId)}`, {
             method: 'GET',
             mode: 'cors',  // Ajout de CORS
             headers: {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateConsultationCounter(animalId) {
         console.log('Animal ID:', animalId);
-        fetch('https://backarcadia.vercel.app/api/update-counter', {
+        fetch('/api/update-counter', {
             method: 'POST',
             mode: 'cors',  // Ajout de CORS
             headers: {
