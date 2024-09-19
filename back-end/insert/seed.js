@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const Animal = require('./models/animals');
-const Habitat = require('./models/habitats');
+const Animal = require('../models/animals');
+const Habitat = require('../models/habitats');
 
 const animaux = [
   { nom: 'Lion', sante: 'Bonne', poids: 190, nourriture: 'Viande', quantite: 10, url: 'Lion.jpg', habitat: 'Savane' },
