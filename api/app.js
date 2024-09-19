@@ -7,15 +7,15 @@ const jwt = require('jsonwebtoken');
 const connectDB = require('./config/connection');
 
 // Import des modèles pour s'assurer qu'ils sont enregistrés
-require('./models/habitats');
-const Animal = require('./models/animals');
-const User = require('./models/user');
+require('./backend/models/habitats');
+const Animal = require('./backend/models/animals');
+const User = require('./backend/models/user');
 
 // Import des routeurs
-const animalRouter = require('./routes/animals');
-const habitatRouter = require('./routes/habitats');
-const reviewRouter = require('./routes/reviewRoute'); 
-const authRoutes = require('./routes/auth');
+const animalRouter = require('./backend/routes/animals');
+const habitatRouter = require('./backend/routes/habitats');
+const reviewRouter = require('./backend/routes/reviewRoute'); 
+const authRoutes = require('./backend/routes/auth');
 
 const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret'; // Secret pour JWT
