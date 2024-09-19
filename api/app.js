@@ -6,6 +6,7 @@ const app = express();
 // Configuration CORS
 app.use(cors({
     origin: [
+        'http://localhost:3000',
         'http://127.0.0.1:8080',
         'https://backarcadia-mxgu8but6-thiamousmane1s-projects.vercel.app',
         'https://backarcadia.vercel.app',
