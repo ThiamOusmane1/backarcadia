@@ -7,6 +7,7 @@ const app = express();
 app.use(cors({
     origin: [
         'http://127.0.0.1:8080',
+        'https://backarcadia-mxgu8but6-thiamousmane1s-projects.vercel.app',
         'https://backarcadia.vercel.app',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
