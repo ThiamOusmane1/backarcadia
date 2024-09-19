@@ -34,11 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('animalWeight').value = animal.poids; // Affiche le poids dans le formulaire
         document.getElementById('animalCare').value = animal.soins || ''; // Affiche les consultations (soins)
         editModal.style.display = 'flex'; // Ouvre la modale
+    
     }
+    const apiUrl = '/api';
 
     // Charger les animaux depuis l'API
     function loadAnimals() {
-        fetch('http://localhost:3002/api/vet/animals')  // Requête API pour charger les animaux
+        fetch('${apiUrl}/api/vet/animals')  // Requête API pour charger les animaux
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erreur dans la requête API');
@@ -95,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Envoie la requête PUT à l'API pour mettre à jour l'animal
-        fetch(`http://localhost:3002/api/vet/animals/${selectedAnimalId}`, {
+        fetch(`${apiUrl}/api/vet/animals/${selectedAnimalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

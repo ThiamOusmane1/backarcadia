@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const animalGallery = document.getElementById('animal-gallery');
+    const apiUrl = '/api';
 
     function fetchAnimals(habitatName) {
-        fetch(`http://localhost:3002/api/animals?habitat=${encodeURIComponent(habitatName)}`, {
+        fetch(`${apiUrl}/api/animals?habitat=${encodeURIComponent(habitatName)}`, {
             method: 'GET',
             mode: 'cors',  // Ajout de CORS
             headers: {
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function fetchAnimalDetails(animalId) {
-        fetch(`http://localhost:3002/api/animal-details?id=${encodeURIComponent(animalId)}`, {
+        fetch(`${apiUrl}/api/animal-details?id=${encodeURIComponent(animalId)}`, {
             method: 'GET',
             mode: 'cors',  // Ajout de CORS
             headers: {
@@ -78,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateConsultationCounter(animalId) {
         console.log('Animal ID:', animalId);
-        fetch('http://localhost:3002/api/update-counter', {
+        fetch('${apiUrl}/api/update-counter', {
             method: 'POST',
             mode: 'cors',  // Ajout de CORS
             headers: {
