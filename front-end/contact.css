@@ -67,35 +67,30 @@ h2 {
     box-shadow: 0 0 8px rgba(0, 100, 0, 0.4);
 }
 
-/* Boutons */
-.btn-primary {
-    background-color: #069d01;
-    border-color: #069d01;
-    padding: 12px;
+/* Button */
+.back-to-home {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.back-to-home a.btn-primary {
+    background-color: #4caf50;
+    border-color: #4caf50;
+    padding: 10px 20px;
     font-size: 1.2rem;
     border-radius: 10px;
-    width: 100%;
     color: white;
-    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.btn-primary:hover {
-    background-color: #045d00;
-    border-color: #045d00;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
-    padding: 12px;
-    font-size: 1.2rem;
-    border-radius: 10px;
-    width: 100%;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
+.back-to-home a.btn-primary:hover {
+    background-color: #388e3c;
+    border-color: #388e3c;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    color: white;
 }
 
 /* Footer */
