@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les animaux depuis l'API
     function loadAnimals() {
-        fetch('http://localhost:3002/api/vet/animals')  // Requête API pour charger les animaux
+        fetch('/api/vet/animals')  // Requête API pour charger les animaux
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erreur dans la requête API');
