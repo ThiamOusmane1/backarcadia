@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateConsultationCounter(animalId) {
+        
         console.log('Animal ID:', animalId);
         fetch('${apiUrl}/api/update-counter', {
             method: 'POST',
