@@ -1,26 +1,36 @@
-/* Styles généraux du site */
+/* Styles généraux du formulaire */
 body {
-    background-color: #f7f7f7;
-    font-family: Arial, sans-serif;
+    background: url('pictures/Jungle.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    color: #289321;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
 }
 
 /* Container principal du formulaire */
 .container {
     max-width: 600px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
 }
 
-/* Header & footer */
+/* Header et Footer */
 header, footer {
-    background-color: #f8f9fa;
+    background: linear-gradient(to right, rgba(59, 83, 35, 0.8), rgba(85, 107, 47, 0.8));
     padding: 15px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: blanchedalmond;
 }
 
+/* Navigation */
 .navbar-nav .nav-link {
     font-size: 16px;
     color: #069d01;
@@ -30,19 +40,43 @@ header, footer {
     color: #045d00;
 }
 
-/* Formulaire */
+/* Titre du formulaire */
 h2 {
-    color: #069d01;
+    color: #006400;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
+/* Formulaire */
 .form-control {
     padding: 10px;
     font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 2px solid #3b5323;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
 }
 
+.form-control:focus {
+    border-color: #006400;
+    box-shadow: 0 0 8px rgba(0, 100, 0, 0.4);
+}
+
+/* Boutons */
 .btn-primary {
     background-color: #069d01;
     border-color: #069d01;
+    padding: 12px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    width: 100%;
+    color: white;
+    transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover {
@@ -50,10 +84,13 @@ h2 {
     border-color: #045d00;
 }
 
-/* Bouton Retour */
 .btn-secondary {
     background-color: #6c757d;
     border-color: #6c757d;
+    padding: 12px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    width: 100%;
 }
 
 .btn-secondary:hover {
@@ -81,12 +118,51 @@ footer ul li a:hover {
     color: #045d00;
 }
 
+/* Message d'erreur */
+.invalid-feedback {
+    color: #d9534f;
+    font-size: 0.9rem;
+}
+
 /* Mobile-first */
 @media (max-width: 576px) {
     .container {
-        padding: 15px;
+        padding: 20px;
     }
+
     h2 {
         font-size: 1.5rem;
+    }
+}
+
+/* Tablette */
+@media (min-width: 768px) {
+    .container {
+        padding: 40px;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    .form-control {
+        font-size: 0.9rem;
+    }
+
+    .btn-primary, .btn-secondary {
+        font-size: 1rem;
+        padding: 10px;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    h2 {
+        font-size: 2.25rem;
+    }
+
+    .container {
+        max-width: 800px;
+        padding: 50px;
     }
 }

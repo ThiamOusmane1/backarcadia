@@ -9,13 +9,7 @@ const animalSchema = new mongoose.Schema({
   habitat: { type: mongoose.Schema.Types.ObjectId, ref: 'Habitat', required: true },
   url: { type: String, required: true, match: /^(http|https):\/\/[^ "]+$/ }, // URL de l'image
   consultations: { type: Number, default: 0 }, // Compteur de consultations
-  soins: { type: String, required: true },
-  historique: [
-    {
-        date: { type: Date, default: Date.now },
-        modifications: {type: String} // Texte décrivant les modifications
-    }
-]
+  soins: { type: String, required: true }
 });
 
 animalSchema.index({ nom: 1 });
