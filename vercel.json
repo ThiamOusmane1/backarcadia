@@ -1,18 +1,23 @@
 {
-  "rewrites": [
-    {
-      "source": "/api/(.*)",       
-      "destination": "/back-end/app.js"
-    }
-  ],
+  "version": 2,
   "builds": [
     {
-      "src": "back-end/app.js",    
+      "src": "api/app.js", 
       "use": "@vercel/node"
     },
     {
-      "src": "front-end/**/*",     
-      "use": "@vercel/static-build"
+      "src": "front-end/**/*", 
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/app.js" 
+    },
+    {
+      "src": "/(.*)", 
+      "dest": "/front-end/$1" 
     }
   ]
 }
