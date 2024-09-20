@@ -34,9 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('animalWeight').value = animal.poids; // Affiche le poids dans le formulaire
         document.getElementById('animalCare').value = animal.soins || ''; // Affiche les consultations (soins)
         editModal.style.display = 'flex'; // Ouvre la modale
-    
     }
-    const apiUrl = '/api';
 
     // Charger les animaux depuis l'API
     function loadAnimals() {

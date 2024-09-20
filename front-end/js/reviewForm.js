@@ -31,11 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             console.log("Données du formulaire:", formData);  // Vérifie les données récupérées
 
-            const apiUrl = '/api';
-
             try {
                 // Envoyer les données au serveur
-                const response = await fetch('${apiUrl}/api/reviews', {
+                const response = await fetch('/api/reviews', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

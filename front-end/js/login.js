@@ -15,10 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log("Formulaire soumis avec", { email, password }); // Ajout d'un message de débogage
 
-        const apiUrl = '/api';
-
         // Requête pour se connecter et recevoir un token JWT
-        fetch('${apiUrl}/api/login', {
+        fetch('/api/login', {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -40,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Token JWT reçu:", data.token); // Ajout d'un message de débogage
 
             // Ensuite, demander le rôle de l'utilisateur avec le token
-            return fetch('${apiUrl}/api/auth/getUserRole', {
+            return fetch('/api/auth/getUserRole', {
                 method: 'GET',
                 mode: 'cors',
                 headers: {
