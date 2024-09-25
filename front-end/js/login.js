@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Formulaire soumis avec", { email, password }); // Ajout d'un message de débogage
 
         // Requête pour se connecter et recevoir un token JWT
-        fetch('/api/login', {
+        fetch('http://localhost:3002/api/login', {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Token JWT reçu:", data.token); // Ajout d'un message de débogage
 
             // Ensuite, demander le rôle de l'utilisateur avec le token
-            return fetch('/api/auth/getUserRole', {
+            return fetch('http://localhost:3002/api/auth/getUserRole', {
                 method: 'GET',
                 mode: 'cors',
                 headers: {
@@ -53,30 +53,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return response.json();
         })
-        .then(userData => {
-            console.log("Rôle de l'utilisateur reçu:", userData.role); // Ajout d'un message de débogage
-
-            // Redirection en fonction du rôle de l'utilisateur
-            if (userData.role === 'admin') {
-                window.location.href = '/admin-dashboard.html';
-            } else if (userData.role === 'vet') {
-                window.location.href = '/vet-dashboard.html';
-            } else if (userData.role === 'employee') {
-                window.location.href = '/employee-dashboard.html';
+        .then(data => {
+            console.log("Rôle de l'utilisateur récupéré:", data.role); // Ajout d'un message de débogage
+            // Rediriger l'utilisateur vers la page appropriée en fonction de son rôle
+            if (data.role === 'vet') {
+                window.location.href = 'vet-dashboard.html';
+            } else if (data.role === 'employee') {
+                window.location.href = 'employee-dashboard.html';
+            } else if (data.role === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                alert("Rôle d'utilisateur inconnu.");
             }
         })
         .catch(error => {
             console.error('Erreur lors de la connexion:', error);
-            alert(error.message || 'Erreur serveur');
+            alert('Erreur lors de la connexion: ' + error.message);
         });
     }
 
-    // Attacher le gestionnaire d'événements au formulaire de connexion
+    // Ajouter l'événement de soumission au formulaire
     const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleLoginFormSubmit);
-        console.log('Gestionnaire d\'événement attaché au formulaire.'); // Ajout d'un message de débogage
-    } else {
-        console.error('Le formulaire de connexion est introuvable dans le DOM.');
-    }
+    loginForm.addEventListener('submit', handleLoginFormSubmit);
 });

@@ -1,21 +1,61 @@
-const mongoose = require('mongoose');
+// models/animals.js
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/mysqlConnection'); 
 
-const animalSchema = new mongoose.Schema({
-  nom: { type: String, required: true, unique: true },
-  sante: { type: String, required: true },
-  poids: { type: Number, required: true, min: 0 }, // Poids en kg
-  nourriture: { type: String, required: true },
-  quantite: { type: Number, required: true, min: 0 }, // Quantité
-  habitat: { type: mongoose.Schema.Types.ObjectId, ref: 'Habitat', required: true },
-  url: { type: String, required: true, match: /^(http|https):\/\/[^ "]+$/ }, // URL de l'image
-  consultations: { type: Number, default: 0 }, // Compteur de consultations
-  soins: { type: String, required: true }
+const Animal = sequelize.define('Animal', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false
+    },
+    name: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    health: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    weight: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    food: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    habitatId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'Habitats', // Nom de la table associée
+            key: 'id'
+        }
+    },
+    url: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+    },
+    consultations: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    notes: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    history: {
+        type: DataTypes.JSON,
+        allowNull: true
+    }
+}, {
+    timestamps: true,
+    tableName: 'animals'
 });
 
-animalSchema.index({ nom: 1 });
-animalSchema.index({ habitat: 1 });
-
-const Animal = mongoose.model('Animal', animalSchema);
-
 module.exports = Animal;
-

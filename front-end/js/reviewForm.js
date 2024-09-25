@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("Script chargé et DOM prêt.");  // Vérifie que le script est bien exécuté
+    console.log("Script chargé et DOM prêt."); // Vérifie que le script est bien exécuté
 
     const button = document.getElementById('leaveReviewBtn');
     const formSection = document.getElementById('reviewFormSection');
@@ -7,19 +7,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const formConfirm = document.getElementById('formConfirmation');
 
     if (button && formSection && formReview && formConfirm) {
-        console.log("Éléments trouvés.");  // Vérifie que les éléments existent dans le DOM
+        console.log("Éléments trouvés."); // Vérifie que les éléments existent dans le DOM
 
         // Afficher le formulaire lorsque le bouton est cliqué
         button.addEventListener('click', function() {
             formSection.classList.remove('d-none'); // Affiche le formulaire
             formConfirm.classList.add('d-none'); // Cache le message de confirmation si visible
-            console.log("Formulaire affiché.");  // Vérifie que le formulaire est bien affiché
+            console.log("Formulaire affiché."); // Vérifie que le formulaire est bien affiché
         });
 
         // Gérer la soumission du formulaire
         formReview.addEventListener('submit', async function(event) {
-            event.preventDefault();  // Empêche le rechargement de la page
-            console.log("Formulaire soumis.");  // Vérifie que le formulaire a bien été soumis
+            event.preventDefault(); // Empêche le rechargement de la page
+            console.log("Formulaire soumis."); // Vérifie que le formulaire a bien été soumis
 
             // Récupérer les données du formulaire
             const formData = {
@@ -29,11 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 message: document.getElementById('message').value,
             };
 
-            console.log("Données du formulaire:", formData);  // Vérifie les données récupérées
+            console.log("Données du formulaire:", formData); // Vérifie les données récupérées
 
             try {
                 // Envoyer les données au serveur
-                const response = await fetch('/api/reviews', {
+                const response = await fetch('http://localhost:3002/api/reviews', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -41,32 +41,34 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify(formData),
                 });
 
-                console.log("Réponse du serveur:", response.status);  // Vérifie la réponse du serveur
+                console.log("Réponse du serveur:", response.status); // Vérifie la réponse du serveur
 
                 if (response.ok) {
-                    console.log("Formulaire envoyé avec succès.");  // Vérifie si la requête a réussi
+                    console.log("Formulaire envoyé avec succès."); // Vérifie si la requête a réussi
 
                     // Masquer le formulaire
-                    formSection.classList.add('d-none');  // Cache la section du formulaire
+                    formSection.classList.add('d-none'); // Cache la section du formulaire
 
                     // Afficher un message de confirmation avec un léger délai pour s'assurer qu'il apparaît
                     setTimeout(function() {
-                        formConfirm.classList.remove('d-none');  // Affiche le message de confirmation
-                    }, 100);  // Légère attente avant d'afficher le message
+                        formConfirm.classList.remove('d-none'); // Affiche le message de confirmation
+                    }, 100); // Légère attente avant d'afficher le message
 
                     // Réinitialiser le formulaire
                     formReview.reset();
 
                     // Masquer le message de confirmation après 3 secondes
                     setTimeout(function() {
-                        formConfirm.classList.add('d-none');  // Cache le message de confirmation
-                        console.log("Message de confirmation caché.");  // Vérifie si le message a bien été caché
-                    }, 3000);  // Délai de 3 secondes
+                        formConfirm.classList.add('d-none'); // Cache le message de confirmation
+                        console.log("Message de confirmation caché."); // Vérifie si le message a bien été caché
+                    }, 3000); // Délai de 3 secondes
                 } else {
                     console.error("Erreur lors de l'envoi du formulaire");
+                    alert("Erreur lors de l'envoi du formulaire. Veuillez réessayer.");
                 }
             } catch (error) {
                 console.error("Erreur lors de la requête:", error);
+                alert("Erreur de connexion. Veuillez réessayer.");
             }
         });
     } else {

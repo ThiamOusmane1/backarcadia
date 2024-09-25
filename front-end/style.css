@@ -58,7 +58,8 @@ main {
 }
 
 .section-presentation p {
-    color: #1f8904;
+    color: #393737;
+    font-weight: bold;
 }
 
 /* Styles pour les images du carrousel de présentation */
@@ -126,6 +127,12 @@ main {
     text-align: center;
 }
 
+.zoo-gallery .gallery-card p {
+    color: #444;
+
+
+}
+
 .zoo-gallery .gallery-card:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;
@@ -155,7 +162,8 @@ main {
     width: 100%; 
     height: 200px; 
     object-fit: cover; 
-    border-bottom: 1px solid #ddd; 
+    border-bottom: 1px solid #ddd;
+    cursor: pointer; 
 }
 
 .zoo-services .service-card .card-body {
@@ -233,6 +241,7 @@ main {
     height: 200px; /* Hauteur fixe pour les images */
     object-fit: cover; /* Couvre la zone sans déformer l'image */
     border-bottom: 1px solid #ddd;
+    cursor: pointer;
 }
 
 .ha-card h5 {
@@ -243,7 +252,7 @@ main {
 
 .ha-card p {
     text-align: center;
-    color: #333;
+    color: #444;
 }
 
 .ha-card:hover {

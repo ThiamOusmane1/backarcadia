@@ -1,13 +1,29 @@
-const mongoose = require('mongoose');
+// models/habitats.js
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/mysqlConnection');
 
-const habitatSchema = new mongoose.Schema({
-  nom: { type: String, required: true },
-  description: { type: String, required: true },
-  image: { type: String, required: true },
-  animaux: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Animal' }]
+const Habitat = sequelize.define('Habitat', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false
+    },
+    name: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+    image: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    }
+}, {
+    timestamps: true,
+    tableName: 'habitats'
 });
 
-const Habitat = mongoose.model('Habitat', habitatSchema);
-
 module.exports = Habitat;
-

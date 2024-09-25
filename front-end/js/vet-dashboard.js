@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const editModal = document.getElementById('editModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const updateAnimalBtn = document.getElementById('updateAnimalBtn');
-    const statusMessage = document.getElementById('statusMessage');  // Pour les messages de statut
-    const modalStatusMessage = document.getElementById('modalStatusMessage');  // Message dans la modale
+    const statusMessage = document.getElementById('statusMessage'); // Pour les messages de statut
+    const modalStatusMessage = document.getElementById('modalStatusMessage'); // Message dans la modale
     
     let selectedAnimalId = null;
 
@@ -29,24 +29,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Ouvrir la fenêtre modale pour modifier un animal
     function openEditModal(animal) {
-        selectedAnimalId = animal._id;  // Stocke l'ID de l'animal sélectionné
+        selectedAnimalId = animal._id; // Stocke l'ID de l'animal sélectionné
         document.getElementById('animalHealth').value = animal.sante; // Affiche l'état de santé dans le formulaire
         document.getElementById('animalWeight').value = animal.poids; // Affiche le poids dans le formulaire
-        document.getElementById('animalCare').value = animal.soins || ''; // Affiche les consultations (soins)
+        document.getElementById('animalCare').value = animal.soins || ''; // Affiche les soins
         editModal.style.display = 'flex'; // Ouvre la modale
     }
 
     // Charger les animaux depuis l'API
     function loadAnimals() {
-        fetch('/api/vet/animals')  // Requête API pour charger les animaux
+        fetch('http://localhost:3002/api/vet/animals') // Requête API pour charger les animaux
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erreur dans la requête API');
                 }
-                return response.json();  // Transforme la réponse en JSON
+                return response.json(); // Transforme la réponse en JSON
             })
             .then(data => {
-                console.log('Réponse de l\'API:', data);  // Debug: Affiche la réponse
+                console.log('Réponse de l\'API:', data); // Debug: Affiche la réponse
 
                 // Vérifie si la réponse est un tableau, sinon l'encapsule dans un tableau
                 const animals = Array.isArray(data) ? data : [data];
@@ -56,9 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Itère sur les animaux pour les afficher
                 animals.forEach(animal => {
-
                     const imageUrl = `/pictures/${animal.url}`;
-                    const row = document.createElement('tr');  // Crée une nouvelle ligne de tableau
+                    const row = document.createElement('tr'); // Crée une nouvelle ligne de tableau
 
                     row.innerHTML = `
                     <td><img src="${imageUrl}" class="img-fluid mb-3" alt="${animal.nom}"></td> <!-- Image de l'animal -->
@@ -68,12 +67,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${animal.poids} kg</td> <!-- Poids de l'animal -->
                     <td>${animal.nourriture}</td> <!-- Nourriture de l'animal -->
                     <td>${animal.quantite} kg</td> <!-- Quantité de nourriture -->
-                    <td>${animal.consultations ? animal.consultations : 'Aucun soin disponible'}</td> <!-- Soins ou consultations -->
-                    <td><button class="edit-btn" data-id="${animal._id}">Modifier</button></td> <!-- Bouton Modifier -->
+                    <td>${animal.soins}</td> <!-- Soins ou consultations -->
+                    <td>
+                    <button class="view-history-btn" data-animal-id="${animal._id}">Voir l'historique</button>
+                    <button class="edit-btn" data-id="${animal._id}">Modifier</button>
+                    </td> <!-- Bouton Modifier -->
                     `;
 
                     // Ajoute un événement pour ouvrir la modale de modification au clic sur le bouton "Modifier"
                     row.querySelector('.edit-btn').addEventListener('click', () => openEditModal(animal));
+
+                    // Gérer le clic sur le bouton "Voir l'historique"
+                    row.querySelector('.view-history-btn').addEventListener('click', () => {
+                        afficherHistorique(animal._id); // Appel à la fonction pour afficher l'historique
+                    });
 
                     // Ajoute la ligne au tableau HTML
                     animalsTableBody.appendChild(row);
@@ -82,45 +89,44 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Erreur lors du chargement des animaux :', error);
-                showStatusMessage('Erreur lors du chargement des animaux', true);  // Affiche un message d'erreur
+                showStatusMessage('Erreur lors du chargement des animaux', true); // Affiche un message d'erreur
             });
     }
 
     // Mettre à jour les informations de l'animal via l'API
     updateAnimalBtn.addEventListener('click', () => {
         const updatedAnimal = {
-            sante: document.getElementById('animalHealth').value,  // Récupère la nouvelle santé
-            poids: document.getElementById('animalWeight').value,  // Récupère le nouveau poids
-            soins: document.getElementById('animalCare').value  // Récupère les nouvelles consultations (soins)
+            sante: document.getElementById('animalHealth').value, // Récupère la nouvelle santé
+            poids: document.getElementById('animalWeight').value, // Récupère le nouveau poids
+            soins: document.getElementById('animalCare').value // Récupère les nouvelles consultations (soins)
         };
 
         // Envoie la requête PUT à l'API pour mettre à jour l'animal
-        fetch(`${apiUrl}/api/vet/animals/${selectedAnimalId}`, {
+        fetch(`http://localhost:3002/api/vet/animals/${selectedAnimalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(updatedAnimal),  // Convertit l'objet en JSON pour l'envoyer
+            body: JSON.stringify(updatedAnimal), // Convertit l'objet en JSON pour l'envoyer
         })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erreur lors de la mise à jour de l\'animal');
             }
-            return response.json();  // Convertit la réponse en JSON
+            return response.json(); // Convertit la réponse en JSON
         })
         .then(() => {
             // Ferme la modale après la mise à jour réussie
             editModal.style.display = 'none';
-            loadAnimals();  // Recharge la liste des animaux pour refléter les modifications
+            loadAnimals(); // Recharge la liste des animaux pour refléter les modifications
             showModalStatusMessage('Animal mis à jour avec succès !');
         })
         .catch(error => {
             console.error('Erreur lors de la mise à jour :', error);
-            showModalStatusMessage('Erreur lors de la mise à jour de l\'animal', true);  // Affiche un message d'erreur
+            showModalStatusMessage('Erreur lors de la mise à jour de l\'animal', true); // Affiche un message d'erreur
         });
     });
 
     // Charger les animaux au démarrage de la page
     loadAnimals();
 });
-

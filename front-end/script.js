@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const animalGallery = document.getElementById('animal-gallery');
 
     function fetchAnimals(habitatName) {
-        fetch(` /api/animals?habitat=${encodeURIComponent(habitatName)}`, {
+        fetch(`http://localhost:3002/api/animals?habitat=${encodeURIComponent(habitatName)}`, {
             method: 'GET',
             mode: 'cors',  // Ajout de CORS
             headers: {
@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 animalGallery.appendChild(animalCard);
             });
+
         })
         .catch(error => console.error('Erreur lors de la récupération des animaux:', error));
     }
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function fetchAnimalDetails(animalId) {
-        fetch(` /api/animal-details?id=${encodeURIComponent(animalId)}`, {
+        fetch(`http://localhost:3002/api/animal-details?id=${encodeURIComponent(animalId)}`, {
             method: 'GET',
             mode: 'cors',  // Ajout de CORS
             headers: {
@@ -70,16 +71,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p><strong>Quantité:</strong> ${animal.quantite}</p>
                 <p><strong>Consultations:</strong> ${animal.consultations}</p>
                 <p><strong>Soins:</strong> ${animal.soins}</p>
+                <button id="show-historique-btn" class="btn btn-info">Afficher l'historique</button>
             `;
             $('#animalModal').modal('show');
+
+            // Ajout de l'écouteur d'événements pour le bouton "Afficher l'historique"
+            document.getElementById('modal-body').addEventListener('click', (e) => {
+                if (e.target.id === 'show-historique-btn') {
+                    afficherHistorique(animalId); // Appelle la fonction pour afficher l'historique
+                }
+            });
         })
         .catch(error => console.error('Erreur lors de la récupération des détails de l\'animal:', error));
     }
 
     function updateConsultationCounter(animalId) {
-
         console.log('Animal ID:', animalId);
-        fetch(' /api/update-counter', {
+        fetch('http://localhost:3002/api/update-counter', {
             method: 'POST',
             mode: 'cors',  // Ajout de CORS
             headers: {
@@ -98,7 +106,33 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => console.error('Erreur lors de la mise à jour du compteur de consultations:', error));
     }
-    
+
+    // Fonction pour afficher l'historique d'un animal
+    function afficherHistorique(animalId) {
+        fetch(`http://localhost:3002/api/animals/${animalId}/historique`)  // URL corrigée pour inclure l'animalId
+            .then(response => response.json())
+            .then(data => {
+                console.log('Historique de l\'animal:', data);
+
+                // Afficher l'historique dans une modale
+                const modalBody = document.getElementById('modal-body');
+                modalBody.innerHTML = ''; // Vide le contenu précédent
+                if (Array.isArray(data)) {
+                    data.forEach(entry => {
+                        const historyEntry = document.createElement('p');
+                        historyEntry.textContent = `date: ${entry.date}, action: ${entry.action}`;
+                        modalBody.appendChild(historyEntry);
+                    });
+                } else {
+                    modalBody.innerHTML = '<p>Aucun historique trouvé pour cet animal.</p>';
+                }
+
+                // Ouvre la modale
+                $('#animalModal').modal('show');
+            })
+            .catch(error => console.error('Erreur lors de la récupération de l\'historique :', error));
+    }
+
     document.getElementById('habitats-list').addEventListener('click', (e) => {
         const habitatCard = e.target.closest('.ha-card');
         if (habitatCard) {
@@ -108,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
 
 
 

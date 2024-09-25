@@ -1,6 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
-
-    fetch('/api/dashboard-data', {
+document.addEventListener('DOMContentLoaded', () => { 
+    fetch('http://localhost:3002/api/dashboard-data', {
         method: 'GET',
         credentials: 'include' // Pour envoyer les cookies de session
     })
@@ -17,18 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
             dashboardTitle.innerText = 'Tableau de Bord Vétérinaire';
             displayVetDashboard(data.habitats);
             document.getElementById('vetContainer').style.display = 'block';
-        } 
-        else if (data.role === 'employee') {
+        } else if (data.role === 'employee') {
             dashboardTitle.innerText = 'Tableau de Bord Employé';
             displayEmployeeDashboard(data.reviews);
             document.getElementById('employeeContainer').style.display = 'block';
-        }
-         else if (data.role === 'admin') {
+        } else if (data.role === 'admin') {
             dashboardTitle.innerText = 'Tableau de Bord Admin';
             displayAdminDashboard(data.habitats, data.reviews);
             document.getElementById('adminContainer').style.display = 'block';
-        }
-         else {
+        } else {
             document.getElementById('dashboardContent').innerHTML = '<p>Rôle non reconnu.</p>';
         }
     })
@@ -65,11 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let html = '';
 
         reviews.forEach(review => {
-            html += `
-                <div>
-                    <p>${review.commentaire} - Note : ${review.note}/5</p>
-                    <button onclick="replyToReview('${review._id}')">Répondre</button>
-                </div>`;
+            html += `<div>
+                <p>${review.commentaire} - Note : ${review.note}/5</p>
+                <button onclick="replyToReview('${review._id}')">Répondre</button>
+            </div>`;
         });
 
         reviewsContainer.innerHTML = html;
@@ -89,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         replyForm.onsubmit = function(event) {
             event.preventDefault();
             const response = document.getElementById('response').value;
-            fetch(`/api/reviews/${reviewId}/reply`, {
+            fetch(`http://localhost:3002/api/reviews/${reviewId}/reply`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -110,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fonction pour éditer un animal (vétérinaire/admin)
     function editAnimal(animalId) {
-        fetch(`/api/animals/${animalId}`)
+        fetch(`http://localhost:3002/api/animals/${animalId}`)
             .then(response => response.json())
             .then(animal => {
                 const editForm = `
@@ -128,8 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             
                             <button type="submit">Enregistrer les modifications</button>
                         </form>
-                    </div>
-                `;
+                    </div>`;
                 document.getElementById('dashboardContent').insertAdjacentHTML('beforeend', editForm);
             })
             .catch(error => {
@@ -144,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sante = document.getElementById('sante').value;
         const poids = document.getElementById('poids').value;
 
-        fetch(`/api/animals/${animalId}`, {
+        fetch(`http://localhost:3002/api/animals/${animalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

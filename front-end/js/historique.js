@@ -1,12 +1,11 @@
-export function afficherHistorique(animalId) {
-    // Appelle l'API ou récupère les données d'historique pour cet animal
-    fetch(`/api/animals/${animalId}/historique`)  // Exemple d'API fictive
+function afficherHistorique(animalId) { 
+    // Appelle l'API pour récupérer les données d'historique pour cet animal
+    fetch(`http://localhost:3002/api/animals/${animalId}/historique`)  // Correction ici
         .then(response => response.json())
         .then(data => {
-            // Affiche les données d'historique dans une modale, ou bien sur la page
+            // Affiche les données d'historique dans une modale
             console.log('Historique de l\'animal:', data);
 
-            // Afficher l'historique dans une modale (par exemple)
             const modalBody = document.getElementById('modal-body');
             modalBody.innerHTML = ''; // Vide le contenu précédent
             data.forEach(entry => {
@@ -20,4 +19,5 @@ export function afficherHistorique(animalId) {
         })
         .catch(error => console.error('Erreur lors de la récupération de l\'historique :', error));
 }
+
 

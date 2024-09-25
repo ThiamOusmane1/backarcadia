@@ -1,14 +1,37 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/mysqlConnection');
 
-// Schéma pour les avis des utilisateurs
-const reviewSchema = new mongoose.Schema({
-    name: { type: String, required: true },           // Nom de l'utilisateur
-    subject: { type: String, required: true },        // Sujet de l'avis
-    message: { type: String, required: true },        // Message de l'avis
-    email: { type: String, required: true },          // Adresse email de l'utilisateur
-    createdAt: { type: Date, default: Date.now }      // Date de création automatique
- });
-
-const Review = mongoose.model('Review', reviewSchema);
+const Review = sequelize.define('Review', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false
+    },
+    name: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    subject: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    message: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+    email: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    createdAt: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+    }
+}, {
+    timestamps: true, 
+    tableName: 'reviews' 
+});
 
 module.exports = Review;
+

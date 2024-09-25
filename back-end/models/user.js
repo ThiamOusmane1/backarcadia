@@ -1,23 +1,51 @@
-// models/User.js
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/mysqlConnection');
 const bcrypt = require('bcrypt');
 
-const userSchema = new mongoose.Schema({
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    role: { type: String, enum: ['admin', 'vet', 'employee'], default: 'admin', required: true }
+const User = sequelize.define('User', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    email: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        unique: true,
+        validate: {
+            isEmail: true, // si l'email est valide
+        },
+    },
+    password: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
+    role: {
+        type: DataTypes.ENUM('admin', 'vet', 'employee'),
+        allowNull: false,
+        defaultValue: 'admin',
+    },
+}, {
+    timestamps: true,
+    tableName: 'users', 
 });
 
-userSchema.pre('save', async function(next) {
-    if (this.isModified('password')) {
-        this.password = await bcrypt.hash(this.password, 10);
+// Hook pour hacher le mot de passe avant de sauvegarder
+User.beforeCreate(async (user, options) => {
+    user.password = await bcrypt.hash(user.password, 10);
+});
+
+User.beforeUpdate(async (user, options) => {
+    if (user.changed('password')) {
+        user.password = await bcrypt.hash(user.password, 10);
     }
-    next();
 });
 
-userSchema.methods.comparePassword = function(candidatePassword) {
+// Méthode pour comparer les mots de passe
+User.prototype.comparePassword = function(candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = User;
+
 
