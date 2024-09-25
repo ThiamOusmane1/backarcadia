@@ -13,7 +13,7 @@ require('./models/associations');
 // Importation des routeurs
 const animalRouter = require('./routes/animals');
 const habitatRouter = require('./routes/habitats');
-const reviewRouter = require('./routes/reviews'); 
+const reviewRouter = require('./routes/reviewRoute'); 
 const authRoutes = require('./routes/auth');
 
 const app = express();

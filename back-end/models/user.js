@@ -32,19 +32,32 @@ const User = sequelize.define('User', {
 
 // Hook pour hacher le mot de passe avant de sauvegarder
 User.beforeCreate(async (user, options) => {
-    user.password = await bcrypt.hash(user.password, 10);
+    try {
+        user.password = await bcrypt.hash(user.password, 10);
+    } catch (error) {
+        throw new Error('Erreur lors du hachage du mot de passe');
+    }
 });
 
 User.beforeUpdate(async (user, options) => {
-    if (user.changed('password')) {
-        user.password = await bcrypt.hash(user.password, 10);
+    try {
+        if (user.changed('password')) {
+            user.password = await bcrypt.hash(user.password, 10);
+        }
+    } catch (error) {
+        throw new Error('Erreur lors du hachage du mot de passe');
     }
 });
 
 // Méthode pour comparer les mots de passe
-User.prototype.comparePassword = function(candidatePassword) {
-    return bcrypt.compare(candidatePassword, this.password);
+User.prototype.comparePassword = async function(candidatePassword) {
+    try {
+        return await bcrypt.compare(candidatePassword, this.password);
+    } catch (error) {
+        throw new Error('Erreur lors de la comparaison des mots de passe');
+    }
 };
+
 
 module.exports = User;
 

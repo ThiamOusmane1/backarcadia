@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Habitat = require('./models/habitats');
-const Animal = require('./models/animals');
+const Habitat = require('../models/habitats');
+const Animal = require('../models/animals');
 
 // Route pour afficher tous les habitats
 router.get('/', async (req, res) => {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Review = require('./models/reviews'); // Importation du modèle MySQL Review
+const Review = require('../models/reviews'); // Importation du modèle MySQL Review
 
 // Route POST pour soumettre un avis
 router.post('/', async (req, res) => {

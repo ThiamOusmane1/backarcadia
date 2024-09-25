@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const MySQLUser = require('./models/user'); // Importation du modèle utilisateur MySQL
+const MySQLUser = require('../models/user'); // Importation du modèle utilisateur MySQL
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
 
