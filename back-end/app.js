@@ -2,23 +2,24 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const { sequelize, connectMySQLDB } = require('./config/mysqlConnection'); // Connexion MySQL avec Sequelize
+const { sequelize, connectMySQLDB } = require('./config/mysqlconnection'); // Connexion MySQL avec Sequelize
 
 // Importation des modèles pour MySQL
 const Animal = require('./models/animals');
-const MySQLUser = require('./models/user');
-const Historique = require('./models/historiques');
-require('./models/associations');
+const User = require('./models/users');
+const HistoriqueAnimal = require('./models/historiques_animals');
+const Habitat = require('./models/habitats');
+const Review = require('./models/reviews');
 
 // Importation des routeurs
-const animalRouter = require('./routes/animals');
-const habitatRouter = require('./routes/habitats');
-const reviewRouter = require('./routes/reviewRoute'); 
+const animalRoutes = require('./routes/animals');
+const habitatRoutes = require('./routes/habitats');
+const reviewsRoutes = require('./routes/reviews'); // Vérifiez que le nom du fichier est correct
 const authRoutes = require('./routes/auth');
+const vetRoutes = require('./routes/vet'); 
 
 const app = express();
 const port = process.env.PORT || 3000; // Changer à PORT au lieu de DB_PORT pour le serveur
-const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
 
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
@@ -47,9 +48,6 @@ const startServer = async () => {
         await connectMySQLDB();
         console.log('Connexion à MySQL réussie.');
 
-        // Synchroniser les modèles avec la base de données
-        await sequelize.sync({ alter: true }); // Assurez-vous que vos modèles sont synchronisés
-
         app.listen(port, () => {
             console.log(`Serveur démarré sur le port ${port}`);
         });
@@ -59,15 +57,11 @@ const startServer = async () => {
 };
 
 // Routes API
-app.use('/api/animals', animalRouter);
-app.use('/api/habitats', habitatRouter);
-app.use('/api/reviews', reviewRouter);
-app.use('/api/auth', authRoutes.router);
+app.use('/api/animals', animalRoutes);
+app.use('/api/habitats', habitatRoutes);
+app.use('/api/reviews', reviewsRoutes);
+app.use('/api/auth', authRoutes); // Utilisation de authRoutes.router
+app.use('/api/vet', vetRoutes); 
 
 // Appel de la fonction pour démarrer le serveur
 startServer();
-
-
-
-
-

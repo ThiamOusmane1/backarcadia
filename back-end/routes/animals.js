@@ -1,75 +1,83 @@
 const express = require('express');
 const router = express.Router();
-const Animal = require('../models/animals'); // Importation du modèle Animal
-const Habitat = require('../models/habitats'); // Importation du modèle Habitat
+const { Animal, Habitat, HistoriqueAnimal } = require('../config/mysqlconnection');
 
-// GET tous les animaux d'un habitat spécifique
+// Récupérer tous les animaux avec leur habitat
 router.get('/', async (req, res) => {
-  try {
-    const habitatName = req.query.habitat;
-    if (!habitatName) {
-      return res.status(400).json({ error: 'Le nom de l\'habitat est requis' });
+    try {
+        const animals = await Animal.findAll({
+            include: [{
+                model: Habitat,
+                as: 'habitat',
+                attributes: ['nom']
+            }]
+        });
+        res.status(200).json(animals);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des animaux:', error);
+        res.status(500).json({ message: 'Erreur lors de la récupération des animaux' });
     }
-
-    // Rechercher le nom de l'habitat et les animaux associés avec Sequelize
-    const habitat = await Habitat.findOne({
-      where: { name: habitatName },
-      include: { model: Animal, as: 'animaux' } // Inclure les animaux dans la réponse
-    });
-
-    if (!habitat || habitat.animaux.length === 0) {
-      return res.status(404).json({ error: 'Aucun animal trouvé pour cet habitat' });
-    }
-
-    res.json(habitat.animaux);
-  } catch (error) {
-    console.error('Erreur lors de la récupération des animaux:', error.message);
-    res.status(500).json({ error: 'Erreur lors de la récupération des animaux' });
-  }
 });
 
-// GET détails d'un animal par ID
-router.get('/animal-details', async (req, res) => {
-  try {
-    const animalId = req.query.id;
-
-    if (!animalId) {
-      return res.status(400).json({ error: 'L\'ID de l\'animal est requis' });
+// Récupérer un animal par son ID
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const animal = await Animal.findByPk(id, {
+            include: { model: Habitat, as: 'habitat' }
+        });
+        if (!animal) {
+            return res.status(404).json({ message: 'Animal non trouvé.' });
+        }
+        res.status(200).json(animal);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des détails de l\'animal:', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des détails de l\'animal' });
     }
-
-    const animal = await Animal.findByPk(animalId, { include: { model: Habitat, as: 'habitat' } }); // Inclure l'habitat dans la réponse
-
-    if (!animal) {
-      return res.status(404).json({ error: 'Animal non trouvé' });
-    }
-
-    res.json(animal);
-  } catch (error) {
-    console.error('Erreur lors de la récupération des détails de l\'animal:', error.message);
-    res.status(500).json({ error: 'Erreur lors de la récupération des détails de l\'animal' });
-  }
 });
 
-// GET historique d'un animal spécifique
-router.get('/:id/historiques', async (req, res) => {
-  try {
-    const animalId = req.params.id;
-
-    if (!animalId) {
-      return res.status(400).json({ error: 'L\'ID de l\'animal est requis' });
+// Mettre à jour le compteur de consultations
+router.post('/update-counter', async (req, res) => {
+    const { id } = req.body;
+    try {
+        const animal = await Animal.findByPk(id);
+        if (!animal) {
+            return res.status(404).json({ message: 'Animal non trouvé.' });
+        }
+        animal.consultations += 1;
+        await animal.save();
+        res.json({ message: 'Compteur de consultations mis à jour.', consultations: animal.consultations });
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour du compteur:', error);
+        res.status(500).json({ error: 'Erreur lors de la mise à jour du compteur' });
     }
-
-    const animal = await Animal.findByPk(animalId);
-
-    if (!animal || !animal.history) {
-      return res.status(404).json({ error: 'Aucun historique trouvé pour cet animal' });
-    }
-
-    res.json(animal.history);
-  } catch (error) {
-    console.error('Erreur lors de la récupération de l\'historique de l\'animal:', error.message);
-    res.status(500).json({ error: 'Erreur lors de la récupération de l\'historique de l\'animal' });
-  }
 });
+
+// Récupérer l'historique d'un animal
+router.get('/:animalId/historique', async (req, res) => {
+    const { animalId } = req.params;
+    
+    try {
+        // Modification de la requête pour ne sélectionner que les colonnes existantes
+        const historique = await HistoriqueAnimal.findAll({
+            where: { animal_id: animalId },
+            attributes: ['id', 'animal_id', 'action', 'date', 'vet_id', 'old_value', 'new_value'] // Sélectionnez les colonnes existantes
+        });
+
+        // Si l'historique est vide, renvoie une réponse 404
+        if (!historique.length) {
+            return res.status(404).json({ message: 'Historique non trouvé' });
+        }
+
+        // Renvoie l'historique si trouvé
+        res.status(200).json(historique);
+    } catch (error) {
+        // Capture l'erreur et la log dans la console
+        console.error('Erreur lors de la récupération de l\'historique:', error);
+        res.status(500).json({ message: 'Erreur lors de la récupération de l\'historique' });
+    }
+});
+
 
 module.exports = router;
+

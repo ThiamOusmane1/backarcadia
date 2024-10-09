@@ -1,27 +1,26 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    return sequelize.define('Habitat', {
+    return sequelize.define('HistoriqueAnimal', {
         id: {
             type: DataTypes.STRING(24),
             primaryKey: true,
             allowNull: false
         },
-        nom: {
-            type: DataTypes.STRING(255),
+        animal_id: {
+            type: DataTypes.STRING(24),
             allowNull: false
         },
         description: {
             type: DataTypes.TEXT,
             allowNull: true
         },
-        image: {
-            type: DataTypes.STRING(255),
-            allowNull: true
+        date: {
+            type: DataTypes.DATE,
+            allowNull: false
         }
     }, {
-        tableName: 'habitats',
+        tableName: 'historique_animals',
         timestamps: false
     });
 };
-

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Habitat = require('../models/habitats');
-const Animal = require('../models/animals');
+const { Animal, Habitat ,HistoriqueAnimal } = require('../config/mysqlconnection'); // Import des modèles
+
 
 // Route pour afficher tous les habitats
 router.get('/', async (req, res) => {
@@ -16,14 +16,14 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Route pour afficher les animaux par habitat
+// Route pour afficher les détails d'un habitat par nom
 router.get('/:habitatName', async (req, res) => {
   try {
     const habitatName = req.params.habitatName;
 
-    // Recherche du nom de l'habitat (insensible à la casse)
+    // Recherche de l'habitat (insensible à la casse)
     const habitat = await Habitat.findOne({
-      where: { name: habitatName },
+      where: { nom: habitatName },
       include: { model: Animal, as: 'animaux' }
     });
 
@@ -39,5 +39,3 @@ router.get('/:habitatName', async (req, res) => {
 });
 
 module.exports = router;
-
-

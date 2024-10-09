@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Gestion de la soumission du formulaire de login
     function handleLoginFormSubmit(event) {
         event.preventDefault(); // Empêcher le comportement par défaut du formulaire
 
@@ -16,21 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Formulaire soumis avec", { email, password }); // Ajout d'un message de débogage
 
         // Requête pour se connecter et recevoir un token JWT
-        fetch('http://localhost:3002/api/login', {
+        fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
-            mode: 'cors',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json' // Indique que le corps de la requête est au format JSON
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, password }) // Envoie les données de login
         })
         .then(response => {
             if (!response.ok) {
-                return response.json().then(data => {
-                    throw new Error(data.message || 'Erreur de connexion');
-                });
+                throw new Error(`Erreur: ${response.status} ${response.statusText}`);
             }
-            return response.json();  // Récupérer le token JWT
+            return response.json(); // Convertit la réponse en JSON
         })
         .then(data => {
             // Stocker le token JWT dans le localStorage
@@ -38,23 +36,22 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Token JWT reçu:", data.token); // Ajout d'un message de débogage
 
             // Ensuite, demander le rôle de l'utilisateur avec le token
-            return fetch('http://localhost:3002/api/auth/getUserRole', {
+            return fetch('http://localhost:3000/api/auth/getUserRole', {
                 method: 'GET',
-                mode: 'cors',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`,  // Envoi du token dans l'en-tête
-                    'Content-Type': 'application/json'
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}` // Envoi du token dans l'en-tête
                 }
             });
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Erreur lors de la récupération du rôle');
+                throw new Error(`Erreur: ${response.status} ${response.statusText}`);
             }
-            return response.json();
+            return response.json(); // Convertit la réponse en JSON
         })
         .then(data => {
             console.log("Rôle de l'utilisateur récupéré:", data.role); // Ajout d'un message de débogage
+
             // Rediriger l'utilisateur vers la page appropriée en fonction de son rôle
             if (data.role === 'vet') {
                 window.location.href = 'vet-dashboard.html';
