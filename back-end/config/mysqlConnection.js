@@ -10,7 +10,8 @@ const sequelize = new Sequelize(
     {
         host: process.env.DB_HOST || 'localhost', // Hôte de la base de données
         dialect: 'mysql',                          // Type de base de données
-        port: process.env.DB_PORT || 3306         // Port de connexion
+        port: process.env.DB_PORT || 3306 ,
+        logging: console.log // Active les logs SQL        // Port de connexion
     }
 );
 
@@ -26,11 +27,22 @@ console.log('Modèle User initialisé :', User);
 console.log('Modèle Review initialisé :', Review);
 
 // Définir les associations entre les modèles
+
+// Animal appartient à Habitat
 Animal.belongsTo(Habitat, { foreignKey: 'habitat_id', as: 'habitat' });
 Habitat.hasMany(Animal, { foreignKey: 'habitat_id', as: 'animaux' });
+
+// HistoriqueAnimal appartient à Animal
 Animal.hasMany(HistoriqueAnimal, { foreignKey: 'animal_id', as: 'historique' });
 HistoriqueAnimal.belongsTo(Animal, { foreignKey: 'animal_id', as: 'animal' });
 
+// Animal appartient à un Vétérinaire (User avec role 'vet')
+Animal.belongsTo(User, { foreignKey: 'vet_id', as: 'veterinaire' });
+User.hasMany(Animal, { foreignKey: 'vet_id', as: 'animaux_soignes' });
+
+// Si tu souhaites relier Review à User (par exemple, pour savoir qui a laissé une review)
+//Review.belongsTo(User, { foreignKey: 'user_id', as: 'utilisateur' });
+//User.hasMany(Review, { foreignKey: 'user_id', as: 'avis' });
 // Fonction de connexion à la base de données
 const connectMySQLDB = async () => {
     try {

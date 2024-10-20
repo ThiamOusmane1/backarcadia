@@ -14,16 +14,16 @@ const Review = require('./models/reviews');
 // Importation des routeurs
 const animalRoutes = require('./routes/animals');
 const habitatRoutes = require('./routes/habitats');
-const reviewsRoutes = require('./routes/reviews'); // Vérifiez que le nom du fichier est correct
+const reviewsRoutes = require('./routes/reviews'); 
 const authRoutes = require('./routes/auth');
 const vetRoutes = require('./routes/vet'); 
 
 const app = express();
-const port = process.env.PORT || 3000; // Changer à PORT au lieu de DB_PORT pour le serveur
+const port = process.env.PORT || 3000; 
 
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
-    origin: ['http://127.0.0.1:8080', 'http://localhost:8080'], // Assurez-vous que c'est le bon port pour le frontend
+    origin: ['http://127.0.0.1:8080', 'http://localhost:8080'], 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true
@@ -61,7 +61,7 @@ app.use('/api/animals', animalRoutes);
 app.use('/api/habitats', habitatRoutes);
 app.use('/api/reviews', reviewsRoutes);
 app.use('/api/auth', authRoutes); // Utilisation de authRoutes.router
-app.use('/api/vet', vetRoutes); 
+app.use('/api', vetRoutes); 
 
 // Appel de la fonction pour démarrer le serveur
 startServer();

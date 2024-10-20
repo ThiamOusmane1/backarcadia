@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
         }
 
         // Génération du token
-        const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: '8h' });
         console.log('Token généré :', token);
 
         // Renvoi du token au client

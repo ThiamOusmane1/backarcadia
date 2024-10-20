@@ -5,11 +5,11 @@ module.exports = (sequelize) => {
         id: {
             type: DataTypes.STRING(24),
             primaryKey: true,
-            allowNull: false
+            allowNull: true
         },
         nom: {
             type: DataTypes.STRING(255),
-            allowNull: false
+            allowNull: true
         },
         habitat_id: {
             type: DataTypes.STRING(24),

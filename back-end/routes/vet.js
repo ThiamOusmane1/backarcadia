@@ -1,59 +1,41 @@
 const express = require('express');
 const router = express.Router();
-const { Animal, Habitat, HistoriqueAnimal } = require('../config/mysqlconnection');
+const { Animal ,Habitat } = require('../config/mysqlconnection');
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
-router.get('/api/animals/vet/:vet_id', authenticateToken, authorizeRoles('vet'), async (req, res) => {
+// Route pour récupérer les animaux d'un vétérinaire connecté
+router.put('/animals/:id', async (req, res) => {
+    const { id } = req.params;
+    console.log(`ID reçu pour la mise à jour : ${id}`); // Vérifie si l'ID arrive bien
+    console.log(`Corps de la requête :`, req.body);
+
     try {
-        const { vet_id } = req.params;  // Récupérer le vet_id depuis l'URL
-
-        // Récupérer tous les animaux associés à ce vétérinaire
-        const animals = await Animal.findAll({
-            where: { vet_id: vet_id },
-           // include: [{ model: Habitat, as: 'habitat' }]  // Si vous voulez inclure des habitats
-        });
-
-        if (animals.length === 0) {
-            return res.status(404).json({ message: 'Aucun animal trouvé pour ce vétérinaire' });
-        }
-
-        res.json(animals);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des animaux :', error);
-        res.status(500).json({ message: 'Erreur lors de la récupération des animaux' });
-    }
-});
-
-
-
-// Route pour mettre à jour un animal (vétérinaire uniquement)
-router.put('/animals/:id', authenticateToken, authorizeRoles('vet'), async (req, res) => {
-    try {
-        const { id } = req.params;  // Récupérer l'ID de l'animal depuis l'URL
-        const { nourriture, sante, poids, soins } = req.body;
-        const vetId = req.user.userId;  // Récupérer l'ID du vétérinaire depuis le token JWT
-
-        // Vérifier que l'animal appartient bien au vétérinaire connecté
-        const animal = await Animal.findOne({
-            where: { id, vet_id: vetId }
-        });
+        // Rechercher l'animal par son ID
+        const animal = await Animal.findByPk(id);
 
         if (!animal) {
-            return res.status(404).json({ message: 'Animal non trouvé ou non associé à ce vétérinaire' });
+            console.log('Animal non trouvé');
+            return res.status(404).json({ message: 'Animal non trouvé.' });
         }
 
-        // Mise à jour des informations de l'animal
-        animal.nourriture = nourriture;
-        animal.sante = sante;
-        animal.poids = poids;
-        animal.soins = soins;
+        console.log('Animal trouvé :', animal);
 
-        await animal.save(); // Enregistrer les changements
+        // Mise à jour des champs, avec vérification que le body contient bien les données
+        animal.sante = req.body.sante ?? animal.sante;
+        animal.poids = req.body.poids ?? animal.poids;
+        animal.nourriture = req.body.nourriture ?? animal.nourriture;
+        animal.soins = req.body.soins ?? animal.soins;
+        animal.habitat_id = req.body.habitat_id ?? animal.habitat_id; // Si tu veux mettre à jour l'habitat
 
-        res.json({ message: 'Animal mis à jour avec succès' });
+        // Sauvegarde dans la base de données
+        console.log('Tentative de sauvegarde de l\'animal');
+        await animal.save();
+
+        console.log('Animal mis à jour avec succès');
+        return res.json({ message: 'Animal mis à jour avec succès.', animal });
     } catch (error) {
         console.error('Erreur lors de la mise à jour de l\'animal :', error);
-        res.status(500).json({ message: 'Erreur lors de la mise à jour de l\'animal' });
+        return res.status(500).json({ message: 'Erreur serveur.' });
     }
 });
 
