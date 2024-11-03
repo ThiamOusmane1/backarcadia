@@ -4,39 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalBtn = document.getElementById('closeModalBtn');
     const updateAnimalBtn = document.getElementById('updateAnimalBtn');
     const statusMessage = document.getElementById('statusMessage');
-    const modalStatusMessage = document.getElementById('modalStatusMessage');
 
     let selectedAnimalId = null;
 
-    // Fonction pour récupérer l'ID du vétérinaire depuis le token JWT
-    function getVetIdFromToken() {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.error('Aucun token trouvé dans localStorage');
-            return null;
-        }
-
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            return payload.userId; // Assurez-vous que `userId` correspond à la clé utilisée dans votre token
-        } catch (error) {
-            console.error('Erreur lors de la décodage du token', error);
-            return null;
-        }
+    // Fonction pour déconnecter l'utilisateur
+    function logout() {
+        localStorage.removeItem('authToken'); // Supprime le token d'authentification
+        window.location.href = 'index.html';  // Redirige vers la page de connexion
     }
+
+    // Écouter le clic sur le bouton de déconnexion
+    logoutBtn.addEventListener('click', logout);
 
     // Fonction pour afficher un message de statut
     function showStatusMessage(message, isError = false) {
         statusMessage.textContent = message;
         statusMessage.style.color = isError ? 'red' : 'green';
         setTimeout(() => { statusMessage.textContent = ''; }, 3000);
-    }
-
-    // Fonction pour afficher un message dans la modale
-    function showModalStatusMessage(message, isError = false) {
-        modalStatusMessage.textContent = message;
-        modalStatusMessage.style.color = isError ? 'red' : 'green';
-        setTimeout(() => { modalStatusMessage.textContent = ''; }, 3000);
     }
 
     // Fermer la fenêtre modale
@@ -46,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Ouvrir la fenêtre modale pour modifier un animal
     function openEditModal(animal) {
-        selectedAnimalId = animal.id; 
+        selectedAnimalId = animal.id;
         document.getElementById('animalHealth').value = animal.sante;
         document.getElementById('animalWeight').value = animal.poids;
         document.getElementById('animalFood').value = animal.nourriture;
@@ -56,20 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les animaux depuis l'API
     function loadAnimals() {
-        const vetId = getVetIdFromToken(); // Récupérer l'ID du vétérinaire
-    
-        if (!vetId) {
-            showStatusMessage('Erreur : ID du vétérinaire non trouvé', true);
-            return;
-        }
-    
         showStatusMessage('Chargement des animaux...', false); // Message de chargement
-    
-        fetch(`http://localhost:3000/api/animals`, { // Utiliser l'ID du vétérinaire ici
+
+        fetch('http://localhost:3000/api/animals', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}` // Token JWT pour authentification
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}` // Utiliser 'authToken'
             }
         })
         .then(response => {
@@ -79,37 +56,39 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            console.log('Réponse de l\'API:', data);
+            console.log('Réponse de l\'API:', data); // Afficher la réponse
+
+            // Vérification de la propriété animals
+            if (!Array.isArray(data)) {
+                throw new Error('Les données ne sont pas un tableau');
+            }
+
             animalsTableBody.innerHTML = ''; // Vide le tableau avant de le remplir
-    
+
             data.forEach(animal => {
-                const imageUrl = `/pictures/${animal.url}`; // Chemin d'image
+                const imageUrl = `/pictures/${animal.url}`; 
                 const row = document.createElement('tr');
-    
+
                 row.innerHTML = `
                     <td><img src="${imageUrl}" class="img-fluid mb-3" alt="${animal.nom}"></td>
                     <td>${animal.nom}</td>
-                    <td>${animal.habitat.nom|| 'Inconnu'}</td>
+                    <td>${animal.habitat ? animal.habitat.nom : 'Inconnu'}</td>
                     <td>${animal.sante}</td>
                     <td>${animal.poids} kg</td>
                     <td>${animal.nourriture}</td>
                     <td>${animal.quantite} kg</td>
                     <td>${animal.soins}</td>
                     <td>
-                        <button class="view-history-btn" data-animal-id="${animal.id}">Voir l'historique</button>
                         <button class="edit-btn" data-id="${animal.id}">Modifier</button>
                     </td>
                 `;
-    
-                // Ajouter événements "Modifier" et "Voir l'historique"
+
+                // Ajouter événements "Modifier"
                 row.querySelector('.edit-btn').addEventListener('click', () => openEditModal(animal));
-                row.querySelector('.view-history-btn').addEventListener('click', () => {
-                    afficherHistorique(animal.id); 
-                });
-    
+
                 animalsTableBody.appendChild(row);
             });
-    
+
             showStatusMessage('Animaux chargés avec succès !');
         })
         .catch(error => {
@@ -117,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showStatusMessage('Erreur lors du chargement des animaux', true);
         });
     }
-    
 
     // Mettre à jour les informations de l'animal via l'API
     updateAnimalBtn.addEventListener('click', () => {
@@ -130,12 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Validation des champs
         if (!updatedAnimal.sante || !updatedAnimal.poids || !updatedAnimal.nourriture || !updatedAnimal.soins) {
-            showModalStatusMessage('Veuillez remplir tous les champs.', true);
+            showStatusMessage('Veuillez remplir tous les champs.', true);
             return;
         }
 
         if (isNaN(updatedAnimal.poids) || updatedAnimal.poids <= 0) {
-            showModalStatusMessage('Le poids doit être un nombre positif.', true);
+            showStatusMessage('Le poids doit être un nombre positif.', true);
             return;
         }
 
@@ -145,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`  // Token d'authentification
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`  // Token d'authentification
             },
             body: JSON.stringify(updatedAnimal)
         })
@@ -161,15 +139,18 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(() => {
             editModal.style.display = 'none';
             loadAnimals();  // Recharger la liste des animaux après mise à jour
-            showModalStatusMessage('Informations mises à jour avec succès !');
+            showStatusMessage('Informations mises à jour avec succès !');
         })
         .catch(error => {
             console.error('Erreur lors de la mise à jour de l\'animal :', error);
-            showModalStatusMessage('Erreur lors de la mise à jour de l\'animal', true);
+            showStatusMessage('Erreur lors de la mise à jour de l\'animal', true);
         });
     });
 
     loadAnimals(); // Charger les animaux au démarrage
 });
+
+
+
 
 

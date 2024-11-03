@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Review } = require('../config/mysqlconnection'); // Vérifiez que ce chemin est correct
+const { Review } = require('../config/mysqlConnection'); // Vérifiez que ce chemin est correct
 console.log('Modèle Review:', Review);
 
 // Soumettre un avis

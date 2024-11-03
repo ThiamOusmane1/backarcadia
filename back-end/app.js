@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const { sequelize, connectMySQLDB } = require('./config/mysqlconnection'); // Connexion MySQL avec Sequelize
+const { sequelize, connectMySQLDB } = require('./config/mysqlConnection'); // Connexion MySQL avec Sequelize
 
 // Importation des modèles pour MySQL
 const Animal = require('./models/animals');
@@ -17,6 +17,7 @@ const habitatRoutes = require('./routes/habitats');
 const reviewsRoutes = require('./routes/reviews'); 
 const authRoutes = require('./routes/auth');
 const vetRoutes = require('./routes/vet'); 
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const port = process.env.PORT || 3000; 
@@ -62,6 +63,7 @@ app.use('/api/habitats', habitatRoutes);
 app.use('/api/reviews', reviewsRoutes);
 app.use('/api/auth', authRoutes); // Utilisation de authRoutes.router
 app.use('/api', vetRoutes); 
+app.use('/api', adminRoutes);
 
 // Appel de la fonction pour démarrer le serveur
 startServer();

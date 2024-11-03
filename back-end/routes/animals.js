@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Animal, Habitat, HistoriqueAnimal } = require('../config/mysqlconnection');
+const { Animal, Habitat, HistoriqueAnimal } = require('../config/mysqlConnection');
 
 // Récupérer tous les animaux avec leur habitat
 router.get('/', async (req, res) => {

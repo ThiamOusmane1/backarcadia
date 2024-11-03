@@ -1,8 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { User } = require('../config/mysqlconnection'); // Modèle utilisateur
+const { User } = require('../config/mysqlConnection'); // Modèle utilisateur
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
 

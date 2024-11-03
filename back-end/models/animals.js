@@ -5,11 +5,11 @@ module.exports = (sequelize) => {
         id: {
             type: DataTypes.STRING(24),
             primaryKey: true,
-            allowNull: true
+            allowNull: false // Doit être unique
         },
         nom: {
             type: DataTypes.STRING(255),
-            allowNull: true
+            allowNull: false
         },
         habitat_id: {
             type: DataTypes.STRING(24),
@@ -47,10 +47,13 @@ module.exports = (sequelize) => {
         soins: {
             type: DataTypes.TEXT,
             allowNull: true
+        },
+        isDeleted: { // Champ pour suppression logique
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
     }, {
         tableName: 'animals',
         timestamps: false
     });
 };
-

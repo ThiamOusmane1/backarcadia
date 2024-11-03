@@ -1,10 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const { Animal ,Habitat } = require('../config/mysqlconnection');
+const { Animal, Habitat } = require('../config/mysqlConnection'); // Assurez-vous que ce chemin est correct
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // Route pour récupérer les animaux d'un vétérinaire connecté
-router.put('/animals/:id', async (req, res) => {
+router.get('/animals', authenticateToken, authorizeRoles('vet'), async (req, res) => {
+    try {
+        const animals = await Animal.findAll({
+            attributes: ['id', 'nom', 'sante', 'poids', 'nourriture', 'soins', 'quantite', 'url'],
+            include: [
+                { model: Habitat, as: 'habitat', attributes: ['nom'] }
+            ]
+        });
+
+        return res.json({ message: 'Liste des animaux récupérée avec succès.', animals });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des animaux :', error);
+        return res.status(500).json({ message: 'Erreur serveur.' });
+    }
+});
+
+// Route pour mettre à jour les informations d'un animal
+router.put('/animals/:id', authenticateToken, authorizeRoles('vet'), async (req, res) => {
     const { id } = req.params;
     console.log(`ID reçu pour la mise à jour : ${id}`); // Vérifie si l'ID arrive bien
     console.log(`Corps de la requête :`, req.body);
@@ -39,6 +56,6 @@ router.put('/animals/:id', async (req, res) => {
     }
 });
 
-
 module.exports = router;
+
 

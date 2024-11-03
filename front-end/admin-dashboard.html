@@ -7,22 +7,125 @@
     <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-    <header class="bg-success text-white text-center py-3">
+    <header>
         <a href="index.html">
             <img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo">
         </a>
         <h1>Bienvenue dans le tableau de bord Admin</h1>
+        <button id="logoutBtn" class="logout-btn">Déconnexion</button>
     </header>
 
     <main>
-        <p>Vous avez accès à toutes les sessions.</p>
-        <!-- Ajoutez ici les outils de gestion d'administrateur -->
+        <section id="admin-tools">
+            <h2>Gestion des utilisateurs</h2>
+            <button id="addUserBtn">Ajouter un utilisateur</button>
+            <div class="table-container">
+                <table id="userTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Rôle</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="animal-tools">
+            <h2>Gestion des animaux</h2>
+            <button id="addAnimalBtn">Ajouter un animal</button>
+            <div class="table-container">
+                <table id="animalTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Nom</th>
+                            <th>Habitat</th>
+                            <th>État de santé</th>
+                            <th>Poids</th>
+                            <th>Nourriture</th>
+                            <th>Quantité</th>
+                            <th>Soins</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
     </main>
+
+    <!-- Formulaire Modal pour les utilisateurs -->
+    <div id="userModal" class="form-modal" style="display:none;">
+        <div class="form-modal-content">
+            <button class="form-modal-close">X</button>
+            <h2>Ajouter/Modifier Utilisateur</h2>
+            <form>
+                <input type="text" placeholder="Email">
+                <input type="text" placeholder="Rôle">
+                <button type="submit">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulaire Modal pour modifier un utilisateur -->
+    <div id="editUserModal" class="form-modal" style="display:none;">
+        <div class="form-modal-content">
+            <button class="form-modal-close">X</button>
+            <h2>Modifier l'utilisateur</h2>
+            <form id="editUserForm">
+                <input type="email" id="editUserEmail" placeholder="Email" required>
+                <select id="editUserRole">
+                    <option value="user">Utilisateur</option>
+                    <option value="admin">Administrateur</option>
+                </select>
+                <button type="button" id="saveUserBtn">Sauvegarder</button>
+                <button type="button" id="cancelUserEditBtn">Annuler</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulaire Modal pour les animaux -->
+    <div id="animalModal" class="form-modal" style="display:none;">
+        <div class="form-modal-content">
+            <button class="form-modal-close">X</button>
+            <h2>Ajouter/Modifier Animal</h2>
+            <form>
+                <input type="text" placeholder="Nom">
+                <input type="text" placeholder="Habitat">
+                <input type="number" placeholder="Poids">
+                <input type="text" placeholder="Santé">
+                <input type="text" placeholder="Nourriture">
+                <input type="number" placeholder="Quantité">
+                <button type="submit">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulaire Modal pour modifier un animal -->
+    <div id="editAnimalModal" class="form-modal" style="display:none;">
+        <div class="form-modal-content">
+            <button class="form-modal-close">X</button>
+            <h2>Modifier l'animal</h2>
+            <form id="editAnimalForm">
+                <input type="text" id="editAnimalName" placeholder="Nom" required>
+                <input type="text" id="editAnimalHealth" placeholder="Santé" required>
+                <input type="number" id="editAnimalWeight" placeholder="Poids (kg)" required>
+                <input type="text" id="editAnimalFood" placeholder="Nourriture" required>
+                <button type="button" id="saveAnimalBtn">Sauvegarder</button>
+                <button type="button" id="cancelAnimalEditBtn">Annuler</button>
+            </form>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2024 Zoo-Arcadia. Tous droits réservés.</p>
     </footer>
+
+    <script src="js/admin-dashboard.js"></script>
 </body>
 </html>
-
-
