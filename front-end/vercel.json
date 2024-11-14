@@ -5,12 +5,6 @@
         "src": "front-end/**/*",
         "use": "@vercel/static"
       }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/front-end/$1"
-      }
     ]
   }
   
