@@ -65,5 +65,5 @@ app.use('/api/auth', authRoutes); // Utilisation de authRoutes.router
 app.use('/api', vetRoutes); 
 app.use('/api', adminRoutes);
 
-// Appel de la fonction pour démarrer le serveur
-startServer();
+module.exports = app;
+
