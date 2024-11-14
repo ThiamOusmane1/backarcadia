@@ -84,6 +84,30 @@ h2 {
     box-shadow: 0 0 8px rgba(0, 100, 0, 0.4);
 }
 
+/* Section d'informations de contact */
+.contact-info {
+    background-color: rgba(255, 255, 255, 0.15); 
+    border: 2px solid #3b5323;
+    border-radius: 10px;
+    padding: 20px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+    margin-top: 20px;
+    backdrop-filter: blur(5px); /* Ajout d'un flou d'arrière-plan */
+}
+
+.contact-info h5 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #289321;
+    margin-bottom: 5px;
+}
+
+.contact-info p {
+    margin: 0;
+    color: #3b5323;
+}
+
+
 /* Button */
 .back-to-home {
     text-align: center;
@@ -141,6 +165,10 @@ footer {
     h2 {
         font-size: 1.5rem;
     }
+
+    .contact-info h5 {
+        font-size: 1rem;
+    }
 }
 
 /* Tablette */
@@ -160,6 +188,12 @@ footer {
     .btn-primary, .btn-secondary {
         font-size: 1rem;
         padding: 10px;
+    }
+    .contact-info h5 {
+        font-size: 1.25rem;
+    }
+    .contact-info p {
+        font-size: 1rem;
     }
 }
 
