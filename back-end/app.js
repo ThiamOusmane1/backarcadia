@@ -20,7 +20,7 @@ const vetRoutes = require('./routes/vet');
 const adminRoutes = require('./routes/admin');
 
 const app = express();
-const port = process.env.PORT || 3000; 
+const port = process.env.DB_PORT || 3000; 
 
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
@@ -63,7 +63,7 @@ const startServer = async () => {
 app.use('/api/animals', animalRoutes);
 app.use('/api/habitats', habitatRoutes);
 app.use('/api/reviews', reviewsRoutes);
-app.use('/api/auth', authRoutes); // Utilisation de authRoutes.router
+app.use('/api/auth', authRoutes); 
 app.use('/api', vetRoutes); 
 app.use('/api', adminRoutes);
 

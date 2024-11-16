@@ -34,12 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Écouter les clics pour voir les détails d'un animal
-    animalGallery.addEventListener('click', (e) => {
-        if (e.target.classList.contains('view-details-btn')) {
-            const animalId = e.target.getAttribute('data-animal-id');
-            fetchAnimalDetails(animalId);
-        }
-    });
+   // animalGallery.addEventListener('click', (e) => {
+      //  if (e.target.classList.contains('view-details-btn')) {
+       //     const animalId = e.target.getAttribute('data-animal-id');
+          //  fetchAnimalDetails(animalId);
+    //    }
+  //  });
 
     // Fonction pour récupérer les détails d'un animal
     async function fetchAnimalDetails(animalId) {
