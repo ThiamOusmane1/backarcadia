@@ -20,13 +20,12 @@ const vetRoutes = require('./routes/vet');
 const adminRoutes = require('./routes/admin');
 
 const app = express();
-const port = process.env.DB_PORT || 3000; 
+const port = process.env.PORT || 3000; 
 
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
     origin: ['http://127.0.0.1:8080',
-             'https://frontarcadia-app.vercel.app',
-             'https://frontarcadia-khaj4lehx-thiamousmane1s-projects.vercel.app'], 
+             'https://frontarcadia-app.vercel.app'], 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true
@@ -51,9 +50,9 @@ const startServer = async () => {
         await connectMySQLDB();
         console.log('Connexion à MySQL réussie.');
 
-        //app.listen(port, () => {
-         //   console.log(`Serveur démarré sur le port ${port}`);
-       // });
+        app.listen(port, () => {
+            console.log(`Serveur démarré sur le port ${port}`);
+        });
     } catch (error) {
         console.error('Erreur lors du démarrage du serveur :', error);
     }
