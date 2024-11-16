@@ -8,10 +8,15 @@ const sequelize = new Sequelize(
     process.env.DB_USER,     // Nom d'utilisateur de la base de données
     process.env.DB_PASSWORD,  // Mot de passe de la base de données
     {
-        host: process.env.DB_HOST || 'localhost', // Hôte de la base de données
-        dialect: 'mysql',                          // Type de base de données
+        host: process.env.DB_HOST || 'localhost', 
+        dialect: 'mysql',                          
         port: process.env.DB_PORT || 3306 ,
-        logging: console.log // Active les logs SQL        // Port de connexion
+        logging: console.log,// Active les logs SQL 
+        dialectOptions: {
+            ssl: {
+                rejectUnauthorized: true,
+            },
+        },  
     }
 );
 
