@@ -24,7 +24,7 @@ const port = process.env.PORT || 3000;
 
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
-    origin: ['https://frontarcadia-app.vercel.app', 'http://127.0.0.1:8080', 'http://localhost:8080'], 
+    origin: ['https://frontarcadia-app.vercel.app'], 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true
