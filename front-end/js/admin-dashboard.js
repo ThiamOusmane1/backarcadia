@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editAnimalHealth = document.getElementById('editAnimalHealth');
     const editAnimalWeight = document.getElementById('editAnimalWeight');
     const editAnimalFood = document.getElementById('editAnimalFood');
-    const apiUrl = 'https://zoo-arcadia-omega.vercel.app/api';
+    const apiUrl = 'https://zoo-arcadia-omega.vercel.app';
     let currentUserId, currentAnimalId;
 
     // Déconnexion
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Vérifier le rôle de l'utilisateur
-    fetch('${apiUrl}/auth/getUserRole', {
+    fetch('${apiUrl}/api/auth/getUserRole', {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
     })
     .then(response => response.json())
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les utilisateurs
     function loadUsers() {
-        fetch('${apiUrl}/users', {
+        fetch('${apiUrl}/api/users', {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         })
         .then(response => response.json())
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les animaux
     function loadAnimals() {
-        fetch('${apiUrl}/animals', {
+        fetch('${apiUrl}/api/animals', {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         })
         .then(response => response.json())
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Envoi des modifications d'un utilisateur
     editUserForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        fetch(`${apiUrl}/users/${currentUserId}`, {
+        fetch(`${apiUrl}/api/users/${currentUserId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour supprimer un utilisateur
     window.deleteUser = function(id) {
         if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
-            fetch(`${apiUrl}/users/${id}`, {
+            fetch(`${apiUrl}/api/users/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
             })
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Envoi des modifications d'un animal
     editAnimalForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        fetch(`${apiUrl}/animals/${currentAnimalId}`, {
+        fetch(`${apiUrl}/api/animals/${currentAnimalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour supprimer un animal
     window.deleteAnimal = function(id) {
         if (confirm("Êtes-vous sûr de vouloir supprimer cet animal ?")) {
-            fetch(`${apiUrl}/animals/${id}`, {
+            fetch(`${apiUrl}/api/animals/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
             })

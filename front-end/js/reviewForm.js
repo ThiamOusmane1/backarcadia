@@ -5,12 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const formSection = document.getElementById('reviewFormSection');
     const formReview = document.getElementById('reviewForm');
     const formConfirm = document.getElementById('formConfirmation');
-    const apiUrl = 'https://zoo-arcadia-omega.vercel.app/api';
+    const apiUrl = 'https://zoo-arcadia-omega.vercel.app';
 
     // Fonction pour afficher les avis
     async function displayReviews() {
         try {
-            const response = await fetch('${apiUrl}/reviews');
+            const response = await fetch('${apiUrl}/api/reviews');
             const reviews = await response.json();
 
             // Vider le conteneur des avis existants
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             try {
                 // Envoyer les données au serveur avec fetch
-                const response = await fetch('${apiUrl}/reviews', {
+                const response = await fetch('${apiUrl}/api/reviews', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

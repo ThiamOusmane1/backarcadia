@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiUrl = 'https://zoo-arcadia-omega.vercel.app/api';
+    const apiUrl = 'https://zoo-arcadia-omega.vercel.app';
 
     // Gestion de la soumission du formulaire de login
     function handleLoginFormSubmit(event) {
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Formulaire soumis avec", { email, password }); // Ajout d'un message de débogage
 
         // Requête pour se connecter et recevoir un token JWT
-        fetch('${apiUrl}/auth/login', {
+        fetch('${apiUrl}/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json' // Indique que le corps de la requête est au format JSON
@@ -36,8 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('authToken', data.token);
             console.log("Token JWT reçu:", data.token); // Ajout d'un message de débogage
 
-            // Ensuite, demander le rôle de l'utilisateur avec le token
-            return fetch('${apiUrl}/auth/getUserRole', {
+            // demander le rôle de l'utilisateur avec le token
+            return fetch('${apiUrl}/api/auth/getUserRole', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}` // Envoi du token dans l'en-tête

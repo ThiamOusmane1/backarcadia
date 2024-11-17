@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const animalGallery = document.getElementById('animal-gallery');
-    const apiUrl = 'https://zoo-arcadia-omega.vercel.app/api';
+    const apiUrl = 'https://zoo-arcadia-omega.vercel.app';
     
     // Fonction pour récupérer les animaux par habitat
     async function fetchAnimals(habitatName) {
         try {
-            const response = await fetch(`${apiUrl}/habitats/${encodeURIComponent(habitatName)}`);
+            const response = await fetch(`${apiUrl}/api/habitats/${encodeURIComponent(habitatName)}`);
             const habitat = await response.json();
             
             animalGallery.innerHTML = ''; 
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour récupérer les détails d'un animal
     async function fetchAnimalDetails(animalId) {
         try {
-            const response = await fetch(`${apiUrl}/animals/${encodeURIComponent(animalId)}`);
+            const response = await fetch(`${apiUrl}/api/animals/${encodeURIComponent(animalId)}`);
             const animal = await response.json();
             
             updateConsultationCounter(animalId);
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour mettre à jour le compteur de consultations
     async function updateConsultationCounter(animalId) {
         try {
-            const response = await fetch('${apiUrl}/animals/update-counter', {
+            const response = await fetch('${apiUrl}/api/animals/update-counter', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour afficher l'historique d'un animal
     async function afficherHistorique(animalId) {
         try {
-            const response = await fetch(`${apiUrl}/animals/${animalId}/historique`);
+            const response = await fetch(`${apiUrl}/api/animals/${animalId}/historique`);
             const data = await response.json();
 
             const modalBody = document.getElementById('modal-body');
