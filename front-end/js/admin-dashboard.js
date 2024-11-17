@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editAnimalHealth = document.getElementById('editAnimalHealth');
     const editAnimalWeight = document.getElementById('editAnimalWeight');
     const editAnimalFood = document.getElementById('editAnimalFood');
+    const apiUrl = 'https://zoo-arcadia-omega.vercel.app/api';
     let currentUserId, currentAnimalId;
 
     // Déconnexion
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Vérifier le rôle de l'utilisateur
-    fetch('https://zoo-arcadia-omega.vercel.app/api/auth/getUserRole', {
+    fetch('${apiUrl}/auth/getUserRole', {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
     })
     .then(response => response.json())
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les utilisateurs
     function loadUsers() {
-        fetch('https://zoo-arcadia-omega.vercel.app/api/users', {
+        fetch('${apiUrl}/users', {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         })
         .then(response => response.json())
@@ -63,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les animaux
     function loadAnimals() {
-        fetch('https://zoo-arcadia-omega.vercel.app/api/animals', {
+        fetch('${apiUrl}/animals', {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         })
         .then(response => response.json())
@@ -104,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Envoi des modifications d'un utilisateur
     editUserForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        fetch(`https://zoo-arcadia-omega.vercel.app/api/users/${currentUserId}`, {
+        fetch(`${apiUrl}/users/${currentUserId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -130,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour supprimer un utilisateur
     window.deleteUser = function(id) {
         if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
-            fetch(`https://zoo-arcadia-omega.vercel.app/api/users/${id}`, {
+            fetch(`${apiUrl}/users/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
             })
@@ -158,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Envoi des modifications d'un animal
     editAnimalForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        fetch(`https://zoo-arcadia-omega.vercel.app/api/animals/${currentAnimalId}`, {
+        fetch(`${apiUrl}/animals/${currentAnimalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -186,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour supprimer un animal
     window.deleteAnimal = function(id) {
         if (confirm("Êtes-vous sûr de vouloir supprimer cet animal ?")) {
-            fetch(`https://zoo-arcadia-omega.vercel.app/api/animals/${id}`, {
+            fetch(`${apiUrl}/animals/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
             })

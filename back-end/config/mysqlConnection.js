@@ -14,7 +14,8 @@ const sequelize = new Sequelize(
         logging: console.log,// Active les logs SQL 
         dialectOptions: {
             ssl: {
-                rejectUnauthorized: true,
+                rejectUnauthorized: false, 
+            
             },
         },  
     }
@@ -45,9 +46,11 @@ HistoriqueAnimal.belongsTo(Animal, { foreignKey: 'animal_id', as: 'animal' });
 Animal.belongsTo(User, { foreignKey: 'vet_id', as: 'veterinaire' });
 User.hasMany(Animal, { foreignKey: 'vet_id', as: 'animaux_soignes' });
 
-// Si tu souhaites relier Review à User (par exemple, pour savoir qui a laissé une review)
-//Review.belongsTo(User, { foreignKey: 'user_id', as: 'utilisateur' });
-//User.hasMany(Review, { foreignKey: 'user_id', as: 'avis' });
+
+Review.belongsTo(User, { foreignKey: 'user_id', as: 'utilisateur' });
+User.hasMany(Review, { foreignKey: 'user_id', as: 'avis' });
+
+
 // Fonction de connexion à la base de données
 const connectMySQLDB = async () => {
     try {

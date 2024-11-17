@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const bcrypt = require('bcrypt');
 const cors = require('cors');
 const { sequelize, connectMySQLDB } = require('./config/mysqlConnection'); // Connexion MySQL avec Sequelize
 
@@ -25,10 +24,9 @@ const port = process.env.PORT || 3000;
 
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
-    origin: ['http://127.0.0.1:8080', 'https://frontarcadia.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
-    credentials: true
+    origin: '*', // Permet toutes les origines. Pour plus de sécurité, spécifiez l'URL de votre frontend.
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Middleware pour parser le body des requêtes
@@ -44,7 +42,6 @@ app.use((err, req, res, next) => {
     res.status(500).send('Erreur interne du serveur : ' + err.message);
 });
 
-
 // Route de base pour la racine
 app.get('/', (req, res) => {
     res.send('Bienvenue sur l\'API Zoo Arcadia !');
@@ -56,9 +53,13 @@ const startServer = async () => {
         await connectMySQLDB();
         console.log('Connexion à MySQL réussie.');
 
-        app.listen(port, () => {
+        // Synchroniser les modèles avec la base de données sans recréer les tables
+        await sequelize.sync(); // Par défaut, force est false, donc les tables ne seront pas recréées
+        console.log('Base de données synchronisée.');
+
+        app.listen(port, '0.0.0.0', () => {
             console.log(`Serveur démarré sur le port ${port}`);
-       });
+        });
     } catch (error) {
         console.error('Erreur lors du démarrage du serveur :', error);
     }
@@ -75,4 +76,3 @@ app.use('/api', adminRoutes);
 startServer();
 
 module.exports = app;
-
