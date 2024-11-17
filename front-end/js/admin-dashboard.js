@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Vérifier le rôle de l'utilisateur
-    fetch('https://backarcadia-app.vercel.app/api/auth/getUserRole', {
+    fetch('https://zoo-arcadia-omega.vercel.app/api/auth/getUserRole', {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
     })
     .then(response => response.json())
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les utilisateurs
     function loadUsers() {
-        fetch('https://backarcadia-app.vercel.app/api/users', {
+        fetch('https://zoo-arcadia-omega.vercel.app/api/users', {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         })
         .then(response => response.json())
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les animaux
     function loadAnimals() {
-        fetch('https://backarcadia-app.vercel.app/api/animals', {
+        fetch('https://zoo-arcadia-omega.vercel.app/api/animals', {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         })
         .then(response => response.json())
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Envoi des modifications d'un utilisateur
     editUserForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        fetch(`https://backarcadia-app.vercel.app/api/users/${currentUserId}`, {
+        fetch(`https://zoo-arcadia-omega.vercel.app/api/users/${currentUserId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour supprimer un utilisateur
     window.deleteUser = function(id) {
         if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
-            fetch(`https://backarcadia-app.vercel.app/api/users/${id}`, {
+            fetch(`https://zoo-arcadia-omega.vercel.app/api/users/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
             })
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Envoi des modifications d'un animal
     editAnimalForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        fetch(`https://backarcadia-app.vercel.app/api/animals/${currentAnimalId}`, {
+        fetch(`https://zoo-arcadia-omega.vercel.app/api/animals/${currentAnimalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour supprimer un animal
     window.deleteAnimal = function(id) {
         if (confirm("Êtes-vous sûr de vouloir supprimer cet animal ?")) {
-            fetch(`https://backarcadia-app.vercel.app/api/animals/${id}`, {
+            fetch(`https://zoo-arcadia-omega.vercel.app/api/animals/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
             })

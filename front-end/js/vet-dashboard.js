@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadAnimals() {
         showStatusMessage('Chargement des animaux...', false); // Message de chargement
 
-        fetch('https://backarcadia.app.vercel.app/api/animals', {
+        fetch('https://zoo-arcadia-omega.vercel.app/api/animals', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log(`Mise à jour de l'animal avec l'ID : ${selectedAnimalId}`);
 
-        fetch(`https://backarcadia.app.vercel.app/api/animals/${selectedAnimalId}`, {
+        fetch(`https://zoo-arcadia-omega.vercel.app/api/animals/${selectedAnimalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
