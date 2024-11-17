@@ -44,9 +44,9 @@ router.post('/update-counter', async (req, res) => {
         if (!animal) {
             return res.status(404).json({ message: 'Animal non trouvé.' });
         }
-        animal.consultations += 1;
+        animal.consultations = (animal.consultations || 0) + 1;
         await animal.save();
-        res.json({ message: 'Compteur de consultations mis à jour.', consultations: animal.consultations });
+        res.status(200).json({ message: 'Compteur de consultations mis à jour.', consultations: animal.consultations });
     } catch (error) {
         console.error('Erreur lors de la mise à jour du compteur:', error);
         res.status(500).json({ error: 'Erreur lors de la mise à jour du compteur' });
