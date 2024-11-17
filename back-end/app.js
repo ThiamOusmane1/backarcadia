@@ -62,7 +62,7 @@ const startServer = async () => {
         console.log('Connexion à MySQL réussie.');
 
         // Synchroniser les modèles avec la base de données sans recréer les tables
-        await sequelize.sync(); // Par défaut, force est false, donc les tables ne seront pas recréées
+        await sequelize.sync(); 
         console.log('Base de données synchronisée.');
 
         app.listen(port, '0.0.0.0', () => {
