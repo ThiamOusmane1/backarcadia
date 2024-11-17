@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const bcrypt = require('bcrypt');
 const cors = require('cors');
 const { sequelize, connectMySQLDB } = require('./config/mysqlConnection'); // Connexion MySQL avec Sequelize
 
@@ -46,9 +47,9 @@ const startServer = async () => {
         await connectMySQLDB();
         console.log('Connexion à MySQL réussie.');
 
-        app.listen(port, () => {
-            console.log(`Serveur démarré sur le port ${port}`);
-        });
+       // app.listen(port, () => {
+           // console.log(`Serveur démarré sur le port ${port}`);
+       // });
     } catch (error) {
         console.error('Erreur lors du démarrage du serveur :', error);
     }
@@ -61,6 +62,8 @@ app.use('/api/reviews', reviewsRoutes);
 app.use('/api/auth', authRoutes); 
 app.use('/api', vetRoutes); 
 app.use('/api', adminRoutes);
+
+startServer();
 
 module.exports = app;
 
