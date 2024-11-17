@@ -4,7 +4,7 @@
   "description": "Back-end for Zoo Arcadia",
   "main": "app.js",
   "scripts": {
-    "build": "npm install mysql2 && npm run start",
+    "build": "echo 'No build step needed' && exit 0",
     "start": "node app.js",
     "dev": "nodemon app.js",
     "generate-passwords": "node generatePassword.js",

@@ -39,6 +39,12 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../front-end')));
 app.use('/pictures', express.static(path.join(__dirname, '../front-end/pictures')));
 
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Erreur interne du serveur : ' + err.message);
+});
+
+
 // Route de base pour la racine
 app.get('/', (req, res) => {
     res.send('Bienvenue sur l\'API Zoo Arcadia !');
@@ -50,9 +56,9 @@ const startServer = async () => {
         await connectMySQLDB();
         console.log('Connexion à MySQL réussie.');
 
-       // app.listen(port, () => {
-           // console.log(`Serveur démarré sur le port ${port}`);
-       // });
+        app.listen(port, () => {
+            console.log(`Serveur démarré sur le port ${port}`);
+       });
     } catch (error) {
         console.error('Erreur lors du démarrage du serveur :', error);
     }
