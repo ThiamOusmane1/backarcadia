@@ -24,7 +24,7 @@ const port = process.env.PORT || 3000;
 
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
-    origin: '*', // Permet toutes les origines. Pour plus de sécurité, spécifiez l'URL de votre frontend.
+    origin: 'http://127.0.0.1:8080', 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
