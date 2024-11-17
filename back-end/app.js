@@ -23,7 +23,9 @@ const app = express();
 const port = process.env.PORT || 3000; 
 
 // Configuration CORS pour permettre les requêtes du frontend
-app.use(cors());
+app.use(cors({
+    origin: '*',
+}));
 
 // Middleware pour parser le body des requêtes
 app.use(express.urlencoded({ extended: true }));
