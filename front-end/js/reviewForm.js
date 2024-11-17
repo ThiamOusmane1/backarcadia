@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Fonction pour afficher les avis
     async function displayReviews() {
         try {
-            const response = await fetch('https://backarcadia.app.vercel.app/api/reviews');
+            const response = await fetch('https://backarcadia-app.vercel.app/api/reviews');
             const reviews = await response.json();
 
             // Vider le conteneur des avis existants
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             try {
                 // Envoyer les données au serveur avec fetch
-                const response = await fetch('https://backarcadia.app.vercel.app/api/reviews', {
+                const response = await fetch('https://backarcadia-app.vercel.app/api/reviews', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

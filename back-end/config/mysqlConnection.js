@@ -14,7 +14,7 @@ const sequelize = new Sequelize(
         logging: console.log,// Active les logs SQL 
         dialectOptions: {
             ssl: {
-                rejectUnauthorized: true,
+                rejectUnauthorized: false,
             },
         },  
     }
