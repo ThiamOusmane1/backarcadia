@@ -10,12 +10,11 @@ const sequelize = new Sequelize(
     {
         host: process.env.DB_HOST || 'localhost', 
         dialect: 'mysql',                          
-        port: process.env.DB_PORT || 3306 ,
-        logging: console.log,// Active les logs SQL 
+        port: process.env.DB_PORT || 3306,
+        logging: console.log, // Active les logs SQL 
         dialectOptions: {
             ssl: {
                 rejectUnauthorized: false, 
-            
             },
         },  
     }
@@ -46,10 +45,9 @@ HistoriqueAnimal.belongsTo(Animal, { foreignKey: 'animal_id', as: 'animal' });
 Animal.belongsTo(User, { foreignKey: 'vet_id', as: 'veterinaire' });
 User.hasMany(Animal, { foreignKey: 'vet_id', as: 'animaux_soignes' });
 
-
+// Review appartient à User
 Review.belongsTo(User, { foreignKey: 'user_id', as: 'utilisateur' });
 User.hasMany(Review, { foreignKey: 'user_id', as: 'avis' });
-
 
 // Fonction de connexion à la base de données
 const connectMySQLDB = async () => {
