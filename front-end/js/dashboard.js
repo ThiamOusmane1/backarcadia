@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => { 
     const apiUrl = 'https://zoo-arcadia-omega.vercel.app';
     
-    fetch('${apiUrl}/api/dashboard-data', {
+    fetch(`${apiUrl}/api/dashboard-data`, {
         method: 'GET',
         credentials: 'include' // Pour envoyer les cookies de session
     })

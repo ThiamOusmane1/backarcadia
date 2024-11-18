@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadAnimals() {
         showStatusMessage('Chargement des animaux...', false); // Message de chargement
 
-        fetch('${apiUrl}/api/animals', {
+        fetch(`${apiUrl}/api/animals`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

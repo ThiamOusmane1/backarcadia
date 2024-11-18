@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour mettre à jour le compteur de consultations
     async function updateConsultationCounter(animalId) {
         try {
-            const response = await fetch('${apiUrl}/api/animals/update-counter', {
+            const response = await fetch(`${apiUrl}/api/animals/update-counter`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

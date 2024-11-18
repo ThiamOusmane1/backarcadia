@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Vérifier le rôle de l'utilisateur
-    fetch('${apiUrl}/api/auth/getUserRole', {
+    fetch(`${apiUrl}/api/auth/getUserRole`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
     })
     .then(response => response.json())
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les utilisateurs
     function loadUsers() {
-        fetch('${apiUrl}/api/users', {
+        fetch(`${apiUrl}/api/users`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         })
         .then(response => response.json())
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Charger les animaux
     function loadAnimals() {
-        fetch('${apiUrl}/api/animals', {
+        fetch(`${apiUrl}/api/animals`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
         })
         .then(response => response.json())
