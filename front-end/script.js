@@ -1,4 +1,4 @@
-const apiUrl = 'https://zoo-arcadia-omega.vercel.app';
+const apiUrl = 'https://back-arcadia.vercel.app';
 
 // Fonction pour récupérer les animaux par habitat
 async function fetchAnimals(habitatName) {

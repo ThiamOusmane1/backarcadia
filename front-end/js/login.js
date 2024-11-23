@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiUrl = 'https://zoo-arcadia-omega.vercel.app';
+    const apiUrl = 'https://back-arcadia.vercel.app';
 
     // Gestion de la soumission du formulaire de login
     function handleLoginFormSubmit(event) {

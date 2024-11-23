@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const formSection = document.getElementById('reviewFormSection');
     const formReview = document.getElementById('reviewForm');
     const formConfirm = document.getElementById('formConfirmation');
-    const apiUrl = 'https://zoo-arcadia-omega.vercel.app';
+    const apiUrl = 'https://back-arcadia.vercel.app';
 
     // Fonction pour afficher les avis
     async function displayReviews() {

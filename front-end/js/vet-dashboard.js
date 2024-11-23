@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalBtn = document.getElementById('closeModalBtn');
     const updateAnimalBtn = document.getElementById('updateAnimalBtn');
     const statusMessage = document.getElementById('statusMessage');
-    const apiUrl = 'https://zoo-arcadia-omega.vercel.app';
+    const apiUrl = 'https://back-arcadia.vercel.app';
 
     let selectedAnimalId = null;
 
