@@ -25,10 +25,26 @@ const port = process.env.PORT || 3000;
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
     origin: ['http://127.0.0.1:8080', 'https://front-arcadia.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true
 }));
+
+// Middleware général pour ajouter les en-têtes CORS si nécessaire
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
+    next();
+});
+
+// Gestion spécifique des requêtes préliminaires (OPTIONS)
+app.options('*', (req, res) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.sendStatus(200);
+});
 
 // Middleware pour parser le body des requêtes
 app.use(express.urlencoded({ extended: true }));
@@ -38,9 +54,14 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../front-end')));
 app.use('/pictures', express.static(path.join(__dirname, '../front-end/pictures')));
 
+// Middleware global pour gérer les erreurs
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('Erreur interne du serveur : ' + err.message);
+    res.status(500).json({
+        error: true,
+        message: 'Erreur interne du serveur',
+        details: err.message
+    });
 });
 
 // Route de base pour la racine
@@ -65,6 +86,12 @@ const startServer = async () => {
         console.error('Erreur lors du démarrage du serveur :', error);
     }
 };
+
+// Middleware de log pour déboguer les requêtes
+app.use((req, res, next) => {
+    console.log(`[${req.method}] ${req.url}`);
+    next();
+});
 
 // Routes API
 app.use('/api/animals', animalRoutes);
