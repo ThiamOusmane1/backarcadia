@@ -7,8 +7,7 @@
     "build": "echo 'No build step needed' && exit 0",
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "generate-passwords": "node generatePassword.js",
-    "seed": "node seed.js"
+    "generate-passwords": "node generatePassword.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
