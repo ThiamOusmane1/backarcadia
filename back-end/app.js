@@ -24,7 +24,7 @@ const port = process.env.PORT || 3000;
 
 // Configuration CORS pour permettre les requêtes du frontend
 app.use(cors({
-    origin: ['http://127.0.0.1:8080', 'https://zoo-arcadia-front.vercel.app'],
+    origin: ['http://127.0.0.1:8080', 'https://front-arcadia.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true
