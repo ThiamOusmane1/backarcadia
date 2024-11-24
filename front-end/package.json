@@ -1,0 +1,18 @@
+{
+  "name": "front-arcadia",
+  "version": "1.0.0",
+  "description": "Front-end for Zoo Arcadia",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server",
+    "build": "echo 'No build step required' && exit 0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "author": "",
+  "license": "ISC"
+}

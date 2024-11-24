@@ -66,6 +66,7 @@ async function updateConsultationCounter(animalId) {
     try {
         const response = await fetch(`${apiUrl}/api/animals/update-counter`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },

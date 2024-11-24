@@ -2,16 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const { sequelize, connectMySQLDB } = require('./config/mysqlConnection'); // Connexion MySQL avec Sequelize
+const { sequelize, connectMySQLDB } = require('./config/mysqlConnection');
 
-// Importation des modèles pour MySQL
-const Animal = require('./models/animals');
-const User = require('./models/users');
-const HistoriqueAnimal = require('./models/historiques_animals');
-const Habitat = require('./models/habitats');
-const Review = require('./models/reviews');
-
-// Importation des routeurs
+// Importation des modèles et routeurs
 const animalRoutes = require('./routes/animals');
 const habitatRoutes = require('./routes/habitats');
 const reviewsRoutes = require('./routes/reviews'); 
@@ -20,41 +13,25 @@ const vetRoutes = require('./routes/vet');
 const adminRoutes = require('./routes/admin');
 
 const app = express();
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT || 3000;
 
-// Configuration CORS pour permettre les requêtes du frontend
+// Configuration CORS stricte
 app.use(cors({
     origin: ['http://127.0.0.1:8080', 'https://front-arcadia.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true
 }));
-
-// Middleware général pour ajouter les en-têtes CORS si nécessaire
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept');
-    next();
-});
-
-// Gestion spécifique des requêtes préliminaires (OPTIONS)
-app.options('*', (req, res) => {
-    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.sendStatus(200);
-});
 
 // Middleware pour parser le body des requêtes
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Servir les fichiers statiques du répertoire 'front-end'
+// Servir les fichiers statiques
 app.use(express.static(path.join(__dirname, '../front-end')));
 app.use('/pictures', express.static(path.join(__dirname, '../front-end/pictures')));
 
-// Middleware global pour gérer les erreurs
+// Gestion des erreurs globales
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({
@@ -64,19 +41,18 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Route de base pour la racine
+// Route de base
 app.get('/', (req, res) => {
     res.send('Bienvenue sur l\'API Zoo Arcadia !');
 });
 
-// Démarre le serveur et la connexion à la base de données
+// Lancer le serveur et connecter MySQL
 const startServer = async () => {
     try {
         await connectMySQLDB();
         console.log('Connexion à MySQL réussie.');
 
-        // Synchroniser les modèles avec la base de données sans recréer les tables
-        await sequelize.sync(); 
+        await sequelize.sync();
         console.log('Base de données synchronisée.');
 
         app.listen(port, '0.0.0.0', () => {
@@ -86,12 +62,6 @@ const startServer = async () => {
         console.error('Erreur lors du démarrage du serveur :', error);
     }
 };
-
-// Middleware de log pour déboguer les requêtes
-app.use((req, res, next) => {
-    console.log(`[${req.method}] ${req.url}`);
-    next();
-});
 
 // Routes API
 app.use('/api/animals', animalRoutes);
