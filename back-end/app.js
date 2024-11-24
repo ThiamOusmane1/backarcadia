@@ -17,14 +17,16 @@ const port = process.env.PORT || 3000;
 
 // Configuration stricte de CORS
 app.use(cors({
-    origin: [
-        process.env.FRONTEND_URL, // URL du front-end (doit être configurée dans Vercel)
-        'http://127.0.0.1:8080',  // URL de développement local
-        'https://front-arcadia.vercel.app' // URL du front déployé
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Inclure OPTIONS pour les requêtes pré-vol
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
-    credentials: true // Autoriser les cookies/identifiants si nécessaire
+    credentials: true // Autorise les cookies si nécessaire
 }));
 
 // Répondre aux requêtes pré-vol CORS (options)
