@@ -15,21 +15,26 @@ const adminRoutes = require('./routes/admin');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Configuration CORS stricte
+// Configuration stricte de CORS
 app.use(cors({
-    origin: ['http://127.0.0.1:8080', 'https://front-arcadia.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: [
+        process.env.FRONTEND_URL, // URL du front-end (doit être configurée dans Vercel)
+        'http://127.0.0.1:8080',  // URL de développement local
+        'https://front-arcadia.vercel.app' // URL du front déployé
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Inclure OPTIONS pour les requêtes pré-vol
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
-    credentials: true
+    credentials: true // Autoriser les cookies/identifiants si nécessaire
 }));
+
+// Répondre aux requêtes pré-vol CORS (options)
+app.options('*', cors());
 
 // Middleware pour parser le body des requêtes
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Servir les fichiers statiques
-app.use(express.static(path.join(__dirname, '../front-end')));
-app.use('/pictures', express.static(path.join(__dirname, '../front-end/pictures')));
+// Suppression de la gestion des fichiers statiques (car front et back déployés séparément)
 
 // Gestion des erreurs globales
 app.use((err, req, res, next) => {
@@ -41,10 +46,26 @@ app.use((err, req, res, next) => {
     });
 });
 
+// Gestion des erreurs 404 pour les routes non définies
+app.use((req, res, next) => {
+    res.status(404).json({
+        error: true,
+        message: 'Route non trouvée'
+    });
+});
+
 // Route de base
 app.get('/', (req, res) => {
     res.send('Bienvenue sur l\'API Zoo Arcadia !');
 });
+
+// Routes API
+app.use('/api/animals', animalRoutes);
+app.use('/api/habitats', habitatRoutes);
+app.use('/api/reviews', reviewsRoutes);
+app.use('/api/auth', authRoutes); 
+app.use('/api', vetRoutes); 
+app.use('/api', adminRoutes);
 
 // Lancer le serveur et connecter MySQL
 const startServer = async () => {
@@ -52,7 +73,7 @@ const startServer = async () => {
         await connectMySQLDB();
         console.log('Connexion à MySQL réussie.');
 
-        await sequelize.sync();
+        await sequelize.sync(); 
         console.log('Base de données synchronisée.');
 
         app.listen(port, '0.0.0.0', () => {
@@ -63,14 +84,7 @@ const startServer = async () => {
     }
 };
 
-// Routes API
-app.use('/api/animals', animalRoutes);
-app.use('/api/habitats', habitatRoutes);
-app.use('/api/reviews', reviewsRoutes);
-app.use('/api/auth', authRoutes); 
-app.use('/api', vetRoutes); 
-app.use('/api', adminRoutes);
-
 startServer();
 
 module.exports = app;
+
