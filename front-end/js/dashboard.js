@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => { 
-    const apiUrl = 'https://back-arcadia.vercel.app';
+    const apiUrl = 'https://arcadia-back-olive.vercel.app';
     
     fetch(`${apiUrl}/api/dashboard-data`, {
         method: 'GET',

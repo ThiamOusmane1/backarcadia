@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editAnimalHealth = document.getElementById('editAnimalHealth');
     const editAnimalWeight = document.getElementById('editAnimalWeight');
     const editAnimalFood = document.getElementById('editAnimalFood');
-    const apiUrl = 'https://back-arcadia.vercel.app';
+    const apiUrl = 'https://arcadia-back-olive.vercel.app';
     let currentUserId, currentAnimalId;
 
     // Déconnexion

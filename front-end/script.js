@@ -1,4 +1,4 @@
-const apiUrl = 'https://back-arcadia.vercel.app';
+const apiUrl = 'https://arcadia-back-olive.vercel.app'; // Remplacez par l'URL de votre API
 
 // Fonction pour récupérer les animaux par habitat
 async function fetchAnimals(habitatName) {

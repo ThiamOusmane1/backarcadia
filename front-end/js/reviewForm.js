@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const formSection = document.getElementById('reviewFormSection');
     const formReview = document.getElementById('reviewForm');
     const formConfirm = document.getElementById('formConfirmation');
-    const apiUrl = 'https://back-arcadia.vercel.app';
+    const apiUrl = 'https://arcadia-back-olive.vercel.app';
 
     // Fonction pour afficher les avis
     async function displayReviews() {

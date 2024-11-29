@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalBtn = document.getElementById('closeModalBtn');
     const updateAnimalBtn = document.getElementById('updateAnimalBtn');
     const statusMessage = document.getElementById('statusMessage');
-    const apiUrl = 'https://back-arcadia.vercel.app';
+    const apiUrl = 'https://arcadia-back-olive.vercel.app';
 
     let selectedAnimalId = null;
 
