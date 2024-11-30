@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Animal, Habitat ,HistoriqueAnimal } = require('../config/mysqlconnection'); // Import des modèles
+const { Animal, Habitat ,HistoriqueAnimal } = require('../config/mysqlConnection'); // Import des modèles
 
 
 // Route pour afficher tous les habitats
