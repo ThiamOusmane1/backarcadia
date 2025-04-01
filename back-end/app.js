@@ -11,13 +11,15 @@ const reviewsRoutes = require('./routes/reviews');
 const authRoutes = require('./routes/auth');
 const vetRoutes = require('./routes/vet'); 
 const adminRoutes = require('./routes/admin');
+const employeeRoutes = require('./routes/employee');
+const contactMessagesRoutes = require('./routes/contact_messages');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Configuration stricte de CORS
 app.use(cors({
-    origin: ['http://127.0.0.1:8080', 'https://arcadia-front-tau.vercel.app'],
+    origin: ['http://127.0.0.1:8080', 'http://127.0.0.1:5500', 'https://arcadia-front-tau.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true
@@ -29,7 +31,20 @@ app.options('*', cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Suppression de la gestion des fichiers statiques (car front et back déployés séparément)
+// Route de base
+app.get('/', (req, res) => {
+    res.send('Bienvenue sur l\'API Zoo Arcadia !');
+});
+
+// Routes API
+app.use('/api/contact_messages', contactMessagesRoutes);
+app.use('/api/animals', animalRoutes);
+app.use('/api/habitats', habitatRoutes);
+app.use('/api/reviews', reviewsRoutes);
+app.use('/api/auth', authRoutes); 
+app.use('/api/vet', vetRoutes); 
+app.use('/api/admin', adminRoutes);
+app.use('/api/employee', employeeRoutes);
 
 // Gestion des erreurs globales
 app.use((err, req, res, next) => {
@@ -49,18 +64,6 @@ app.use((req, res, next) => {
     });
 });
 
-// Route de base
-app.get('/', (req, res) => {
-    res.send('Bienvenue sur l\'API Zoo Arcadia !');
-});
-
-// Routes API
-app.use('/api/animals', animalRoutes);
-app.use('/api/habitats', habitatRoutes);
-app.use('/api/reviews', reviewsRoutes);
-app.use('/api/auth', authRoutes); 
-app.use('/api', vetRoutes); 
-app.use('/api', adminRoutes);
 
 // Lancer le serveur et connecter MySQL
 const startServer = async () => {

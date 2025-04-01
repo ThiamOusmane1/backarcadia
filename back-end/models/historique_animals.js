@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
     return sequelize.define('HistoriqueAnimal', {
         id: {
-            type: DataTypes.STRING(24),
+            type: DataTypes.STRING(36), // UUID string
             primaryKey: true,
             allowNull: false
         },
@@ -11,8 +11,12 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING(24),
             allowNull: false
         },
+        vet_id: {
+            type: DataTypes.STRING(24),
+            allowNull: false
+        },
         action: {
-            type: DataTypes.STRING, // Type à adapter si nécessaire
+            type: DataTypes.STRING,
             allowNull: false
         },
         old_value: {
@@ -32,4 +36,5 @@ module.exports = (sequelize) => {
         timestamps: false
     });
 };
+
 

@@ -1,95 +1,130 @@
-const express = require('express'); 
+const express = require('express');
 const router = express.Router();
 const { User, Animal, Habitat } = require('../config/mysqlConnection');
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
-// Route pour récupérer tous les utilisateurs
+// Ajouter un nouvel utilisateur (admin uniquement)
+router.post('/users', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+    const { email, role } = req.body;
+
+    if (!email || !role) {
+        return res.status(400).json({ message: 'Email et rôle sont requis.' });
+    }
+
+    try {
+        const userExist = await User.findOne({ where: { email } });
+        if (userExist) return res.status(409).json({ message: 'Cet utilisateur existe déjà.' });
+
+        const defaultPassword = 'password123'; // tu peux le changer par une logique plus robuste
+        const bcrypt = require('bcrypt');
+        const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+
+        const newUser = await User.create({
+            email,
+            role,
+            password: hashedPassword,
+            isDeleted: false
+        });
+
+        res.status(201).json({ message: 'Utilisateur créé.', user: newUser });
+    } catch (error) {
+        console.error('Erreur lors de la création de l’utilisateur :', error);
+        res.status(500).json({ message: 'Erreur serveur.' });
+    }
+});
+
+
+// Voir tous les utilisateurs (Admin)
 router.get('/users', authenticateToken, authorizeRoles('admin'), async (req, res) => {
     try {
-        const users = await User.findAll({
-            where: { isDeleted: false } // Ne récupérer que les utilisateurs non supprimés
-        });
+        const users = await User.findAll({ where: { isDeleted: false } });
         res.json(users);
     } catch (error) {
-        console.error("Erreur lors de la récupération des utilisateurs :", error);
+        console.error("Erreur récupération utilisateurs:", error);
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
 
-// Route pour mettre à jour un utilisateur
+// Modifier un utilisateur
 router.put('/users/:id', authenticateToken, authorizeRoles('admin'), async (req, res) => {
     const { id } = req.params;
     try {
         const user = await User.findByPk(id);
         if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
-        
+
         await User.update(req.body, { where: { id, isDeleted: false } });
         res.json({ message: 'Utilisateur mis à jour avec succès' });
     } catch (error) {
-        console.error("Erreur lors de la mise à jour de l'utilisateur :", error);
+        console.error("Erreur mise à jour utilisateur:", error);
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
 
-// Route pour supprimer un utilisateur avec suppression logique
+// Suppression logique d’un utilisateur
 router.delete('/users/:id', authenticateToken, authorizeRoles('admin'), async (req, res) => {
     const { id } = req.params;
     try {
         const user = await User.findByPk(id);
         if (!user) return res.status(404).json({ message: 'Utilisateur non trouvé' });
 
-        user.isDeleted = true;  // Marquer comme supprimé
+        user.isDeleted = true;
         await user.save();
-        res.json({ message: 'Utilisateur marqué comme supprimé' });
+        res.json({ message: 'Utilisateur supprimé (logique)' });
     } catch (error) {
-        console.error("Erreur lors de la suppression logique de l'utilisateur :", error);
+        console.error("Erreur suppression utilisateur:", error);
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
 
-// Route pour récupérer tous les animaux
+// Voir tous les animaux
 router.get('/animals', authenticateToken, authorizeRoles('admin'), async (req, res) => {
     try {
         const animals = await Animal.findAll({
-            where: { isDeleted: false }, // Ne récupérer que les animaux non supprimés
+            where: { isDeleted: false },
             attributes: ['id', 'nom', 'sante', 'poids', 'nourriture', 'soins', 'quantite', 'url'],
             include: [{ model: Habitat, as: 'habitat', attributes: ['nom'] }]
         });
         res.json(animals);
     } catch (error) {
-        console.error('Erreur lors de la récupération des animaux :', error);
+        console.error('Erreur récupération animaux :', error);
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
 
-// Route pour ajouter un nouvel animal
-router.post('/animals', authenticateToken, authorizeRoles('admin'), async (req, res) => {
-    try {
-        const animal = await Animal.create(req.body);
-        res.status(201).json(animal);
-    } catch (error) {
-        console.error('Erreur lors de la création de l\'animal :', error);
-        res.status(500).json({ message: 'Erreur serveur' });
-    }
-});
-
-// Route pour supprimer un animal avec suppression logique
+// Supprimer un animal (logique)
 router.delete('/animals/:id', authenticateToken, authorizeRoles('admin'), async (req, res) => {
     const { id } = req.params;
     try {
         const animal = await Animal.findByPk(id);
         if (!animal) return res.status(404).json({ message: 'Animal non trouvé' });
 
-        animal.isDeleted = true;  // Marquer comme supprimé
+        animal.isDeleted = true;
         await animal.save();
-        res.json({ message: 'Animal marqué comme supprimé' });
+        res.json({ message: 'Animal supprimé (logique)' });
     } catch (error) {
-        console.error("Erreur lors de la suppression logique de l'animal :", error);
+        console.error("Erreur suppression animal:", error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
+// Modifier un animal
+router.put('/animals/:id', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+    const { id } = req.params;
+    try {
+        const animal = await Animal.findByPk(id);
+        if (!animal) return res.status(404).json({ message: 'Animal non trouvé' });
+
+        await Animal.update(req.body, { where: { id, isDeleted: false } });
+        res.json({ message: 'Animal mis à jour' });
+    } catch (error) {
+        console.error('Erreur mise à jour animal :', error);
         res.status(500).json({ message: 'Erreur serveur' });
     }
 });
 
 module.exports = router;
+
+
 
 
 

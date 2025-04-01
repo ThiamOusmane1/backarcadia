@@ -1,61 +1,75 @@
 const express = require('express');
 const router = express.Router();
-const { Animal, Habitat } = require('../config/mysqlConnection'); // Assurez-vous que ce chemin est correct
+const { Animal, Habitat, HistoriqueAnimal } = require('../config/mysqlConnection');
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
+const { v4: uuidv4 } = require('uuid');
 
-// Route pour récupérer les animaux d'un vétérinaire connecté
-router.get('/animals', authenticateToken, authorizeRoles('vet'), async (req, res) => {
+//  Middleware pour tous les endpoints vétérinaire
+router.use(authenticateToken, authorizeRoles('vet'));
+
+// Liste des animaux
+router.get('/animals', async (req, res) => {
     try {
         const animals = await Animal.findAll({
+            where: { isDeleted: false },
             attributes: ['id', 'nom', 'sante', 'poids', 'nourriture', 'soins', 'quantite', 'url'],
-            include: [
-                { model: Habitat, as: 'habitat', attributes: ['nom'] }
-            ]
+            include: [{ model: Habitat, as: 'habitat', attributes: ['nom'] }]
         });
 
-        return res.json({ message: 'Liste des animaux récupérée avec succès.', animals });
+        // Retourne un objet contenant le tableau 
+        return res.json({ animals });
     } catch (error) {
-        console.error('Erreur lors de la récupération des animaux :', error);
+        console.error(' Erreur lors de la récupération des animaux :', error);
         return res.status(500).json({ message: 'Erreur serveur.' });
     }
 });
 
-// Route pour mettre à jour les informations d'un animal
-router.put('/animals/:id', authenticateToken, authorizeRoles('vet'), async (req, res) => {
+//  Mise à jour d’un animal avec historique
+router.put('/animals/:id', async (req, res) => {
     const { id } = req.params;
-    console.log(`ID reçu pour la mise à jour : ${id}`); // Vérifie si l'ID arrive bien
-    console.log(`Corps de la requête :`, req.body);
+    const { sante, poids, nourriture, soins, habitat_id } = req.body;
 
     try {
-        // Rechercher l'animal par son ID
         const animal = await Animal.findByPk(id);
+        if (!animal) return res.status(404).json({ message: 'Animal non trouvé.' });
 
-        if (!animal) {
-            console.log('Animal non trouvé');
-            return res.status(404).json({ message: 'Animal non trouvé.' });
-        }
+        const oldValues = {
+            sante: animal.sante,
+            poids: animal.poids,
+            nourriture: animal.nourriture,
+            soins: animal.soins,
+            habitat_id: animal.habitat_id
+        };
 
-        console.log('Animal trouvé :', animal);
+        const updates = {
+            sante: sante ?? animal.sante,
+            poids: poids ?? animal.poids,
+            nourriture: nourriture ?? animal.nourriture,
+            soins: soins ?? animal.soins,
+            habitat_id: habitat_id ?? animal.habitat_id
+        };
 
-        // Mise à jour des champs, avec vérification que le body contient bien les données
-        animal.sante = req.body.sante ?? animal.sante;
-        animal.poids = req.body.poids ?? animal.poids;
-        animal.nourriture = req.body.nourriture ?? animal.nourriture;
-        animal.soins = req.body.soins ?? animal.soins;
-        animal.habitat_id = req.body.habitat_id ?? animal.habitat_id; // Si tu veux mettre à jour l'habitat
+        await animal.update(updates);
 
-        // Sauvegarde dans la base de données
-        console.log('Tentative de sauvegarde de l\'animal');
-        await animal.save();
+        await HistoriqueAnimal.create({
+            id: uuidv4(),
+            animal_id: id,
+            vet_id: req.user.id,
+            action: 'Mise à jour',
+            old_value: JSON.stringify(oldValues),
+            new_value: JSON.stringify(updates),
+            date: new Date()
+        });
 
-        console.log('Animal mis à jour avec succès');
-        return res.json({ message: 'Animal mis à jour avec succès.', animal });
+        res.json({ message: 'Animal mis à jour avec succès.' });
     } catch (error) {
-        console.error('Erreur lors de la mise à jour de l\'animal :', error);
+        console.error(" Erreur mise à jour de l'animal :", error);
         return res.status(500).json({ message: 'Erreur serveur.' });
     }
 });
 
 module.exports = router;
+
+
 
 

@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Script chargé et DOM prêt.");
 
+    const apiUrl = 'http://localhost:3000'; // Changer cette URL si besoin
+
     const button = document.getElementById('leaveReviewBtn');
     const formSection = document.getElementById('reviewFormSection');
     const formReview = document.getElementById('reviewForm');
     const formConfirm = document.getElementById('formConfirmation');
-    const apiUrl = 'https://arcadia-back-olive.vercel.app';
 
     // Fonction pour afficher les avis
     async function displayReviews() {
@@ -13,53 +14,50 @@ document.addEventListener('DOMContentLoaded', function () {
             const response = await fetch(`${apiUrl}/api/reviews`);
             const reviews = await response.json();
 
-            // Vider le conteneur des avis existants
+            if (!Array.isArray(reviews)) {
+                console.error('Réponse inattendue du serveur (non-array) :', reviews);
+                return;
+            }
+
             const reviewsContainer = document.querySelector('#reviewCarousel .carousel-inner');
-            reviewsContainer.innerHTML = ''; // Effacer le contenu existant
+            if (!reviewsContainer) {
+                console.error("Conteneur du carrousel introuvable.");
+                return;
+            }
 
-            // Créer un élément pour chaque avis
+            reviewsContainer.innerHTML = ''; // Reset du carrousel
+
             reviews.forEach((review, index) => {
-                const reviewElement = document.createElement('div');
-                
-                // Ajout des classes pour les éléments du carrousel
-                reviewElement.classList.add('carousel-item');
-                if (index === 0) {
-                    reviewElement.classList.add('active'); // Marquer le premier élément comme actif
-                }
+                const item = document.createElement('div');
+                item.classList.add('carousel-item');
+                if (index === 0) item.classList.add('active');
 
-                reviewElement.innerHTML = `
+                item.innerHTML = `
                     <div class="carousel-caption">
                         <p>"${review.message}"</p>
                         <div class="carousel-footer">- ${review.name}</div>
                     </div>
                 `;
-                reviewsContainer.appendChild(reviewElement);
+                reviewsContainer.appendChild(item);
             });
 
-            // Réinitialiser le carrousel pour afficher le premier élément
-            $('#reviewCarousel').carousel(0);
-
+            $('#reviewCarousel').carousel(0); // Reset carrousel
         } catch (error) {
             console.error('Erreur lors de la récupération des avis :', error);
+            alert("Impossible de charger les avis pour le moment.");
         }
     }
 
+    // Gestion du bouton "Laisser un avis"
     if (button && formSection && formReview && formConfirm) {
-        console.log("Éléments trouvés.");
-
-        // Afficher le formulaire lorsque le bouton est cliqué
         button.addEventListener('click', function () {
-            formSection.classList.remove('d-none'); // Affiche le formulaire
-            formConfirm.classList.add('d-none'); // Cache le message de confirmation si visible
-            console.log("Formulaire affiché.");
+            formSection.classList.remove('d-none');
+            formConfirm.classList.add('d-none');
         });
 
-        // Gérer la soumission du formulaire
         formReview.addEventListener('submit', async function (event) {
-            event.preventDefault(); // Empêche le rechargement de la page
-            console.log("Formulaire soumis.");
+            event.preventDefault();
 
-            // Récupérer les données du formulaire
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
@@ -67,57 +65,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 message: document.getElementById('message').value,
             };
 
-            console.log("Données du formulaire:", formData);
-
             try {
-                // Envoyer les données au serveur avec fetch
                 const response = await fetch(`${apiUrl}/api/reviews`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData), // Convertir en JSON
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
                 });
 
-                console.log("Réponse du serveur:", response.status);
-
                 if (response.ok) {
-                    console.log("Formulaire envoyé avec succès.");
-
-                    // Masquer le formulaire
-                    formSection.classList.add('d-none'); // Cache la section du formulaire
-
-                    // Afficher un message de confirmation
-                    setTimeout(function () {
-                        formConfirm.classList.remove('d-none'); // Affiche le message de confirmation
-                    }, 100); 
-
-                    // Réinitialiser le formulaire
                     formReview.reset();
+                    formSection.classList.add('d-none');
+                    formConfirm.classList.remove('d-none');
+                    await displayReviews();
 
-                    // Mettre à jour le carrousel avec le nouvel avis
-                    await displayReviews(); // Réactualiser les avis affichés
-
-                    // Masquer le message de confirmation après 3 secondes
-                    setTimeout(function () {
-                        formConfirm.classList.add('d-none'); // Cache le message de confirmation
-                        console.log("Message de confirmation caché.");
-                    }, 3000); // Délai de 3 secondes
+                    setTimeout(() => {
+                        formConfirm.classList.add('d-none');
+                    }, 3000);
                 } else {
-                    console.error("Erreur lors de l'envoi du formulaire");
-                    alert("Erreur lors de l'envoi du formulaire. Veuillez réessayer.");
+                    const err = await response.json();
+                    alert("Erreur lors de l'envoi du formulaire : " + (err?.message || response.statusText));
                 }
             } catch (error) {
-                console.error("Erreur lors de la requête:", error);
-                alert("Erreur de connexion. Veuillez réessayer.");
+                console.error("Erreur réseau :", error);
+                alert("Erreur réseau. Veuillez réessayer.");
             }
         });
     } else {
-        console.error("Un ou plusieurs éléments manquent dans le DOM.");
+        console.error("Un ou plusieurs éléments sont manquants dans le DOM.");
     }
 
-    // Charger les avis au démarrage
-    displayReviews();
+    displayReviews(); // Charger les avis au chargement
 });
 
 

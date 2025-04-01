@@ -1,155 +1,150 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const apiUrl = 'http://localhost:3000';
+
+    const logoutBtn = document.getElementById('logoutBtn');
     const animalsTableBody = document.querySelector('#animalsTable tbody');
     const editModal = document.getElementById('editModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
+    const cancelEditAnimal = document.getElementById('cancelEditAnimal');
     const updateAnimalBtn = document.getElementById('updateAnimalBtn');
     const statusMessage = document.getElementById('statusMessage');
-    const apiUrl = 'https://arcadia-back-olive.vercel.app';
+    const modalStatusMessage = document.getElementById('modalStatusMessage');
 
     let selectedAnimalId = null;
 
-    // Fonction pour déconnecter l'utilisateur
-    function logout() {
-        localStorage.removeItem('authToken'); // Supprime le token d'authentification
-        window.location.href = 'index.html';  // Redirige vers la page de connexion
-    }
+    console.log(' Script vet-dashboard.js chargé');
 
-    // Écouter le clic sur le bouton de déconnexion
-    logoutBtn.addEventListener('click', logout);
-
-    // Fonction pour afficher un message de statut
-    function showStatusMessage(message, isError = false) {
-        statusMessage.textContent = message;
-        statusMessage.style.color = isError ? 'red' : 'green';
-        setTimeout(() => { statusMessage.textContent = ''; }, 3000);
-    }
-
-    // Fermer la fenêtre modale
-    closeModalBtn.addEventListener('click', () => {
-        editModal.style.display = 'none';
+    // Déconnexion
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('authToken');
+        window.location.href = 'index.html';
     });
 
-    // Ouvrir la fenêtre modale pour modifier un animal
-    function openEditModal(animal) {
-        selectedAnimalId = animal.id;
-        document.getElementById('animalHealth').value = animal.sante;
-        document.getElementById('animalWeight').value = animal.poids;
-        document.getElementById('animalFood').value = animal.nourriture;
-        document.getElementById('animalCare').value = animal.soins || '';
-        editModal.style.display = 'flex';
+    // Messages
+    function showStatusMessage(message, isError = false, isModal = false) {
+        const element = isModal ? modalStatusMessage : statusMessage;
+        element.textContent = message;
+        element.style.color = isError ? 'red' : 'green';
+        setTimeout(() => { element.textContent = ''; }, 3000);
     }
 
-    // Charger les animaux depuis l'API
-    function loadAnimals() {
-        showStatusMessage('Chargement des animaux...', false); // Message de chargement
+    // Fermer modale
+    closeModalBtn.addEventListener('click', () => {
+        editModal.classList.add('hidden');
+    });
 
-        fetch(`${apiUrl}/api/animals`, {
+    cancelEditAnimal.addEventListener('click', () => {
+        editModal.classList.add('hidden');
+    });
+
+    // Ouvrir modale
+    function openEditModal(animal) {
+        selectedAnimalId = animal.id;
+        document.getElementById('animalHealth').value = animal.sante || '';
+        document.getElementById('animalWeight').value = animal.poids || '';
+        document.getElementById('animalFood').value = animal.nourriture || '';
+        document.getElementById('animalCare').value = animal.soins || '';
+        editModal.classList.remove('hidden');
+        console.log(' Ouverture de la modale pour l\'animal :', animal.nom);
+    }
+
+    // Charger les animaux
+    function loadAnimals() {
+        showStatusMessage(' Chargement des animaux...');
+        console.log(' Envoi de la requête GET vers /api/vet/animals');
+
+        fetch(`${apiUrl}/api/vet/animals`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}` // Utiliser 'authToken'
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             }
+        })
+        .then(res => {
+            console.log('[DEBUG] Status de la réponse:', res.status);
+            if (!res.ok) throw new Error('Erreur récupération animaux');
+            return res.json();
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Erreur lors de la récupération des animaux');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Réponse de l\'API:', data); // Afficher la réponse
+            console.log('Réponse API animaux :', response);
+            const animals = response.animals;
+            animalsTableBody.innerHTML = '';
 
-            // Vérification de la propriété animals
-            if (!Array.isArray(data)) {
-                throw new Error('Les données ne sont pas un tableau');
-            }
+            animals.forEach(animal => {
+                console.log('Affichage boucle animaux → premier nom :', animals[0]?.nom);
 
-            animalsTableBody.innerHTML = ''; // Vide le tableau avant de le remplir
-
-            data.forEach(animal => {
-                const imageUrl = `/pictures/${animal.url}`; 
                 const row = document.createElement('tr');
+                const imageUrl = `pictures/${animal.url}`;
 
                 row.innerHTML = `
-                    <td><img src="${imageUrl}" class="img-fluid mb-3" alt="${animal.nom}"></td>
+                    <td><img src="${imageUrl}" class="img-fluid" alt="${animal.nom}"></td>
                     <td>${animal.nom}</td>
-                    <td>${animal.habitat ? animal.habitat.nom : 'Inconnu'}</td>
+                    <td>${animal.habitat?.nom || 'Inconnu'}</td>
                     <td>${animal.sante}</td>
                     <td>${animal.poids} kg</td>
                     <td>${animal.nourriture}</td>
                     <td>${animal.quantite} kg</td>
-                    <td>${animal.soins}</td>
-                    <td>
-                        <button class="edit-btn" data-id="${animal.id}">Modifier</button>
-                    </td>
+                    <td>${animal.soins || '-'}</td>
+                    <td><button class="edit-btn">Modifier</button></td>
                 `;
 
-                // Ajouter événements "Modifier"
                 row.querySelector('.edit-btn').addEventListener('click', () => openEditModal(animal));
-
                 animalsTableBody.appendChild(row);
             });
 
-            showStatusMessage('Animaux chargés avec succès !');
+            showStatusMessage(' Animaux chargés avec succès.');
         })
-        .catch(error => {
-            console.error('Erreur lors du chargement des animaux :', error);
-            showStatusMessage('Erreur lors du chargement des animaux', true);
+        .catch(err => {
+            console.error(' Erreur chargement animaux :', err);
+            showStatusMessage('Erreur chargement animaux', true);
         });
     }
 
-    // Mettre à jour les informations de l'animal via l'API
+    // Mise à jour
     updateAnimalBtn.addEventListener('click', () => {
-        const updatedAnimal = {
-            sante: document.getElementById('animalHealth').value,
-            poids: document.getElementById('animalWeight').value,
-            nourriture: document.getElementById('animalFood').value,
-            soins: document.getElementById('animalCare').value,
+        const data = {
+            sante: document.getElementById('animalHealth').value.trim(),
+            poids: parseFloat(document.getElementById('animalWeight').value),
+            nourriture: document.getElementById('animalFood').value.trim(),
+            soins: document.getElementById('animalCare').value.trim()
         };
 
-        // Validation des champs
-        if (!updatedAnimal.sante || !updatedAnimal.poids || !updatedAnimal.nourriture || !updatedAnimal.soins) {
-            showStatusMessage('Veuillez remplir tous les champs.', true);
+        if (!data.sante || !data.nourriture || !data.soins || isNaN(data.poids) || data.poids <= 0) {
+            showStatusMessage(' Champs invalides.', true, true);
             return;
         }
 
-        if (isNaN(updatedAnimal.poids) || updatedAnimal.poids <= 0) {
-            showStatusMessage('Le poids doit être un nombre positif.', true);
-            return;
-        }
+        console.log(' Mise à jour de l\'animal ID :', selectedAnimalId, data);
 
-        console.log(`Mise à jour de l'animal avec l'ID : ${selectedAnimalId}`);
-
-        fetch(`${apiUrl}/api/animals/${selectedAnimalId}`, {
+        fetch(`${apiUrl}/api/vet/animals/${selectedAnimalId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`  // Token d'authentification
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             },
-            body: JSON.stringify(updatedAnimal)
+            body: JSON.stringify(data)
         })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errorData => {
-                    console.log('Erreur API:', errorData);
-                    throw new Error(`Erreur API : ${errorData.message || 'Erreur inconnue'}`);
-                });
-            }
-            return response.json();
+        .then(res => {
+            if (!res.ok) throw new Error('Erreur mise à jour');
+            return res.json();
         })
         .then(() => {
-            editModal.style.display = 'none';
-            loadAnimals();  // Recharger la liste des animaux après mise à jour
-            showStatusMessage('Informations mises à jour avec succès !');
+            showStatusMessage(' Mise à jour réussie.', false, true);
+            editModal.classList.add('hidden');
+            loadAnimals();
         })
-        .catch(error => {
-            console.error('Erreur lors de la mise à jour de l\'animal :', error);
-            showStatusMessage('Erreur lors de la mise à jour de l\'animal', true);
+        .catch(err => {
+            console.error(' Erreur update animal :', err);
+            showStatusMessage('Erreur mise à jour animal', true, true);
         });
     });
 
-    loadAnimals(); // Charger les animaux au démarrage
+    // Démarrage
+    loadAnimals();
 });
+
+
+
 
 
 

@@ -18,10 +18,15 @@ module.exports = (sequelize) => {
         image: {
             type: DataTypes.STRING(255),
             allowNull: true
+        },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
     }, {
         tableName: 'habitats',
         timestamps: false
     });
 };
+
 

@@ -1,0 +1,4 @@
+// testDb.js
+const { connectMySQLDB } = require('./config/mysqlConnection');
+
+connectMySQLDB();

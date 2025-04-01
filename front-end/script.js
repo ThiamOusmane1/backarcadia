@@ -1,4 +1,5 @@
-const apiUrl = 'https://arcadia-back-olive.vercel.app'; // Remplacez par l'URL de votre API
+document.addEventListener('DOMContentLoaded', () => { 
+const apiUrl = 'http://localhost:3000'; 
 
 // Fonction pour récupérer les animaux par habitat
 async function fetchAnimals(habitatName) {
@@ -122,6 +123,7 @@ document.addEventListener('click', (event) => {
         const animalId = animalCard.getAttribute('data-animal-id');
         fetchAnimalDetails(animalId);
     }
+});
 });
 
 

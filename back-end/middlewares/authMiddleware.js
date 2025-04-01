@@ -3,25 +3,30 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key';
 
-// Middleware d'authentification
+// 🔒 Middleware d'authentification (vérifie la présence et la validité du JWT)
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Extraction du token
 
-    // Vérification du token
-    if (!token) return res.status(401).json({ message: 'Token manquant' });
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'Token non fourni ou mal formé' });
+    }
 
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ message: 'Token invalide' });
-        req.user = user;  // Stocker l'utilisateur dans la requête pour les prochaines opérations
-        next(); // Passer à l'étape suivante
-    });
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded; // Ex: { id, email, role }
+        next();
+    } catch (error) {
+        console.error('Erreur de vérification du token JWT :', error);
+        return res.status(403).json({ message: 'Token invalide ou expiré' });
+    }
 }
 
-// Middleware d'autorisation basé sur les rôles
+// 🔐 Middleware d'autorisation (vérifie le rôle)
 function authorizeRoles(...roles) {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
+        if (!req.user || !roles.includes(req.user.role)) {
             return res.status(403).json({ message: 'Accès interdit : rôle insuffisant' });
         }
         next();
@@ -29,4 +34,5 @@ function authorizeRoles(...roles) {
 }
 
 module.exports = { authenticateToken, authorizeRoles };
+
 

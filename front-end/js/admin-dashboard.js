@@ -1,206 +1,237 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const userTableBody = document.querySelector('#userTable tbody');
-    const animalTableBody = document.querySelector('#animalTable tbody');
+    const apiUrl = 'http://localhost:3000'; // ou Vercel
+    const token = localStorage.getItem('authToken');
+  
     const logoutBtn = document.getElementById('logoutBtn');
-    const addUserBtn = document.getElementById('addUserBtn');
-    const addAnimalBtn = document.getElementById('addAnimalBtn');
-    const editUserForm = document.getElementById('editUserForm');
-    const editAnimalForm = document.getElementById('editAnimalForm');
+  
+    const showAddUserFormBtn = document.getElementById('showAddUserForm');
+    const addUserForm = document.getElementById('addUserForm');
+    const userTableBody = document.querySelector('#userTable tbody');
+    const editUserFormModal = document.getElementById('editUserForm');
+    const editUserForm = editUserFormModal.querySelector('form');
     const editUserEmail = document.getElementById('editUserEmail');
     const editUserRole = document.getElementById('editUserRole');
+    let currentUserId = null;
+  
+    const showAddAnimalFormBtn = document.getElementById('showAddAnimalForm');
+    const addAnimalForm = document.getElementById('addAnimalForm');
+    const animalTableBody = document.querySelector('#animalTable tbody');
+  
+    const editAnimalModal = document.getElementById('editAnimalForm');
+    const editAnimalForm = editAnimalModal.querySelector('form');
     const editAnimalName = document.getElementById('editAnimalName');
     const editAnimalHealth = document.getElementById('editAnimalHealth');
     const editAnimalWeight = document.getElementById('editAnimalWeight');
     const editAnimalFood = document.getElementById('editAnimalFood');
-    const apiUrl = 'https://arcadia-back-olive.vercel.app';
-    let currentUserId, currentAnimalId;
-
+    const cancelEditAnimalBtn = document.getElementById('cancelEditAnimal');
+    let currentAnimalId = null;
+  
+    // Vérification du rôle
+    fetch(`${apiUrl}/api/auth/getUserRole`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.role !== 'admin') {
+          alert('Accès interdit');
+          window.location.href = 'index.html';
+        } else {
+          loadUsers();
+          loadAnimals();
+        }
+      });
+  
     // Déconnexion
     logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('authToken');
-        window.location.href = 'index.html';
+      localStorage.removeItem('authToken');
+      window.location.href = 'index.html';
     });
-
-    // Vérifier le rôle de l'utilisateur
-    fetch(`${apiUrl}/api/auth/getUserRole`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.role !== 'admin') {
-            alert("Accès refusé");
-            window.location.href = 'index.html';
-        } else {
-            loadUsers();
-            loadAnimals();
-        }
-    })
-    .catch(error => console.error("Erreur dans la récupération du rôle :", error));
-
-    // Charger les utilisateurs
+  
+    // === UTILISATEURS ===
     function loadUsers() {
-        fetch(`${apiUrl}/api/users`, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
-        })
-        .then(response => response.json())
+      fetch(`${apiUrl}/api/admin/users`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.json())
         .then(users => {
-            userTableBody.innerHTML = '';
-            users.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.id}</td>
-                    <td>${user.email}</td>
-                    <td>${user.role}</td>
-                    <td>
-                        <button onclick="editUser('${user.id}', '${user.email}', '${user.role}')">Modifier</button>
-                        <button onclick="deleteUser('${user.id}')">Supprimer</button>
-                    </td>
-                `;
-                userTableBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error("Erreur lors du chargement des utilisateurs :", error));
+          userTableBody.innerHTML = '';
+          users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${user.id}</td>
+              <td>${user.email}</td>
+              <td>${user.role}</td>
+              <td>
+                <button onclick="editUser('${user.id}', '${user.email}', '${user.role}')">Modifier</button>
+                <button onclick="deleteUser('${user.id}')">Supprimer</button>
+              </td>
+            `;
+            userTableBody.appendChild(row);
+          });
+        });
     }
-
-    // Charger les animaux
-    function loadAnimals() {
-        fetch(`${apiUrl}/api/animals`, {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
-        })
-        .then(response => response.json())
-        .then(animals => {
-            animalTableBody.innerHTML = '';
-            animals.forEach(animal => {
-                const imageUrl = `/pictures/${animal.url}`;
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${animal.id}</td>
-                    <td><img src="${imageUrl}" class="img-fluid mb-3" alt="${animal.nom}"></td>
-                    <td>${animal.nom}</td>
-                    <td>${animal.habitat ? animal.habitat.nom : 'Inconnu'}</td>
-                    <td>${animal.sante}</td>
-                    <td>${animal.poids} kg</td>
-                    <td>${animal.nourriture}</td>
-                    <td>${animal.quantite} kg</td>
-                    <td>${animal.soins}</td>
-                    <td>
-                        <button onclick="editAnimal('${animal.id}', '${animal.nom}', '${animal.sante}', ${animal.poids}, '${animal.nourriture}')">Modifier</button>
-                        <button onclick="deleteAnimal('${animal.id}')">Supprimer</button>
-                    </td>
-                `;
-                animalTableBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error("Erreur lors du chargement des animaux :", error));
-    }
-
-    // Fonction pour éditer un utilisateur
-    window.editUser = function(id, email, role) {
-        currentUserId = id;
-        editUserEmail.value = email;
-        editUserRole.value = role;
-        editUserForm.style.display = 'block';
+  
+    showAddUserFormBtn.addEventListener('click', () => {
+      addUserForm.classList.toggle('hidden');
+    });
+  
+    addUserForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('newUserEmail').value;
+      const role = document.getElementById('newUserRole').value;
+  
+      fetch(`${apiUrl}/api/admin/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ email, role })
+      })
+        .then(() => {
+          addUserForm.reset();
+          addUserForm.classList.add('hidden');
+          loadUsers();
+        });
+    });
+  
+    window.editUser = function (id, email, role) {
+      currentUserId = id;
+      editUserEmail.value = email;
+      editUserRole.value = role;
+      editUserFormModal.classList.remove('hidden');
     };
-
-    // Envoi des modifications d'un utilisateur
+  
     editUserForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        fetch(`${apiUrl}/api/users/${currentUserId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-            },
-            body: JSON.stringify({
-                email: editUserEmail.value,
-                role: editUserRole.value
-            })
+      e.preventDefault();
+      fetch(`${apiUrl}/api/admin/users/${currentUserId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          email: editUserEmail.value,
+          role: editUserRole.value
         })
-        .then(response => {
-            if (response.ok) {
-                loadUsers();
-                editUserForm.reset();
-                editUserForm.style.display = 'none';
-            } else {
-                alert("Erreur lors de la mise à jour de l'utilisateur");
-            }
-        })
-        .catch(error => console.error("Erreur lors de la mise à jour :", error));
+      })
+        .then(() => {
+          editUserFormModal.classList.add('hidden');
+          loadUsers();
+        });
     });
-
-    // Fonction pour supprimer un utilisateur
-    window.deleteUser = function(id) {
-        if (confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")) {
-            fetch(`${apiUrl}/api/users/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
-            })
-            .then(response => {
-                if (response.ok) {
-                    loadUsers();
-                } else {
-                    alert("Erreur lors de la suppression de l'utilisateur");
-                }
-            })
-            .catch(error => console.error("Erreur lors de la suppression :", error));
-        }
+  
+    window.deleteUser = function (id) {
+      if (confirm("Supprimer cet utilisateur ?")) {
+        fetch(`${apiUrl}/api/admin/users/${id}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` }
+        }).then(() => loadUsers());
+      }
     };
-
-    // Fonction pour éditer un animal
-    window.editAnimal = function(id, nom, sante, poids, nourriture) {
-        currentAnimalId = id;
-        editAnimalName.value = nom;
-        editAnimalHealth.value = sante;
-        editAnimalWeight.value = poids;
-        editAnimalFood.value = nourriture;
-        editAnimalForm.style.display = 'block';
+  
+    // === ANIMAUX ===
+    function loadAnimals() {
+      fetch(`${apiUrl}/api/admin/animals`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(animals => {
+          animalTableBody.innerHTML = '';
+          animals.forEach(animal => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${animal.id}</td>
+              <td><img src="pictures/${animal.url}" alt="${animal.nom}" class="img-fluid" /></td>
+              <td>${animal.nom}</td>
+              <td>${animal.habitat?.nom || 'Inconnu'}</td>
+              <td>${animal.sante}</td>
+              <td>${animal.poids} kg</td>
+              <td>${animal.nourriture}</td>
+              <td>${animal.quantite}</td>
+              <td>${animal.soins || '-'}</td>
+              <td>
+                <button onclick="editAnimal('${animal.id}', '${animal.nom}', '${animal.sante}', ${animal.poids}, '${animal.nourriture}')">Modifier</button>
+                <button onclick="deleteAnimal('${animal.id}')">Supprimer</button>
+              </td>
+            `;
+            animalTableBody.appendChild(row);
+          });
+        });
+    }
+  
+    showAddAnimalFormBtn.addEventListener('click', () => {
+      addAnimalForm.classList.toggle('hidden');
+    });
+  
+    addAnimalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = {
+        nom: document.getElementById('newAnimalName').value,
+        sante: document.getElementById('newAnimalHealth').value,
+        poids: parseFloat(document.getElementById('newAnimalWeight').value),
+        nourriture: document.getElementById('newAnimalFood').value,
+        quantite: parseFloat(document.getElementById('newAnimalQuantity').value),
+        url: document.getElementById('newAnimalUrl').value
+      };
+  
+      fetch(`${apiUrl}/api/admin/animals`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+      })
+        .then(() => {
+          addAnimalForm.reset();
+          addAnimalForm.classList.add('hidden');
+          loadAnimals();
+        });
+    });
+  
+    window.editAnimal = function (id, nom, sante, poids, nourriture) {
+      currentAnimalId = id;
+      editAnimalName.value = nom;
+      editAnimalHealth.value = sante;
+      editAnimalWeight.value = poids;
+      editAnimalFood.value = nourriture;
+      editAnimalModal.classList.remove('hidden');
     };
-
-    // Envoi des modifications d'un animal
+  
     editAnimalForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        fetch(`${apiUrl}/api/animals/${currentAnimalId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-            },
-            body: JSON.stringify({
-                nom: editAnimalName.value,
-                sante: editAnimalHealth.value,
-                poids: editAnimalWeight.value,
-                nourriture: editAnimalFood.value
-            })
+      e.preventDefault();
+      fetch(`${apiUrl}/api/admin/animals/${currentAnimalId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          nom: editAnimalName.value,
+          sante: editAnimalHealth.value,
+          poids: parseFloat(editAnimalWeight.value),
+          nourriture: editAnimalFood.value
         })
-        .then(response => {
-            if (response.ok) {
-                loadAnimals();
-                editAnimalForm.reset();
-                editAnimalForm.style.display = 'none';
-            } else {
-                alert("Erreur lors de la mise à jour de l'animal");
-            }
-        })
-        .catch(error => console.error("Erreur lors de la mise à jour :", error));
+      })
+        .then(() => {
+          editAnimalModal.classList.add('hidden');
+          loadAnimals();
+        });
     });
-
-    // Fonction pour supprimer un animal
-    window.deleteAnimal = function(id) {
-        if (confirm("Êtes-vous sûr de vouloir supprimer cet animal ?")) {
-            fetch(`${apiUrl}/api/animals/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
-            })
-            .then(response => {
-                if (response.ok) {
-                    loadAnimals();
-                } else {
-                    alert("Erreur lors de la suppression de l'animal");
-                }
-            })
-            .catch(error => console.error("Erreur lors de la suppression :", error));
-        }
+  
+    cancelEditAnimalBtn.addEventListener('click', () => {
+      editAnimalModal.classList.add('hidden');
+    });
+  
+    window.deleteAnimal = function (id) {
+      if (confirm("Supprimer cet animal ?")) {
+        fetch(`${apiUrl}/api/admin/animals/${id}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` }
+        }).then(() => loadAnimals());
+      }
     };
-    
-    // Gestion des ajouts d'utilisateurs et d'animaux (similaire à ce que tu as déjà)
-});
+  });
+  
+  

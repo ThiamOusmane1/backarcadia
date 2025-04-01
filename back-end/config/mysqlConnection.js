@@ -1,66 +1,100 @@
-// config/mysqlConnection.js
-require('dotenv').config(); // Charge les variables d'environnement depuis un fichier .env
+require('dotenv').config();
 const { Sequelize } = require('sequelize');
 
-// Connexion à la base de données
+// Initialisation de Sequelize
 const sequelize = new Sequelize(
-    process.env.DB_NAME,      // Nom de la base de données
-    process.env.DB_USER,     // Nom d'utilisateur de la base de données
-    process.env.DB_PASSWORD,  // Mot de passe de la base de données
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
     {
-        host: process.env.DB_HOST || 'localhost', 
-        dialect: 'mysql',                          
+        host: process.env.DB_HOST || 'localhost',
+        dialect: 'mysql',
         port: process.env.DB_PORT || 3306,
-        logging: console.log, // Active les logs SQL  
+        logging: false, // Désactive les logs SQL pour la prod (mettre true pour debug)
     }
 );
 
-// Importation des modèles
+// Import des modèles
 const Animal = require('../models/animals')(sequelize);
 const Habitat = require('../models/habitats')(sequelize);
 const HistoriqueAnimal = require('../models/historiques_animals')(sequelize);
 const User = require('../models/users')(sequelize);
 const Review = require('../models/reviews')(sequelize);
+const UserAnimal = require('../models/users_animals')(sequelize);
+const FoodConsumption = require('../models/food_consumption')(sequelize);
+const ContactMessage = require('../models/contact_message')(sequelize); 
 
-// Afficher les modèles initialisés pour le débogage
-console.log('Modèle User initialisé :', User);
-console.log('Modèle Review initialisé :', Review);
+// Définition des associations
 
-// Définir les associations entre les modèles
-
-// Animal appartient à Habitat
-Animal.belongsTo(Habitat, { foreignKey: 'habitat_id', as: 'habitat' });
+// Habitat ➜ Animaux
 Habitat.hasMany(Animal, { foreignKey: 'habitat_id', as: 'animaux' });
+Animal.belongsTo(Habitat, { foreignKey: 'habitat_id', as: 'habitat' });
 
-// HistoriqueAnimal appartient à Animal
+// Animal ➜ Historique
 Animal.hasMany(HistoriqueAnimal, { foreignKey: 'animal_id', as: 'historique' });
 HistoriqueAnimal.belongsTo(Animal, { foreignKey: 'animal_id', as: 'animal' });
 
-// Animal appartient à un Vétérinaire (User avec role 'vet')
-Animal.belongsTo(User, { foreignKey: 'vet_id', as: 'veterinaire' });
+// Vétérinaire (User) ➜ Animaux soignés
 User.hasMany(Animal, { foreignKey: 'vet_id', as: 'animaux_soignes' });
+Animal.belongsTo(User, { foreignKey: 'vet_id', as: 'veterinaire' });
 
-// Review appartient à User
-Review.belongsTo(User, { foreignKey: 'user_id', as: 'utilisateur' });
-User.hasMany(Review, { foreignKey: 'user_id', as: 'avis' });
+// User ➜ Avis
+//User.hasMany(Review, { foreignKey: 'user_id', as: 'avis' });
+//Review.belongsTo(User, { foreignKey: 'user_id', as: 'utilisateur' });
 
-// Fonction de connexion à la base de données
+// User ⬌ Animal via users_animals
+User.belongsToMany(Animal, {
+    through: UserAnimal,
+    foreignKey: 'users_id',
+    otherKey: 'animal_id',
+    as: 'animaux_gérés'
+});
+Animal.belongsToMany(User, {
+    through: UserAnimal,
+    foreignKey: 'animal_id',
+    otherKey: 'users_id',
+    as: 'soigneurs'
+});
+
+ContactMessage.belongsTo(User, {
+    foreignKey: 'replied_by',
+    as: 'repondeur'
+});
+User.hasMany(ContactMessage, {
+    foreignKey: 'replied_by',
+    as: 'messages_repondus'
+});
+
+
+// Employee ➜ FoodConsumption
+User.hasMany(FoodConsumption, { foreignKey: 'employee_id', as: 'consommations' });
+FoodConsumption.belongsTo(User, { foreignKey: 'employee_id', as: 'employee' });
+
+// Animal ➜ FoodConsumption
+Animal.hasMany(FoodConsumption, { foreignKey: 'animal_id', as: 'consommations' });
+FoodConsumption.belongsTo(Animal, { foreignKey: 'animal_id', as: 'animal' });
+
+
+// 🔌 Fonction de connexion
 const connectMySQLDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log('Connexion à la base de données réussie.');
+        console.log('✅ Connexion à la base de données MySQL réussie.');
     } catch (error) {
-        console.error('Impossible de se connecter à la base de données:', error);
+        console.error('❌ Impossible de se connecter à la base de données :', error);
     }
 };
 
-// Exporter les objets nécessaires
+// Exports
 module.exports = {
     sequelize,
+    connectMySQLDB,
     Animal,
     Habitat,
     HistoriqueAnimal,
     User,
     Review,
-    connectMySQLDB 
+    UserAnimal,
+    FoodConsumption,
+    ContactMessage
 };

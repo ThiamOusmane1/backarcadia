@@ -1,70 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de Bord Vétérinaire</title>
-    <link rel="stylesheet" href="dashboard.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tableau de Bord Vétérinaire</title>
+  <link rel="stylesheet" href="dashboard.css" />
 </head>
 <body>
-    <header>
+  <header>
     <a href="index.html">
-        <img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo">
+      <img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo" />
     </a>
     <h1>Tableau de Bord - Vétérinaire</h1>
     <button id="logoutBtn" class="logout-btn">Déconnexion</button>
-    </header>
+  </header>
 
-    <main>
-        <div class="table-container">
-        <p id="statusMessage"></p> 
-        <table id="animalsTable">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Nom</th>
-                    <th>Habitat</th>
-                    <th>État de santé</th>
-                    <th>Poids</th>
-                    <th>Nourriture</th>
-                    <th>Quantité</th>
-                    <th>Soins</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Les lignes des animaux seront insérées ici -->
-            </tbody>
-        </table>
+  <main>
+    <div class="table-container">
+      <p id="statusMessage"></p>
+      <table id="animalsTable">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Nom</th>
+            <th>Habitat</th>
+            <th>Santé</th>
+            <th>Poids</th>
+            <th>Nourriture</th>
+            <th>Quantité</th>
+            <th>Soins</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- MODALE -->
+    <div class="form-modal hidden" id="editModal">
+      <div class="form-modal-content">
+        <h3>Modifier un animal</h3>
+
+        <label for="animalHealth">État de santé</label>
+        <input type="text" id="animalHealth" required />
+
+        <label for="animalWeight">Poids (kg)</label>
+        <input type="number" id="animalWeight" min="1" required />
+
+        <label for="animalFood">Nourriture</label>
+        <textarea id="animalFood" required></textarea>
+
+        <label for="animalCare">Soins</label>
+        <textarea id="animalCare" required></textarea>
+
+        <div style="margin-top: 10px;">
+          <button id="updateAnimalBtn">Enregistrer</button>
+          <button type="button" id="cancelEditAnimal" class="btn btn-danger">Annuler</button>
         </div>
 
-        <!-- Modal pour modifier l'état de santé -->
-        <div class="form-modal" id="editModal">
-            <div class="form-modal-content">
-                <h3>Mettre à jour les informations de l'animal</h3>
-                <label for="animalHealth">Sante</label>
-                <input type="text" id="animalHealth">
-                <label for="animalWeight">Poids (kg)</label>
-                <input type="number" id="animalWeight">
-                <label for="animalFood">Nourriture</label>
-                <textarea id="animalFood"></textarea>
-                <label for="animalCare">Soins</label>
-                <textarea id="animalCare"></textarea>
-                <button id="updateAnimalBtn">Mettre à jour</button>
-                <p id="modalStatusMessage"></p>
-                <button class="form-modal-close" id="closeModalBtn">Fermer</button>
-            </div>
-        </div>
-    </main>
+        <p id="modalStatusMessage" class="status-message"></p>
+      </div>
+    </div>
+  </main>
 
-    <footer>
-        <p>&copy; 2024 Zoo-Arcadia. Tous droits réservés.</p>
-    </footer>
+  <footer>
+    <p>&copy; 2024 Zoo Arcadia. Tous droits réservés.</p>
+  </footer>
 
-    <script src="js/vet-dashboard.js"></script>
-    <script src="js/historique.js"></script>
+  <script src="js/vet-dashboard.js"></script>
+  <script src="js/historique.js"></script>
 </body>
 </html>
+
 
 
 

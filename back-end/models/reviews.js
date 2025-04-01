@@ -1,11 +1,10 @@
 const { DataTypes } = require('sequelize');
 
-
 module.exports = (sequelize) => {
-    return sequelize.define('Review', {
+    const Review = sequelize.define('Review', {
         id: {
-            type: DataTypes.INTEGER, // Changez le type à INTEGER
-            autoIncrement: true, // Active l'auto-incrémentation
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
             primaryKey: true,
             allowNull: false
         },
@@ -24,24 +23,15 @@ module.exports = (sequelize) => {
         email: {
             type: DataTypes.STRING(255),
             allowNull: false
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW
-        },
-        updatedAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW 
         }
     }, {
         tableName: 'reviews',
-        timestamps: true
+        timestamps: true // Sequelize gère automatiquement createdAt et updatedAt
     });
 
     return Review;
 };
+
 
 
 
