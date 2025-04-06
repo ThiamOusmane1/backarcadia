@@ -17,12 +17,13 @@ const sequelize = new Sequelize(
 // Import des modèles
 const Animal = require('../models/animals')(sequelize);
 const Habitat = require('../models/habitats')(sequelize);
-const HistoriqueAnimal = require('../models/historiques_animals')(sequelize);
+const HistoriqueAnimal = require('../models/historique_animals')(sequelize);
 const User = require('../models/users')(sequelize);
 const Review = require('../models/reviews')(sequelize);
 const UserAnimal = require('../models/users_animals')(sequelize);
 const FoodConsumption = require('../models/food_consumption')(sequelize);
-const ContactMessage = require('../models/contact_message')(sequelize); 
+const ContactMessage = require('../models/contact_message')(sequelize);
+const FoodStock = require('../models/FoodStock')(sequelize); 
 
 // Définition des associations
 
@@ -79,9 +80,9 @@ FoodConsumption.belongsTo(Animal, { foreignKey: 'animal_id', as: 'animal' });
 const connectMySQLDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log('✅ Connexion à la base de données MySQL réussie.');
+        console.log(' Connexion à la base de données MySQL réussie.');
     } catch (error) {
-        console.error('❌ Impossible de se connecter à la base de données :', error);
+        console.error(' Impossible de se connecter à la base de données :', error);
     }
 };
 
@@ -96,5 +97,6 @@ module.exports = {
     Review,
     UserAnimal,
     FoodConsumption,
-    ContactMessage
+    ContactMessage,
+    FoodStock
 };

@@ -1,38 +1,38 @@
-require('dotenv').config();
+// middlewares/authMiddleware.js
 const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key';
+// Middleware : Vérifier le token
+const authenticateToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) return res.status(401).json({ message: 'Token manquant' });
 
-// 🔒 Middleware d'authentification (vérifie la présence et la validité du JWT)
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ message: 'Token invalide' });
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'Token non fourni ou mal formé' });
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded; // Ex: { id, email, role }
-        next();
-    } catch (error) {
-        console.error('Erreur de vérification du token JWT :', error);
-        return res.status(403).json({ message: 'Token invalide ou expiré' });
-    }
-}
-
-// 🔐 Middleware d'autorisation (vérifie le rôle)
-function authorizeRoles(...roles) {
-    return (req, res, next) => {
-        if (!req.user || !roles.includes(req.user.role)) {
-            return res.status(403).json({ message: 'Accès interdit : rôle insuffisant' });
-        }
-        next();
+    req.user = {
+      id: decoded.userId,
+      role: decoded.role
     };
-}
+    next();
+  });
+};
 
-module.exports = { authenticateToken, authorizeRoles };
+// Middleware : Vérifier le rôle
+const authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'Accès interdit' });
+    }
+    next();
+  };
+};
+
+module.exports = {
+  authenticateToken,
+  authorizeRoles
+};
+
+
 
 

@@ -46,6 +46,7 @@ app.use('/api/vet', vetRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/employee', employeeRoutes);
 
+
 // Gestion des erreurs globales
 app.use((err, req, res, next) => {
     console.error(err.stack);

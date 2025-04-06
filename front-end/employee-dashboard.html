@@ -1,27 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employé Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Employé - Zoo Arcadia</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-    <header class="bg-success text-white text-center py-3">
-        <a href="index.html">
-            <img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo">
-        </a>
-        <h1>Bienvenue dans le tableau de bord Employé</h1>
-    </header>
+  <header class="bg-dark text-white py-3 px-4 d-flex justify-content-between align-items-center">
+    <a href="index.html"><img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo"></a>
+    <h1 class="m-0">👷 Tableau Employé</h1>
+    <button id="logoutBtn" class="btn btn-danger">Déconnexion</button>
+  </header>
 
-    <main>
-        <p>Accès restreint à certaines fonctionnalités.</p>
-        <!-- Ajoutez ici les fonctionnalités spécifiques aux employés -->
-    </main>
+  <main class="container mt-4">
+    <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+      <li class="nav-item"><a class="nav-link active" id="animaux-tab" data-toggle="tab" href="#animaux" role="tab">Animaux</a></li>
+			<li class="nav-item"><a class="nav-link" id="stock-tab" data-toggle="tab" href="#stock" role="tab">Stock</a></li>
+      <li class="nav-item"><a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab">Messages</a></li>
+    </ul>
 
-    <footer>
-        <p>&copy; 2024 Zoo-Arcadia. Tous droits réservés.</p>
-    </footer>
+    <div class="tab-content mt-3">
+      <div class="tab-pane fade show active" id="animaux" role="tabpanel">
+        <div class="row" id="animalCardsContainer"></div>
+    </div>
+
+			<!-- Stock -->
+		<div class="tab-pane fade" id="stock" role="tabpanel">
+			<div id="stockContainer" class="row">
+			</div>
+		</div>
+
+    <div class="tab-pane fade" id="messages" role="tabpanel">
+      <div class="list-group" id="messageListContainer"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="text-center mt-5 py-3 bg-light">
+    <p>&copy; 2024 Zoo Arcadia. Tous droits réservés.</p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/employee-dashboard.js"></script>
 </body>
 </html>
+
+
+
 

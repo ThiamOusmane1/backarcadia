@@ -1,128 +1,99 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoo Arcadia - Habitats</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zoo Arcadia - Habitats</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <header class="bg-success text-white text-center py-3">
-        <a href="index.html">
-            <img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo">
-        </a>
-        <h1>Nos Habitats</h1>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
-                    <li class="nav-item"><a class="nav-link" href="habitats.html">Habitats</a></li>
-                    <li class="nav-item"><a class="nav-link" href="login.html">Connexion</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+  <header class="bg-success text-white text-center py-3">
+    <a href="index.html">
+      <img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo" />
+    </a>
+    <h1>Nos Habitats</h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+          <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="habitats.html">Habitats</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Connexion</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
 
-    <div class="content">
-        <main class="container mt-5">
-            <!-- Liste des habitats -->
-            <div id="habitats-list" class="row">
-                <!-- Les cartes des habitats seront insérées ici via JavaScript -->
-                <div class="col-md-4 mb-4">
-                    <div class="card ha-card" data-habitat="Savane">
-                        <img src="pictures/Savane.jpg" class="card-img-top" alt="Savane">
-                        <div class="card-body">
-                            <h5 class="card-title">Savane</h5>
-                            <p class="card-text">Découvrez la faune incroyable de la savane.</p>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="col-md-4 mb-4">
-                    <div class="card ha-card" data-habitat="Jungle">
-                        <img src="pictures/Jungle.jpg" class="card-img-top" alt="Jungle">
-                        <div class="card-body">
-                            <h5 class="card-title">Jungle</h5>
-                            <p class="card-text">Une forêt dense avec une grande variété de faune et de flore</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <div class="card ha-card" data-habitat="Marais">
-                        <img src="pictures/Marais.jpg" class="card-img-top" alt="Marais">
-                        <div class="card-body">
-                            <h5 class="card-title">Marais</h5>
-                            <p class="card-text">Des zones humides où vivent des reptiles et des oiseaux aquatiques.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="animal-gallery" class="row mt-5">
-                <!-- Les cartes d'animaux seront insérées ici via JavaScript -->
-            </div>
-            <!-- Modale pour afficher les détails de l'animal -->
-            <div class="modal fade" id="animalModal" tabindex="-1" role="dialog" aria-labelledby="animalModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="animalModalLabel">Détails de l'Animal</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body" id="modal-body">
-                            <!-- Les détails de l'animal seront insérés ici via JavaScript -->
-                            <button class="view-history-btn" data-animal-id="animalId">Voir l'historique</button>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modale pour afficher les détails et l'historique de l'animal -->
-            <div class="modal fade" id="animalModal" tabindex="-1" role="dialog" aria-labelledby="animalModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="animalModalLabel">Détails de l'Animal</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body" id="modal-body">
-                            <!-- Les détails et l'historique de l'animal seront insérés ici via JavaScript -->
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </main>
+  <main class="container mt-5">
+    <!-- Cartes des habitats -->
+    <div id="habitats-list" class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card ha-card" data-habitat="Savane">
+          <img src="pictures/Savane.jpg" class="card-img-top" alt="Savane" />
+          <div class="card-body">
+            <h5 class="card-title">Savane</h5>
+            <p class="card-text">Découvrez la faune incroyable de la savane.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card ha-card" data-habitat="Jungle">
+          <img src="pictures/Jungle.jpg" class="card-img-top" alt="Jungle" />
+          <div class="card-body">
+            <h5 class="card-title">Jungle</h5>
+            <p class="card-text">Une forêt dense avec une grande variété de faune et de flore</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card ha-card" data-habitat="Marais">
+          <img src="pictures/Marais.jpg" class="card-img-top" alt="Marais" />
+          <div class="card-body">
+            <h5 class="card-title">Marais</h5>
+            <p class="card-text">Des zones humides où vivent des reptiles et des oiseaux aquatiques.</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="back-to-home">
-        <a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
-    </div>    
 
-    <footer>
-        <p class="text-center">© 2024 Zoo Arcadia. Tous droits réservés.</p>
-    </footer>
+    <!-- Galerie des animaux -->
+    <div id="animalGallery" class="row mt-5"></div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="script.js"></script>
-    <script src="js/historique.js"></script>
+    <!-- Modale commune -->
+    <div class="modal fade" id="animalModal" tabindex="-1" role="dialog" aria-labelledby="animalModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="animalModalLabel">Informations</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="text-center my-4">
+    <a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
+  </div>
+
+  <footer>
+    <p class="text-center">© 2024 Zoo Arcadia. Tous droits réservés.</p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

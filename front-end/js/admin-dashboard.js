@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <td>${animal.nourriture}</td>
               <td>${animal.quantite}</td>
               <td>${animal.soins || '-'}</td>
+               <td>${animal.consultations || '-'}</td>
               <td>
                 <button onclick="editAnimal('${animal.id}', '${animal.nom}', '${animal.sante}', ${animal.poids}, '${animal.nourriture}')">Modifier</button>
                 <button onclick="deleteAnimal('${animal.id}')">Supprimer</button>

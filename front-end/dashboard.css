@@ -110,7 +110,7 @@ input, textarea {
 
 /* Style de base pour les modaux */
 .form-modal {
-    display: none; /* Caché par défaut */
+    display: flex; /* Caché par défaut */
     position: fixed;
     top: 0;
     left: 0;
@@ -120,6 +120,10 @@ input, textarea {
     justify-content: center;
     align-items: center;
 }
+.hidden {
+    display: none !important;
+  }
+  
 
 /* Style du contenu des modaux */
 .form-modal-content {
@@ -247,6 +251,16 @@ footer {
 .login-form button:hover {
     background-color: #0056b3;
 }
+.historique-entry {
+    margin-bottom: 15px;
+    list-style: none;
+  }
+  
+  .historique-entry pre {
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+  }
+  
 
 /* --- Design réactif --- */
 

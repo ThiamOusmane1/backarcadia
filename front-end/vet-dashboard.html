@@ -54,13 +54,23 @@
         <textarea id="animalCare" required></textarea>
 
         <div style="margin-top: 10px;">
-          <button id="updateAnimalBtn">Enregistrer</button>
+          <button id="updateAnimalBtn" class="btn btn-success">Enregistrer</button>
           <button type="button" id="cancelEditAnimal" class="btn btn-danger">Annuler</button>
+          <button type="button" id="closeModalBtn" class="btn btn-secondary">Fermer</button> 
         </div>
 
         <p id="modalStatusMessage" class="status-message"></p>
       </div>
     </div>
+    <!-- MODALE HISTORIQUE -->
+    <div class="form-modal hidden" id="historiqueModal">
+      <div class="form-modal-content">
+        <h3>Historique des modifications</h3>
+        <ul id="historiqueList" style="max-height: 300px; overflow-y: auto;"></ul>
+        <button id="closeHistoriqueModal" class="form-modal-close">Fermer</button>
+      </div>
+    </div>
+
   </main>
 
   <footer>
@@ -68,9 +78,10 @@
   </footer>
 
   <script src="js/vet-dashboard.js"></script>
-  <script src="js/historique.js"></script>
 </body>
 </html>
+
+
 
 
 
