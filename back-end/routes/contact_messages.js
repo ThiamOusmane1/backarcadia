@@ -40,7 +40,7 @@ router.get('/', authenticateToken, authorizeRoles('admin', 'employee'), async (r
         const messages = await ContactMessage.findAll({
             include: {
                 model: User,
-                as: 'repliedByUser',
+                as: 'repondeur',
                 attributes: ['id', 'email', 'role']
             },
             order: [['createdAt', 'DESC']]

@@ -17,26 +17,48 @@
   <main class="container mt-4">
     <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
       <li class="nav-item"><a class="nav-link active" id="animaux-tab" data-toggle="tab" href="#animaux" role="tab">Animaux</a></li>
-			<li class="nav-item"><a class="nav-link" id="stock-tab" data-toggle="tab" href="#stock" role="tab">Stock</a></li>
+      <li class="nav-item"><a class="nav-link" id="stock-tab" data-toggle="tab" href="#stock" role="tab">Stock</a></li>
       <li class="nav-item"><a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab">Messages</a></li>
     </ul>
 
     <div class="tab-content mt-3">
+      <!-- 🐾 Onglet Animaux -->
       <div class="tab-pane fade show active" id="animaux" role="tabpanel">
         <div class="row" id="animalCardsContainer"></div>
-    </div>
+      </div>
 
-			<!-- Stock -->
-		<div class="tab-pane fade" id="stock" role="tabpanel">
-			<div id="stockContainer" class="row">
-			</div>
-		</div>
+      <!-- 📦 Onglet Stock -->
+      <div class="tab-pane fade" id="stock" role="tabpanel">
+        <div id="stockContainer" class="row"></div>
+      </div>
 
-    <div class="tab-pane fade" id="messages" role="tabpanel">
-      <div class="list-group" id="messageListContainer"></div>
+      <!-- 💬 Onglet Messages -->
+      <div class="tab-pane fade" id="messages" role="tabpanel">
+        <div id="messageListContainer" class="list-group"></div>
       </div>
     </div>
   </main>
+
+  <!-- 📬 Modale Répondre au message -->
+  <div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="replyModalLabel">Répondre au message</h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="modalMessageContent"></p>
+          <textarea id="replyText" class="form-control" placeholder="Votre réponse..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button id="sendReplyBtn" class="btn btn-success">Envoyer</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer class="text-center mt-5 py-3 bg-light">
     <p>&copy; 2024 Zoo Arcadia. Tous droits réservés.</p>
@@ -47,6 +69,7 @@
   <script src="js/employee-dashboard.js"></script>
 </body>
 </html>
+
 
 
 
