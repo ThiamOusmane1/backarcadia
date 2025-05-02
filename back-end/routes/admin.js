@@ -15,7 +15,7 @@ router.post('/users', authenticateToken, authorizeRoles('admin'), async (req, re
         const userExist = await User.findOne({ where: { email } });
         if (userExist) return res.status(409).json({ message: 'Cet utilisateur existe déjà.' });
 
-        const defaultPassword = 'password123'; // tu peux le changer par une logique plus robuste
+        const defaultPassword = 'password'; 
         const bcrypt = require('bcrypt');
         const hashedPassword = await bcrypt.hash(defaultPassword, 10);
 

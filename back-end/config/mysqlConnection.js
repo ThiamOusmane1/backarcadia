@@ -24,6 +24,7 @@ const UserAnimal = require('../models/users_animals')(sequelize);
 const FoodConsumption = require('../models/food_consumption')(sequelize);
 const ContactMessage = require('../models/contact_message')(sequelize);
 const FoodStock = require('../models/FoodStock')(sequelize); 
+const AnimalFoodLog = require('../models/AnimalFoodLog')(sequelize);
 
 // Définition des associations
 
@@ -39,9 +40,6 @@ HistoriqueAnimal.belongsTo(Animal, { foreignKey: 'animal_id', as: 'animal' });
 User.hasMany(Animal, { foreignKey: 'vet_id', as: 'animaux_soignes' });
 Animal.belongsTo(User, { foreignKey: 'vet_id', as: 'veterinaire' });
 
-// User ➜ Avis
-//User.hasMany(Review, { foreignKey: 'user_id', as: 'avis' });
-//Review.belongsTo(User, { foreignKey: 'user_id', as: 'utilisateur' });
 
 // User ⬌ Animal via users_animals
 User.belongsToMany(Animal, {
@@ -75,6 +73,9 @@ FoodConsumption.belongsTo(User, { foreignKey: 'employee_id', as: 'employee' });
 Animal.hasMany(FoodConsumption, { foreignKey: 'animal_id', as: 'consommations' });
 FoodConsumption.belongsTo(Animal, { foreignKey: 'animal_id', as: 'animal' });
 
+AnimalFoodLog.belongsTo(Animal, { foreignKey: 'animalId', as: 'animal' });
+AnimalFoodLog.belongsTo(User, { foreignKey: 'employeeId', as: 'employee' });
+
 
 // 🔌 Fonction de connexion
 const connectMySQLDB = async () => {
@@ -98,5 +99,6 @@ module.exports = {
     UserAnimal,
     FoodConsumption,
     ContactMessage,
-    FoodStock
+    FoodStock,
+    AnimalFoodLog
 };

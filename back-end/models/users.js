@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const { v4: uuidv4 } = require('uuid'); 
 
 module.exports = (sequelize) => {
     return sequelize.define('User', {
@@ -6,7 +7,8 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING(24),
             primaryKey: true,
             allowNull: false, // Doit être unique
-            unique: true // S'assurer que l'ID est unique
+            unique: true, // S'assurer que l'ID est unique
+            defaultValue: () => uuidv4().replace(/-/g, '').slice(0, 24) // Génère un ID alphanumérique unique sur 24 caractères
         },
         email: {
             type: DataTypes.STRING(255),
@@ -15,7 +17,7 @@ module.exports = (sequelize) => {
         },
         password: {
             type: DataTypes.STRING(255),
-            allowNull: false // Conserver le champ pour la gestion des mots de passe
+            allowNull: false // champ pour la gestion des mots de passe
         },
         role: {
             type: DataTypes.ENUM('admin', 'vet', 'employee'), // Conserver ENUM pour des valeurs de rôle spécifiques
@@ -33,19 +35,19 @@ module.exports = (sequelize) => {
         },
         __v: {
             type: DataTypes.INTEGER,
-            defaultValue: 0 // Champ de version, si nécessaire
+            defaultValue: 0 
         },
         updatedAt: {
             type: DataTypes.DATE,
-            allowNull: false // Indiquer que ce champ doit être renseigné
+            allowNull: false 
         },
         createdAt: {
             type: DataTypes.DATE,
-            allowNull: false // Indiquer que ce champ doit être renseigné
+            allowNull: false 
         }
     }, {
         tableName: 'users',
-        timestamps: true, // Activer les timestamps pour createdAt et updatedAt
+        timestamps: true, 
     });
 };
 

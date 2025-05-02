@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { Animal, Habitat, FoodConsumption, ContactMessage, FoodStock } = require('../config/mysqlConnection');
+const { Animal, Habitat, FoodConsumption, ContactMessage, FoodStock, AnimalFoodLog, User } = require('../config/mysqlConnection');
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 const { v4: uuidv4 } = require('uuid');
 
-// Récupérer tous les animaux
-router.get('/animals', authenticateToken, authorizeRoles('employee'), async (req, res) => {
+// ✅ Récupérer tous les animaux
+router.get('/animals', authenticateToken, authorizeRoles('employee', 'admin'), async (req, res) => {
   try {
     const animals = await Animal.findAll({
       where: { isDeleted: false },
@@ -36,70 +36,74 @@ router.post('/food', authenticateToken, authorizeRoles('employee'), async (req, 
       return res.status(400).json({ message: 'Stock insuffisant' });
     }
 
+    // Mise à jour du stock
     stock.quantite_stock -= quantite;
     stock.updated_at = new Date();
     await stock.save();
 
-    const record = await FoodConsumption.create({
+    // Création du log dans AnimalFoodLog
+    const log = await AnimalFoodLog.create({
       id: uuidv4(),
-      animal_id,
-      employee_id,
       nourriture,
       quantite,
       date: new Date(),
-      time: new Date().toLocaleTimeString('fr-FR', { hour12: false })
+      time: new Date().toLocaleTimeString('fr-FR', { hour12: false }),
+      animalId: animal_id,
+      employeeId: employee_id
     });
 
+    // Réponse OK
     res.status(201).json({
       message: "Consommation enregistrée",
-      record,
+      log,
       stockRestant: stock.quantite_stock,
       alerte: stock.quantite_stock <= stock.seuil_alerte ? 'Stock faible !' : null
     });
+
   } catch (err) {
     console.error("Erreur ajout consommation :", err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 });
 
-// Voir tout le stock
-router.get('/food-stock', authenticateToken, authorizeRoles('employee'), async (req, res) => {
-    try {
-      const stock = await FoodStock.findAll({ order: [['nourriture', 'ASC']] });
-      res.json(stock);
-    } catch (error) {
-      console.error("Erreur récupération stock :", error);
-      res.status(500).json({ message: "Erreur serveur" });
-    }
-  });
-  
-// Réapprovisionner un aliment
-router.put('/food-stock/:nourriture', authenticateToken, authorizeRoles('employee'), async (req, res) => {
-    try {
-      const { nourriture } = req.params;
-      const { ajout } = req.body;
-  
-      if (!ajout || isNaN(ajout)) {
-        return res.status(400).json({ message: 'Quantité invalide' });
-      }
-  
-      const stock = await FoodStock.findOne({ where: { nourriture } });
-      if (!stock) return res.status(404).json({ message: 'Nourriture non trouvée' });
-  
-      stock.quantite_stock += parseFloat(ajout);
-      stock.updated_at = new Date();
-      await stock.save();
-  
-      res.json({ message: 'Stock mis à jour', stock });
-    } catch (error) {
-      console.error("Erreur MAJ stock :", error);
-      res.status(500).json({ message: "Erreur serveur" });
-    }
-});
-  
 
-// Voir les messages visiteurs
-router.get('/messages', authenticateToken, authorizeRoles('employee'), async (req, res) => {
+// ✅ Voir le stock pour employee (simple vue)
+router.get('/food-stock', authenticateToken, authorizeRoles('employee', 'admin'), async (req, res) => {
+  try {
+    const stock = await FoodStock.findAll({ order: [['nourriture', 'ASC']] });
+    res.json(stock);
+  } catch (error) {
+    console.error("Erreur récupération stock :", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+
+// ✅ Réapprovisionner un aliment (employee uniquement)
+router.put('/food-stock/:nourriture', authenticateToken, authorizeRoles('employee'), async (req, res) => {
+  try {
+    const { nourriture } = req.params;
+    const { ajout } = req.body;
+
+    if (!ajout || isNaN(ajout)) {
+      return res.status(400).json({ message: 'Quantité invalide' });
+    }
+
+    const stock = await FoodStock.findOne({ where: { nourriture } });
+    if (!stock) return res.status(404).json({ message: 'Nourriture non trouvée' });
+
+    stock.quantite_stock += parseFloat(ajout);
+    stock.updated_at = new Date();
+    await stock.save();
+
+    res.json({ message: 'Stock mis à jour', stock });
+  } catch (error) {
+    console.error("Erreur MAJ stock :", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+
+// ✅ Voir les messages visiteurs
+router.get('/messages', authenticateToken, authorizeRoles('employee', 'admin'), async (req, res) => {
   try {
     const messages = await ContactMessage.findAll({
       order: [['createdAt', 'DESC']],
@@ -112,8 +116,8 @@ router.get('/messages', authenticateToken, authorizeRoles('employee'), async (re
   }
 });
 
-// 🔹 Répondre à un message
-router.put('/messages/:id/reply', authenticateToken, authorizeRoles('employee'), async (req, res) => {
+// ✅ Répondre à un message
+router.put('/messages/:id/reply', authenticateToken, authorizeRoles('employee', 'admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const { reply } = req.body;
@@ -133,6 +137,23 @@ router.put('/messages/:id/reply', authenticateToken, authorizeRoles('employee'),
   }
 });
 
+// ✅ Voir tous les logs nourriture (admin uniquement)
+router.get('/food-log', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+  try {
+    const logs = await AnimalFoodLog.findAll({
+      include: [
+        { model: Animal, as: 'animal', attributes: ['nom'] },
+        { model: User, as: 'employee', attributes: ['email'] }
+      ]
+    });
+    res.json(logs);
+  } catch (error) {
+    console.error('Erreur récupération logs nourriture:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
 module.exports = router;
+
 
 

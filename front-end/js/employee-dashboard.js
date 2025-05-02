@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h5 class="card-title">${animal.nom}</h5>
                 <p><strong>Habitat :</strong> ${animal.habitat?.nom || 'Inconnu'}</p>
                 <p><strong>Nourriture :</strong> ${animal.nourriture}</p>
-                <p><strong>Quantité restante (animal) :</strong> ${animal.quantite || 0} kg</p>
+                <p><strong>Quantité à donner :</strong> ${animal.quantite || 0} kg</p>
                 <form class="feed-form">
                   <input type="hidden" name="animal_id" value="${animal.id}">
                   <input type="hidden" name="nourriture" value="${animal.nourriture}">

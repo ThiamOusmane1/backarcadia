@@ -16,11 +16,10 @@
   </header>
 
   <main class="container">
-    <!-- SECTION UTILISATEURS -->
+    <!-- GESTION UTILISATEURS -->
     <section>
       <h2>Gestion des utilisateurs</h2>
       <button id="showAddUserForm" class="btn">+ Ajouter un utilisateur</button>
-      
       <form id="addUserForm" class="hidden">
         <input type="email" id="newUserEmail" placeholder="Email" required />
         <select id="newUserRole" required>
@@ -30,15 +29,11 @@
         </select>
         <button type="submit">Ajouter</button>
       </form>
-
       <div class="table-responsive">
         <table id="userTable">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Email</th>
-              <th>Rôle</th>
-              <th>Actions</th>
+              <th>ID</th><th>Email</th><th>Rôle</th><th>Actions</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -46,11 +41,10 @@
       </div>
     </section>
 
-    <!-- SECTION ANIMAUX -->
+    <!-- GESTION ANIMAUX -->
     <section>
       <h2>Gestion des animaux</h2>
       <button id="showAddAnimalForm" class="btn">+ Ajouter un animal</button>
-      
       <form id="addAnimalForm" class="hidden">
         <input type="text" id="newAnimalName" placeholder="Nom" required />
         <input type="text" id="newAnimalHealth" placeholder="Santé" required />
@@ -60,71 +54,59 @@
         <input type="text" id="newAnimalUrl" placeholder="Nom du fichier image" required />
         <button type="submit">Ajouter</button>
       </form>
-
       <div class="table-responsive">
         <table id="animalTable">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Image</th>
-              <th>Nom</th>
-              <th>Habitat</th>
-              <th>Santé</th>
-              <th>Poids</th>
-              <th>Nourriture</th>
-              <th>Quantité</th>
-              <th>Soins</th>
-              <th>Consultations</th>
-              <th>Actions</th>
+              <th>ID</th><th>Image</th><th>Nom</th><th>Habitat</th><th>Santé</th>
+              <th>Poids</th><th>Nourriture</th><th>Quantité</th><th>Soins</th><th>Actions</th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
     </section>
+
+    <!-- 📬 MESSAGES VISITEURS -->
+    <section>
+      <h2>Messages visiteurs</h2>
+      <div id="adminMessageList" class="list-group"></div>
+    </section>
+
+    <!-- 🍽️ CONSOMMATIONS -->
+    <section>
+      <h2>Historique des consommations</h2>
+      <div class="table-responsive">
+        <table id="adminFoodLog" class="table">
+          <thead>
+            <tr>
+              <th>Date</th><th>Animal</th><th>Employé</th><th>Nourriture</th><th>Quantité (kg)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 📦 STOCK -->
+    <section>
+      <h2>Stock de nourriture</h2>
+      <div id="adminStockContainer" class="row"></div>
+    </section>
   </main>
 
-  <!-- MODAL UTILISATEUR -->
-  <div id="editUserForm" class="form-modal hidden">
-    <div class="form-modal-content">
-      <button class="form-modal-close" onclick="document.getElementById('editUserForm').classList.add('hidden')">×</button>
-      <h3>Modifier un utilisateur</h3>
-      <form>
-        <input type="email" id="editUserEmail" placeholder="Email" required />
-        <select id="editUserRole">
-          <option value="employee">Employé</option>
-          <option value="vet">Vétérinaire</option>
-          <option value="admin">Administrateur</option>
-        </select>
-        <button type="submit">Enregistrer</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL ANIMAL -->
-  <div id="editAnimalForm" class="form-modal hidden">
-    <div class="form-modal-content">
-      <button class="form-modal-close" onclick="document.getElementById('editAnimalForm').classList.add('hidden')">×</button>
-      <h3>Modifier un animal</h3>
-      <form>
-        <input type="text" id="editAnimalName" placeholder="Nom" required />
-        <input type="text" id="editAnimalHealth" placeholder="Santé" required />
-        <input type="number" id="editAnimalWeight" placeholder="Poids (kg)" required />
-        <input type="text" id="editAnimalFood" placeholder="Nourriture" required />
-        <button type="submit">Enregistrer</button>
-        <button type="button" id="cancelEditAnimal">Annuler</button>
-      </form>
-    </div>
-  </div>
+  <!-- FORMULAIRES MODAUX -->
+  <div id="editUserForm" class="form-modal hidden">...</div>
+  <div id="editAnimalForm" class="form-modal hidden">...</div>
 
   <footer>
     <p>&copy; 2024 Zoo Arcadia — Tous droits réservés</p>
   </footer>
 
   <script src="js/admin-dashboard.js"></script>
-
 </body>
 </html>
+
 
 
 
