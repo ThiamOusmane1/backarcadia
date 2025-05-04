@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiUrl = 'https://arcadia-back-olive.vercel.app/';// URL de l'API
+    const apiUrl = 'https://backarcadia.vercel.app/';// URL de l'API
 
     // Gestion de la soumission du formulaire de login
     function handleLoginFormSubmit(event) {
