@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const apiUrl = 'https://arcadia-back-olive.vercel.app/';
     const form = document.getElementById('contactForm');
   
     form.addEventListener('submit', async (e) => {
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const message = document.getElementById('message').value.trim();
   
       try {
-        const res = await fetch('http://localhost:3000/api/contact_messages', {
+        const res = await fetch(`${apiUrl}/api/contact_messages`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, subject, message })

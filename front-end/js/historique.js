@@ -1,9 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    const apiUrl = 'http://localhost:3000'; // URL de l'API
+
     // Fonction pour récupérer et afficher l'historique d'un animal
     async function fetchHistorique(animalId) {
         try {
             // Appel de l'API pour obtenir l'historique de l'animal avec fetch
-            const response = await fetch(`http://localhost:3000/api/animals/${animalId}/historique`);
+            const response = await fetch(`${apiUrl}/api/animals/${animalId}/historique`);
             
             if (!response.ok) {
                 throw new Error(`Erreur lors de la récupération des données: ${response.statusText}`);

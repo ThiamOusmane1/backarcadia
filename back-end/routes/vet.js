@@ -59,6 +59,15 @@ router.put('/animals/:id', async (req, res) => {
       date: new Date()
     });
 
+    // Ajouter un log pour l'action effectuée par le vétérinaire
+    await UserLog.create({
+      id: uuidv4(),
+      user_id: req.user.id,  // Identifiant du vétérinaire
+      action: 'Mise à jour animal',
+      description: `Vétérinaire ${req.user.id} a mis à jour les informations de l'animal ${id}.`,
+      date: new Date()
+    });
+
     res.json({ message: 'Animal mis à jour avec succès.' });
   } catch (error) {
     console.error("Erreur mise à jour animal :", error);

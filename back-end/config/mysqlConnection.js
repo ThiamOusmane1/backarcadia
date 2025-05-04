@@ -25,6 +25,7 @@ const FoodConsumption = require('../models/food_consumption')(sequelize);
 const ContactMessage = require('../models/contact_message')(sequelize);
 const FoodStock = require('../models/FoodStock')(sequelize); 
 const AnimalFoodLog = require('../models/AnimalFoodLog')(sequelize);
+const UserLog = require('../models/user_logs')(sequelize);
 
 // Définition des associations
 
@@ -76,6 +77,8 @@ FoodConsumption.belongsTo(Animal, { foreignKey: 'animal_id', as: 'animal' });
 AnimalFoodLog.belongsTo(Animal, { foreignKey: 'animalId', as: 'animal' });
 AnimalFoodLog.belongsTo(User, { foreignKey: 'employeeId', as: 'employee' });
 
+UserLog.belongsTo(User, { as: 'user', foreignKey: 'user_id' })
+
 
 // 🔌 Fonction de connexion
 const connectMySQLDB = async () => {
@@ -100,5 +103,6 @@ module.exports = {
     FoodConsumption,
     ContactMessage,
     FoodStock,
-    AnimalFoodLog
+    AnimalFoodLog,
+    UserLog,
 };

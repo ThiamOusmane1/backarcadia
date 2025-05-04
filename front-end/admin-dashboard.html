@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tableau de bord Admin - Zoo Arcadia</title>
+  <title>Admin - Zoo Arcadia</title>
   <link rel="stylesheet" href="adminDashboard.css" />
 </head>
 <body>
@@ -11,15 +11,15 @@
     <a href="index.html">
       <img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo" />
     </a>
-    <h1>Tableau de bord Administrateur</h1>
+    <h1>Tableau de bord Admin</h1>
     <button id="logoutBtn" class="logout-btn">Déconnexion</button>
   </header>
 
   <main class="container">
-    <!-- GESTION UTILISATEURS -->
+    <!-- Utilisateurs -->
     <section>
-      <h2>Gestion des utilisateurs</h2>
-      <button id="showAddUserForm" class="btn">+ Ajouter un utilisateur</button>
+      <h2>Utilisateurs</h2>
+      <button id="showAddUserForm">+ Ajouter un utilisateur</button>
       <form id="addUserForm" class="hidden">
         <input type="email" id="newUserEmail" placeholder="Email" required />
         <select id="newUserRole" required>
@@ -29,81 +29,58 @@
         </select>
         <button type="submit">Ajouter</button>
       </form>
-      <div class="table-responsive">
-        <table id="userTable">
-          <thead>
-            <tr>
-              <th>ID</th><th>Email</th><th>Rôle</th><th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <table id="userTable">
+        <thead>
+          <tr><th>ID</th><th>Email</th><th>Rôle</th><th>Actions</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="editUserForm" class="modal hidden">
+        <form>
+          <input type="email" id="editUserEmail" required />
+          <select id="editUserRole">
+            <option value="employee">Employé</option>
+            <option value="vet">Vétérinaire</option>
+            <option value="admin">Administrateur</option>
+          </select>
+          <button type="submit">Enregistrer</button>
+        </form>
       </div>
     </section>
 
-    <!-- GESTION ANIMAUX -->
+    <!-- Animaux -->
     <section>
-      <h2>Gestion des animaux</h2>
-      <button id="showAddAnimalForm" class="btn">+ Ajouter un animal</button>
+      <h2>Animaux</h2>
+      <button id="showAddAnimalForm">+ Ajouter un animal</button>
       <form id="addAnimalForm" class="hidden">
         <input type="text" id="newAnimalName" placeholder="Nom" required />
         <input type="text" id="newAnimalHealth" placeholder="Santé" required />
         <input type="number" id="newAnimalWeight" placeholder="Poids (kg)" required />
         <input type="text" id="newAnimalFood" placeholder="Nourriture" required />
         <input type="number" id="newAnimalQuantity" placeholder="Quantité" required />
-        <input type="text" id="newAnimalUrl" placeholder="Nom du fichier image" required />
+        <input type="text" id="newAnimalUrl" placeholder="Image (nom de fichier)" />
         <button type="submit">Ajouter</button>
       </form>
-      <div class="table-responsive">
-        <table id="animalTable">
-          <thead>
-            <tr>
-              <th>ID</th><th>Image</th><th>Nom</th><th>Habitat</th><th>Santé</th>
-              <th>Poids</th><th>Nourriture</th><th>Quantité</th><th>Soins</th><th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <table id="animalTable">
+        <thead>
+          <tr><th>ID</th><th>Image</th><th>Nom</th><th>Habitat</th><th>Santé</th><th>Poids</th><th>Nourriture</th><th>Quantité</th><th>Soins</th><th>Actions</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="editAnimalForm" class="modal hidden">
+        <form>
+          <input type="text" id="editAnimalName" required />
+          <input type="text" id="editAnimalHealth" required />
+          <input type="number" id="editAnimalWeight" required />
+          <input type="text" id="editAnimalFood" required />
+          <button type="submit">Mettre à jour</button>
+          <button type="button" id="cancelEditAnimal">Annuler</button>
+        </form>
       </div>
-    </section>
-
-    <!-- 📬 MESSAGES VISITEURS -->
-    <section>
-      <h2>Messages visiteurs</h2>
-      <div id="adminMessageList" class="list-group"></div>
-    </section>
-
-    <!-- 🍽️ CONSOMMATIONS -->
-    <section>
-      <h2>Historique des consommations</h2>
-      <div class="table-responsive">
-        <table id="adminFoodLog" class="table">
-          <thead>
-            <tr>
-              <th>Date</th><th>Animal</th><th>Employé</th><th>Nourriture</th><th>Quantité (kg)</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- 📦 STOCK -->
-    <section>
-      <h2>Stock de nourriture</h2>
-      <div id="adminStockContainer" class="row"></div>
     </section>
   </main>
 
-  <!-- FORMULAIRES MODAUX -->
-  <div id="editUserForm" class="form-modal hidden">...</div>
-  <div id="editAnimalForm" class="form-modal hidden">...</div>
-
-  <footer>
-    <p>&copy; 2024 Zoo Arcadia — Tous droits réservés</p>
-  </footer>
-
-  <script src="js/admin-dashboard.js"></script>
+  <script src="admin-dashboard.js"></script>
 </body>
 </html>
 

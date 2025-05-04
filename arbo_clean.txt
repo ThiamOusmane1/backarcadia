@@ -1,0 +1,123 @@
+﻿├── .vercel
+│   ├── cache
+│   ├── project.json
+│   └── README.txt
+├── back-end
+│   ├── config
+│   │   ├── connection.js
+│   │   └── mysqlConnection.js
+│   ├── controllers
+│   │   └── userController.js
+│   ├── insert
+│   │   ├── bddInsert.js
+│   │   └── seed.js
+│   ├── middlewares
+│   │   ├── authenticateToken.js
+│   │   ├── authMiddleware.js
+│   │   └── checkRole.js
+│   ├── models
+│   │   ├── AnimalFoodLog.js
+│   │   ├── animals.js
+│   │   ├── contact_message.js
+│   │   ├── food_consumption.js
+│   │   ├── FoodStock.js
+│   │   ├── habitats.js
+│   │   ├── historique_animals.js
+│   │   ├── reviews.js
+│   │   ├── users.js
+│   │   └── users_animals.js
+│   ├── routes
+│   │   ├── admin.js
+│   │   ├── animals.js
+│   │   ├── auth.js
+│   │   ├── contact_messages.js
+│   │   ├── employee.js
+│   │   ├── habitats.js
+│   │   ├── reviews.js
+│   │   └── vet.js
+│   ├── .env
+│   ├── app.js
+│   ├── generatePassword.js
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── README.md
+│   ├── test_connect.js
+│   ├── testdb
+│   ├── vercel.json
+│   └── yarn.lock
+├── front-end
+│   ├── css
+│   ├── js
+│   │   ├── admin-dashboard.js
+│   │   ├── caroussel.js
+│   │   ├── contact.js
+│   │   ├── dashboard.js
+│   │   ├── employee-dashboard.js
+│   │   ├── habitats-animaux.js
+│   │   ├── historique.js
+│   │   ├── login.js
+│   │   ├── reviewForm.js
+│   │   ├── services.js
+│   │   └── vet-dashboard.js
+│   ├── pictures
+│   │   ├── alpaca.jpg
+│   │   ├── apprentissage.jpg
+│   │   ├── babar.jpg
+│   │   ├── ballade.jpg
+│   │   ├── craquant.jpg
+│   │   ├── Crocodile.jpg
+│   │   ├── éléphant.jpg
+│   │   ├── fond.jpg
+│   │   ├── fondecran.jpg
+│   │   ├── foret-tropicale.jpg
+│   │   ├── Giraffe.jpg
+│   │   ├── girl-giraffe.jpg
+│   │   ├── Héron.jpg
+│   │   ├── Jungle.jpg
+│   │   ├── Lion.jpg
+│   │   ├── logo.png
+│   │   ├── love.jpg
+│   │   ├── Marais.jpg
+│   │   ├── mignon.jpg
+│   │   ├── montagne.jpg
+│   │   ├── panda.jpg
+│   │   ├── parcours.jpg
+│   │   ├── paysage.jpg
+│   │   ├── pleine.jpg
+│   │   ├── restaurant.jpg
+│   │   ├── Savane.jpg
+│   │   ├── Singe.jpg
+│   │   ├── tiger.jpg
+│   │   ├── Tigre.jpg
+│   │   ├── train.jpg
+│   │   └── Zèbre.jpg
+│   ├── src
+│   │   └── api
+│   ├── adminDashboard.css
+│   ├── admin-dashboard.html
+│   ├── contact.css
+│   ├── contact.html
+│   ├── dashboard.css
+│   ├── employee-dashboard.html
+│   ├── habitats.html
+│   ├── index.html
+│   ├── login.html
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── script.js
+│   ├── services.html
+│   ├── style.css
+│   ├── vercel.json
+│   ├── vet-dashboard.html
+│   └── yarn.lock
+├── prisma
+│   └── schema.prisma
+├── .env
+├── .gitignore
+├── arbo.txt
+├── package.json
+├── package-lock.json
+├── README.md
+├── tree.js
+├── vercel.json
+└── yarn.lock

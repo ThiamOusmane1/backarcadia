@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const apiUrl = 'http://localhost:3000';
+  const apiUrl = 'https://arcadia-back-olive.vercel.app/';
   const token = localStorage.getItem('authToken');
 
   const logoutBtn = document.getElementById('logoutBtn');
@@ -27,7 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelEditAnimalBtn = document.getElementById('cancelEditAnimal');
   let currentAnimalId = null;
 
-  // Vérification du rôle
+  // Visiteurs, logs et stock
+  const visitorMessagesContainer = document.getElementById('visitorMessages');
+  const foodLogsContainer = document.getElementById('foodLogs');
+  const foodStockContainer = document.getElementById('foodStock');
+
   fetch(`${apiUrl}/api/auth/getUserRole`, {
     headers: { Authorization: `Bearer ${token}` }
   })
@@ -232,81 +236,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // === 📬 MESSAGES VISITEURS ===
+  // === Visiteurs, logs et stock ===
   function loadVisitorMessages() {
-    fetch(`${apiUrl}/api/contact_messages`, {
+    fetch(`${apiUrl}/api/admin/visitors`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(messages => {
-        const container = document.getElementById('adminMessageList');
-        if (!container) return;
-        container.innerHTML = '';
+        visitorMessagesContainer.innerHTML = '';
         messages.forEach(msg => {
           const div = document.createElement('div');
-          div.className = 'list-group-item';
-          div.innerHTML = `
-            <h5>${msg.subject}</h5>
-            <p><strong>De :</strong> ${msg.email}</p>
-            <p>${msg.message}</p>
-            ${msg.reply ? `<p><strong>Réponse :</strong> ${msg.reply}</p>` : '<em>Pas encore répondu</em>'}
-          `;
-          container.appendChild(div);
+          div.classList.add('visitor-message');
+          div.innerHTML = `<strong>${msg.nom} (${msg.email}):</strong> ${msg.message}`;
+          visitorMessagesContainer.appendChild(div);
         });
       });
   }
 
-  // === 🍽️ HISTORIQUE CONSOMMATION ===
   function loadFoodLogs() {
-    fetch(`${apiUrl}/api/employee/food-log`, {
+    fetch(`${apiUrl}/api/admin/logs`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(logs => {
-        const tbody = document.querySelector('#adminFoodLog tbody');
-        if (!tbody || !Array.isArray(logs)) return;
-        tbody.innerHTML = '';
-        logs.forEach(entry => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${new Date(entry.date).toLocaleDateString()}</td>
-            <td>${entry.animal?.nom || '-'}</td>
-            <td>${entry.employee?.email || '-'}</td>
-            <td>${entry.nourriture}</td>
-            <td>${entry.quantite}</td>
-          `;
-          tbody.appendChild(tr);
+        foodLogsContainer.innerHTML = '';
+        logs.forEach(log => {
+          const div = document.createElement('div');
+          div.textContent = `${log.date}: ${log.action}`;
+          foodLogsContainer.appendChild(div);
         });
       });
   }
 
-  // === 📦 STOCK ===
   function loadFoodStock() {
-    fetch(`${apiUrl}/api/employee/food-stock`, {
+    fetch(`${apiUrl}/api/admin/stock`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(stocks => {
-        const container = document.getElementById('adminStockContainer');
-        if (!container || !Array.isArray(stocks)) return;
-        container.innerHTML = '';
-        stocks.forEach(stock => {
-          const card = document.createElement('div');
-          card.className = 'col-md-3 mb-3';
-          card.innerHTML = `
-            <div class="card">
-              <div class="card-body">
-                <h5>${stock.nourriture}</h5>
-                <p>Quantité : ${stock.quantite_stock} kg</p>
-                <p>Seuil : ${stock.seuil_alerte} kg</p>
-              </div>
-            </div>
-          `;
-          container.appendChild(card);
+      .then(stock => {
+        foodStockContainer.innerHTML = '';
+        stock.forEach(item => {
+          const div = document.createElement('div');
+          div.textContent = `${item.nourriture}: ${item.quantite} kg`;
+          foodStockContainer.appendChild(div);
         });
       });
   }
 });
+
 
   
   

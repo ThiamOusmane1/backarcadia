@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Script chargé et DOM prêt.");
 
-    const apiUrl = 'http://localhost:3000'; // Changer cette URL si besoin
+    const apiUrl = 'https://arcadia-back-olive.vercel.app/'; // URL de l'API
 
     const button = document.getElementById('leaveReviewBtn');
     const formSection = document.getElementById('reviewFormSection');

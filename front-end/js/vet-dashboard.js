@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   console.log('[DEBUG] vet-dashboard.js chargé');
 
-  const apiUrl = 'http://localhost:3000';
+  const apiUrl = 'https://arcadia-back-olive.vercel.app/';
 
   const animalsTableBody = document.querySelector('#animalsTable tbody');
   const logoutBtn = document.getElementById('logoutBtn');
