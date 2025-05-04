@@ -19,7 +19,7 @@ const port = process.env.PORT || 3000;
 
 // Configuration stricte de CORS
 app.use(cors({
-    origin: ['http://127.0.0.1:8080', 'http://127.0.0.1:5500', 'https://arcadia-front-tau.vercel.app'],
+    origin: ['https://arcadia-front-tau.vercel.app', 'http://127.0.0.1:8080', 'http://127.0.0.1:5500'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true
