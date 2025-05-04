@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiUrl = 'http://localhost:3000';
+    const apiUrl = 'https://backarcadia.vercel.app/';
   
     // Déclenchement auto si ?habitat=... présent dans l'URL
     const urlParams = new URLSearchParams(window.location.search);
