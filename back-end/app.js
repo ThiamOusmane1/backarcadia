@@ -24,8 +24,13 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     credentials: true
 }));
-// Répondre aux requêtes pré-vol CORS (options)
-app.options('*', cors());
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://arcadia-front-tau.vercel.app');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    next();
+});
 
 // Middleware pour parser le body des requêtes
 app.use(express.urlencoded({ extended: true }));
