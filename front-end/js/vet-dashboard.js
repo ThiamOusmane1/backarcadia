@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   console.log('[DEBUG] vet-dashboard.js chargé');
 
-  const apiUrl = 'https://backarcadia.vercel.app/';
+  const apiUrl = 'https://backarcadia.vercel.app';
 
   const animalsTableBody = document.querySelector('#animalsTable tbody');
   const logoutBtn = document.getElementById('logoutBtn');

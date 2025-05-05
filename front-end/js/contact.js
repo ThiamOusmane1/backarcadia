@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiUrl = 'https://backarcadia.vercel.app/';
+    const apiUrl = 'https://backarcadia.vercel.app';
     const form = document.getElementById('contactForm');
   
     form.addEventListener('submit', async (e) => {

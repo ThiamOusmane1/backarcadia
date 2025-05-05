@@ -25,7 +25,7 @@ const FoodConsumption = require('../models/food_consumption')(sequelize);
 const ContactMessage = require('../models/contact_message')(sequelize);
 const FoodStock = require('../models/FoodStock')(sequelize); 
 const AnimalFoodLog = require('../models/AnimalFoodLog')(sequelize);
-const UserLog = require('../models/user_logs')(sequelize);
+const UserLog = require('../models/UserLogs')(sequelize);
 
 // Définition des associations
 
