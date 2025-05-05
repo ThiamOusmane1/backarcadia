@@ -17,22 +17,14 @@ const contactMessagesRoutes = require('./routes/contact_messages');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Configuration stricte de CORS
-app.use(cors({
-    origin: [
-        'https://arcadia-front-l8hccq5s6-thiamousmane1s-projects.vercel.app',
-        'https://arcadia-front-tau.vercel.app',
-        'http://127.0.0.1:8080',
-        'http://127.0.0.1:5500'
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
-    credentials: true
-}));
-
-
-app.use(cors());
-app.options('*', cors()); // OPTIONS global
+//  Nouvelle configuration CORS 
+const corsOptions = {
+    origin: true, // Reflète automatiquement l'origine de la requête
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
+};
+app.use(cors(corsOptions)); 
 
 
 // Middleware pour parser le body des requêtes
