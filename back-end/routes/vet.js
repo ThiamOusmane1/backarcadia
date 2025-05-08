@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Animal, Habitat, HistoriqueAnimal } = require('../config/mysqlConnection');
+const { Animal, Habitat, HistoriqueAnimal, UserLog } = require('../config/mysqlConnection');
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 const { v4: uuidv4 } = require('uuid');
 

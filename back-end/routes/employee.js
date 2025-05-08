@@ -4,7 +4,7 @@ const { Animal, Habitat, FoodConsumption, ContactMessage, FoodStock, AnimalFoodL
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 const { v4: uuidv4 } = require('uuid');
 
-// ✅ Récupérer tous les animaux
+// Récupérer tous les animaux
 router.get('/animals', authenticateToken, authorizeRoles('employee', 'admin'), async (req, res) => {
   try {
     const animals = await Animal.findAll({
@@ -52,7 +52,18 @@ router.post('/food', authenticateToken, authorizeRoles('employee'), async (req, 
       employeeId: employee_id
     });
 
-    // Réponse OK
+    // Création du log dans food_consumption
+    await FoodConsumption.create({
+      id: uuidv4(),
+      animal_id,
+      employee_id,
+      nourriture,
+      quantite,
+      date: now,
+      time
+    });
+
+    // Réponse 
     res.status(201).json({
       message: "Consommation enregistrée",
       log,
@@ -67,7 +78,7 @@ router.post('/food', authenticateToken, authorizeRoles('employee'), async (req, 
 });
 
 
-// ✅ Voir le stock pour employee (simple vue)
+// Voir le stock pour employee (simple vue)
 router.get('/food-stock', authenticateToken, authorizeRoles('employee', 'admin'), async (req, res) => {
   try {
     const stock = await FoodStock.findAll({ order: [['nourriture', 'ASC']] });
@@ -78,7 +89,7 @@ router.get('/food-stock', authenticateToken, authorizeRoles('employee', 'admin')
   }
 });
 
-// ✅ Réapprovisionner un aliment (employee uniquement)
+// Réapprovisionner un aliment (employee uniquement)
 router.put('/food-stock/:nourriture', authenticateToken, authorizeRoles('employee'), async (req, res) => {
   try {
     const { nourriture } = req.params;
@@ -102,7 +113,7 @@ router.put('/food-stock/:nourriture', authenticateToken, authorizeRoles('employe
   }
 });
 
-// ✅ Voir les messages visiteurs
+// Voir les messages visiteurs
 router.get('/messages', authenticateToken, authorizeRoles('employee', 'admin'), async (req, res) => {
   try {
     const messages = await ContactMessage.findAll({
@@ -116,7 +127,7 @@ router.get('/messages', authenticateToken, authorizeRoles('employee', 'admin'), 
   }
 });
 
-// ✅ Répondre à un message
+// Répondre à un message
 router.put('/messages/:id/reply', authenticateToken, authorizeRoles('employee', 'admin'), async (req, res) => {
   try {
     const { id } = req.params;
@@ -137,7 +148,7 @@ router.put('/messages/:id/reply', authenticateToken, authorizeRoles('employee', 
   }
 });
 
-// ✅ Voir tous les logs nourriture (admin uniquement)
+// Voir tous les logs nourriture (admin uniquement)
 router.get('/food-log', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const logs = await AnimalFoodLog.findAll({

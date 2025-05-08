@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === Visiteurs, logs et stock ===
   function loadVisitorMessages() {
-    fetch(`${apiUrl}/api/admin/visitors`, {
+    fetch(`${apiUrl}/api/employee/messages`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function loadFoodLogs() {
-    fetch(`${apiUrl}/api/admin/logs`, {
+    fetch(`${apiUrl}/api/employee/food-log`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
@@ -262,14 +262,18 @@ document.addEventListener('DOMContentLoaded', () => {
         foodLogsContainer.innerHTML = '';
         logs.forEach(log => {
           const div = document.createElement('div');
-          div.textContent = `${log.date}: ${log.action}`;
+          div.textContent = `${log.date} ${log.time} - ${log.employee?.email} a donné ${log.quantite} kg de ${log.nourriture} à ${log.animal?.nom}`;
           foodLogsContainer.appendChild(div);
         });
+      })
+      .catch(err => {
+        console.error("Erreur chargement des logs employés :", err);
       });
   }
+  
 
   function loadFoodStock() {
-    fetch(`${apiUrl}/api/admin/stock`, {
+    fetch(`${apiUrl}/api/employee/food-stock`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())

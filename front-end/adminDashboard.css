@@ -1,3 +1,8 @@
+/* === GLOBAL === */
+* {
+  box-sizing: border-box;
+}
+
 body {
   background: url('pictures/Jungle.jpg') no-repeat center center fixed;
   background-size: cover;
@@ -5,8 +10,21 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #084a1e;
   overflow-x: hidden;
+  position: relative;
 }
 
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* dark overlay */
+  z-index: -1;
+}
+
+/* === HEADER === */
 header {
   background: linear-gradient(to right, rgba(85, 107, 47, 0.4), rgba(143, 188, 143, 0.4));
   padding: 10px 20px;
@@ -28,27 +46,62 @@ header h1 {
   text-align: center;
 }
 
+/* === BUTTONS === */
+button,
+.logout-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 2px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:focus,
+.logout-btn:focus {
+  outline: 2px solid #ffdc00;
+  outline-offset: 2px;
+}
+
 .logout-btn {
   background-color: #ff4136;
   color: white;
-  border: none;
-  padding: 8px 16px;
   border-radius: 8px;
-  cursor: pointer;
 }
 
 .logout-btn:hover {
   background-color: #e03429;
 }
 
+button[onclick*="edit"] {
+  background-color: #2980b9;
+  color: white;
+}
+
+button[onclick*="delete"] {
+  background-color: #c0392b;
+  color: white;
+}
+
+button[type="submit"] {
+  background-color: #27ae60;
+  color: white;
+}
+
+.btn {
+  background-color: #3d9970;
+  color: white;
+  font-weight: bold;
+}
+
+/* === MAIN === */
 main {
   padding: 30px;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
-  margin-top: 20px;
+  margin: 20px auto 0 auto;
   max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -59,7 +112,7 @@ h2 {
   color: #006400;
 }
 
-/* Table */
+/* === TABLES === */
 .table-responsive {
   overflow-x: auto;
   background-color: rgba(255, 255, 255, 0.85);
@@ -90,36 +143,7 @@ td img {
   border-radius: 5px;
 }
 
-button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin: 2px;
-  font-weight: bold;
-}
-
-button[onclick*="edit"] {
-  background-color: #2980b9;
-  color: white;
-}
-
-button[onclick*="delete"] {
-  background-color: #c0392b;
-  color: white;
-}
-
-button[type="submit"] {
-  background-color: #27ae60;
-  color: white;
-}
-
-.btn {
-  background-color: #3d9970;
-  color: white;
-  font-weight: bold;
-}
-
+/* === FORMS === */
 form {
   background-color: rgba(255, 255, 255, 0.85);
   padding: 20px;
@@ -136,7 +160,7 @@ form select {
   width: 100%;
 }
 
-/* Messages visiteurs */
+/* === MESSAGES VISITEURS === */
 .list-group-item {
   background-color: rgba(255, 255, 255, 0.85);
   margin-bottom: 10px;
@@ -145,15 +169,16 @@ form select {
   border-left: 6px solid #3d9970;
 }
 
-/* Stock Cards */
+/* === STOCK CARDS === */
 #adminStockContainer .card {
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 10px;
   padding: 10px;
   margin: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* === FOOTER === */
 footer {
   text-align: center;
   padding: 20px;
@@ -163,6 +188,46 @@ footer {
   margin-top: 30px;
   font-size: 14px;
 }
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.4rem;
+  }
+
+  main {
+    padding: 20px;
+  }
+
+  th, td {
+    font-size: 0.95rem;
+    padding: 8px;
+  }
+
+  button,
+  .logout-btn {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header h1 {
+    text-align: left;
+    font-size: 1.2rem;
+    margin-top: 10px;
+  }
+
+  table {
+    min-width: 100%;
+  }
+}
+
 
   
   
