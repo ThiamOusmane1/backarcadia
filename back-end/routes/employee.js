@@ -52,6 +52,9 @@ router.post('/food', authenticateToken, authorizeRoles('employee'), async (req, 
       employeeId: employee_id
     });
 
+    const now = new Date();
+    const time = now.toLocaleTimeString('fr-FR', { hour12: false });
+
     // Création du log dans food_consumption
     await FoodConsumption.create({
       id: uuidv4(),
