@@ -75,9 +75,9 @@ const startServer = async () => {
         await sequelize.sync(); 
         console.log('Base de données synchronisée.');
 
-        app.listen(port, '0.0.0.0', () => {
-            console.log(`Serveur démarré sur le port ${port}`);
-        });
+        //app.listen(port, '0.0.0.0', () => {
+       //     console.log(`Serveur démarré sur le port ${port}`);
+       // });
     } catch (error) {
         console.error('Erreur lors du démarrage du serveur :', error);
     }
