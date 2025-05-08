@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiUrl = 'https://backarcadia.vercel.app';
+    const apiUrl = 'https://arcadia-zoo-vcms.onrender.com';
   
     // Déclenchement auto si ?habitat=... présent dans l'URL
     const urlParams = new URLSearchParams(window.location.search);

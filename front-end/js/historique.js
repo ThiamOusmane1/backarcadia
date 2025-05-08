@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const apiUrl = 'https://backarcadia.vercel.app'; // URL de l'API
+    const apiUrl = 'https://arcadia-zoo-vcms.onrender.com'; // URL de l'API
 
     // Fonction pour récupérer et afficher l'historique d'un animal
     async function fetchHistorique(animalId) {

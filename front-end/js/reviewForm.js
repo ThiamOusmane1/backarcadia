@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Script chargé et DOM prêt.");
 
-    const apiUrl = 'https://backarcadia.vercel.app';// URL de l'API
+    const apiUrl = 'https://arcadia-zoo-vcms.onrender.com';// URL de l'API
 
     const button = document.getElementById('leaveReviewBtn');
     const formSection = document.getElementById('reviewFormSection');

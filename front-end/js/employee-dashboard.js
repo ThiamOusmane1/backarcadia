@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiUrl = 'https://backarcadia.vercel.app';
+    const apiUrl = 'https://arcadia-zoo-vcms.onrender.com';
     const logoutBtn = document.getElementById('logoutBtn');
     let currentMessageId = null;
   

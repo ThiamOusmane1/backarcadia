@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => { 
-    const apiUrl = 'https://backarcadia.vercel.app';
+    const apiUrl = 'https://arcadia-zoo-vcms.onrender.com';
     
     fetch(`${apiUrl}/api/dashboard-data`, {
         method: 'GET',

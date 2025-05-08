@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiUrl = 'https://backarcadia.vercel.app';// URL de l'API
+    const apiUrl = 'https://arcadia-zoo-vcms.onrender.com';// URL de l'API
 
     // Gestion de la soumission du formulaire de login
     function handleLoginFormSubmit(event) {
