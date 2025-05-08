@@ -19,12 +19,12 @@ const port = process.env.PORT || 3000;
 
 //  Nouvelle configuration CORS 
 const corsOptions = {
-    origin: true, // Reflète automatiquement l'origine de la requête
+    origin: ['https://arcadia-front-tau.vercel.app', 'http://localhost:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
 };
-app.use(cors(corsOptions)); 
+app.use(cors(corsOptions)); // Utilisation de la configuration CORS
 
 
 // Middleware pour parser le body des requêtes
