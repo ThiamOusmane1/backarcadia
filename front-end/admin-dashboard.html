@@ -1,103 +1,98 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Zoo Arcadia</title>
-  <link rel="stylesheet" href="adminDashboard.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord Admin</title>
+  <link rel="stylesheet" href="adminDashboard.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <a href="index.html">
-      <img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo" />
-    </a>
-    <h1>Tableau de bord Admin</h1>
-    <button id="logoutBtn" class="logout-btn">Déconnexion</button>
-  </header>
+  <div class="container my-4">
+    <h1 class="mb-4">Tableau de bord Admin</h1>
 
-  <main class="container">
+    <button class="btn btn-danger float-end mb-3">Déconnexion</button>
+
     <!-- Utilisateurs -->
-    <section>
-      <h2>Utilisateurs</h2>
-      <button id="showAddUserForm">+ Ajouter un utilisateur</button>
-      <form id="addUserForm" class="hidden">
-        <input type="email" id="newUserEmail" placeholder="Email" required />
-        <select id="newUserRole" required>
-          <option value="employee">Employé</option>
-          <option value="vet">Vétérinaire</option>
-          <option value="admin">Administrateur</option>
-        </select>
-        <button type="submit">Ajouter</button>
-      </form>
-      <table id="userTable">
-        <thead>
-          <tr><th>ID</th><th>Email</th><th>Rôle</th><th>Actions</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <div id="editUserForm" class="modal hidden">
-        <form>
-          <input type="email" id="editUserEmail" required />
-          <select id="editUserRole">
-            <option value="employee">Employé</option>
-            <option value="vet">Vétérinaire</option>
-            <option value="admin">Administrateur</option>
-          </select>
-          <button type="submit">Enregistrer</button>
-        </form>
-      </div>
-    </section>
+    <h2>Utilisateurs</h2>
+    <table class="table table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody"></tbody>
+    </table>
 
     <!-- Animaux -->
-    <section>
-      <h2>Animaux</h2>
-      <button id="showAddAnimalForm">+ Ajouter un animal</button>
-      <form id="addAnimalForm" class="hidden">
-        <input type="text" id="newAnimalName" placeholder="Nom" required />
-        <input type="text" id="newAnimalHealth" placeholder="Santé" required />
-        <input type="number" id="newAnimalWeight" placeholder="Poids (kg)" required />
-        <input type="text" id="newAnimalFood" placeholder="Nourriture" required />
-        <input type="number" id="newAnimalQuantity" placeholder="Quantité" required />
-        <input type="text" id="newAnimalUrl" placeholder="Image (nom de fichier)" />
-        <button type="submit">Ajouter</button>
-      </form>
-      <table id="animalTable">
-        <thead>
-          <tr><th>ID</th><th>Image</th><th>Nom</th><th>Habitat</th><th>Santé</th><th>Poids</th><th>Nourriture</th><th>Quantité</th><th>Soins</th><th>Actions</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <div id="editAnimalForm" class="modal hidden">
-        <form>
-          <input type="text" id="editAnimalName" required />
-          <input type="text" id="editAnimalHealth" required />
-          <input type="number" id="editAnimalWeight" required />
-          <input type="text" id="editAnimalFood" required />
-          <button type="submit">Mettre à jour</button>
-          <button type="button" id="cancelEditAnimal">Annuler</button>
-        </form>
-      </div>
-    </section>
+    <h2>Animaux</h2>
+    <table class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Image</th>
+          <th>Nom</th>
+          <th>Habitat</th>
+          <th>Santé</th>
+          <th>Poids</th>
+          <th>Nourriture</th>
+          <th>Quantité</th>
+          <th>Soins</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="animalsTableBody"></tbody>
+    </table>
 
-    <section>
-      <h2>Messages des visiteurs</h2>
-      <div id="contactMessages"></div>
-    </section>
-    
-    <section>
-      <h2>Historique de nourriture</h2>
-      <div id="foodLogs"></div>
-    </section>
-    
-    <section>
-      <h2>Stock de nourriture</h2>
-      <div id="foodStock"></div>
-    </section>
+    <!-- Messages visiteurs -->
+    <h2>Messages des visiteurs</h2>
+    <table class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Email</th>
+          <th>Sujet</th>
+          <th>Message</th>
+          <th>Réponse</th>
+        </tr>
+      </thead>
+      <tbody id="messagesTableBody"></tbody>
+    </table>
 
-  </main>
+    <!-- Historique de nourriture -->
+    <h2>Historique de nourriture</h2>
+    <table class="table table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>Date</th>
+          <th>Heure</th>
+          <th>Animal</th>
+          <th>Employé</th>
+          <th>Nourriture</th>
+          <th>Quantité (kg)</th>
+        </tr>
+      </thead>
+      <tbody id="foodLogsTableBody"></tbody>
+    </table>
 
-  <script src="js/admin-dashboard.js"></script>
+    <!-- Stock de nourriture -->
+    <h2>Stock de nourriture</h2>
+    <table class="table table-sm">
+      <thead class="table-dark">
+        <tr>
+          <th>Nourriture</th>
+          <th>Quantité</th>
+          <th>Seuil</th>
+          <th>État</th>
+        </tr>
+      </thead>
+      <tbody id="stockTableBody"></tbody>
+    </table>
+  </div>
 
+  <script src="admin-dashboard.js"></script>
 </body>
 </html>
 
