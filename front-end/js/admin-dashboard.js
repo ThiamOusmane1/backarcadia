@@ -238,32 +238,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === Visiteurs, logs et stock ===
   function loadContactMessages() {
+    const tableBody = document.querySelector('#contactMessagesTable tbody');
     fetch(`${apiUrl}/api/employee/messages`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(messages => {
-        contact_messageContainer.innerHTML = '';
+        tableBody.innerHTML = '';
         messages.forEach(msg => {
-          const div = document.createElement('div');
-          div.classList.add('visitor-message');
-          div.innerHTML = `<strong>${msg.nom} (${msg.email}):</strong> ${msg.message}`;
-          contact_messageContainer.appendChild(div);
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${msg.nom}</td>
+            <td>${msg.email}</td>
+            <td>${msg.message}</td>
+          `;
+          tableBody.appendChild(row);
         });
       });
   }
+  
 
   function loadFoodLogs() {
+    const tableBody = document.querySelector('#foodLogsTable tbody');
     fetch(`${apiUrl}/api/employee/food-log`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(logs => {
-        foodLogsContainer.innerHTML = '';
+        tableBody.innerHTML = '';
         logs.forEach(log => {
-          const div = document.createElement('div');
-          div.textContent = `${log.date} ${log.time} - ${log.employee?.email} a donné ${log.quantite} kg de ${log.nourriture} à ${log.animal?.nom}`;
-          foodLogsContainer.appendChild(div);
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${log.date}</td>
+            <td>${log.time}</td>
+            <td>${log.employee?.email || 'Inconnu'}</td>
+            <td>${log.animal?.nom || 'Inconnu'}</td>
+            <td>${log.nourriture}</td>
+            <td>${log.quantite}</td>
+          `;
+          tableBody.appendChild(row);
         });
       })
       .catch(err => {
@@ -271,21 +284,27 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
   
+  
 
   function loadFoodStock() {
+    const tableBody = document.querySelector('#foodStockTable tbody');
     fetch(`${apiUrl}/api/employee/food-stock`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(stock => {
-        foodStockContainer.innerHTML = '';
+        tableBody.innerHTML = '';
         stock.forEach(item => {
-          const div = document.createElement('div');
-          div.textContent = `${item.nourriture}: ${item.quantite} kg`;
-          foodStockContainer.appendChild(div);
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${item.nourriture}</td>
+            <td>${item.quantite}</td>
+          `;
+          tableBody.appendChild(row);
         });
       });
   }
+  
 });
 
 
