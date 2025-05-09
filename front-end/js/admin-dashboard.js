@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentAnimalId = null;
 
   // Visiteurs, logs et stock
-  const visitorMessagesContainer = document.getElementById('visitorMessages');
+  const contact_messageContainer = document.getElementById('contactMessages');
   const foodLogsContainer = document.getElementById('foodLogs');
   const foodStockContainer = document.getElementById('foodStock');
 
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         loadUsers();
         loadAnimals();
-        loadVisitorMessages();
+        loadContactMessages();
         loadFoodLogs();
         loadFoodStock();
       }
@@ -237,18 +237,18 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // === Visiteurs, logs et stock ===
-  function loadVisitorMessages() {
+  function loadContactMessages() {
     fetch(`${apiUrl}/api/employee/messages`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(messages => {
-        visitorMessagesContainer.innerHTML = '';
+        contact_messageContainer.innerHTML = '';
         messages.forEach(msg => {
           const div = document.createElement('div');
           div.classList.add('visitor-message');
           div.innerHTML = `<strong>${msg.nom} (${msg.email}):</strong> ${msg.message}`;
-          visitorMessagesContainer.appendChild(div);
+          contact_messageContainer.appendChild(div);
         });
       });
   }

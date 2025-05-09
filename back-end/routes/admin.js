@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User, Animal, Habitat, UserLog } = require('../config/mysqlConnection');
+const { User, Animal, Habitat, UserLog, Employee, FoodStock, ContactMessage, FoodConsumption } = require('../config/mysqlConnection');
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 // Ajouter un utilisateur
@@ -142,6 +142,45 @@ router.get('/user_logs', authenticateToken, authorizeRoles('admin'), async (req,
         res.status(500).json({ message: 'Erreur serveur.' });
     }
 });
+
+// Route : Récupération des logs de nourriture
+router.get('/food-logs', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+    try {
+      const logs = await FoodConsumption.findAll({
+        include: [
+          { model: Animal, attributes: ['nom'] },
+          { model: Employee, attributes: ['nom'] }
+        ],
+        order: [['date', 'DESC'], ['time', 'DESC']]
+      });
+      res.json(logs);
+    } catch (err) {
+      console.error("Erreur récupération des logs :", err);
+      res.status(500).json({ message: "Erreur serveur" });
+    }
+  });
+  
+  // Route : Récupération des messages visiteurs
+  router.get('/visitor-messages', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+    try {
+      const messages = await ContactMessage.findAll({ order: [['createdAt', 'DESC']] });
+      res.json(messages);
+    } catch (err) {
+      console.error("Erreur récupération messages :", err);
+      res.status(500).json({ message: "Erreur serveur" });
+    }
+  });
+  
+  // Route : Récupération du stock
+  router.get('/food-stock', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+    try {
+      const stock = await FoodStock.findAll();
+      res.json(stock);
+    } catch (err) {
+      console.error("Erreur récupération stock :", err);
+      res.status(500).json({ message: "Erreur serveur" });
+    }
+  });
 
 module.exports = router;
 
