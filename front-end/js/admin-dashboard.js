@@ -1,3 +1,5 @@
+// admin-dashboard.js
+
 document.addEventListener('DOMContentLoaded', () => {
   const apiUrl = 'https://arcadia-zoo-vcms.onrender.com';
   const token = localStorage.getItem('authToken');
@@ -27,6 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelEditAnimalBtn = document.getElementById('cancelEditAnimal');
   let currentAnimalId = null;
 
+  const editAnimalQuantity = document.getElementById('editAnimalQuantity');
+  const editAnimalSoins = document.getElementById('editAnimalSoins');
+  const editAnimalConsultations = document.getElementById('editAnimalConsultations');
+  const editAnimalImage = document.getElementById('editAnimalImage');
+  const editAnimalHabitat = document.getElementById('editAnimalHabitat');
+  const editAnimalVet = document.getElementById('editAnimalVet');
+  const editAnimalIsDeleted = document.getElementById('editAnimalIsDeleted');
+  const animalPreviewImage = document.getElementById('animalPreviewImage');
+
   // Visiteurs, logs et stock
   const contact_messageContainer = document.getElementById('contactMessages');
   const foodLogsContainer = document.getElementById('foodLogs');
@@ -53,6 +64,29 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('authToken');
     window.location.href = 'index.html';
   });
+
+  function populateSelectOptions(selectId, options, selectedValue) {
+    const select = document.getElementById(selectId);
+    select.innerHTML = '';
+    options.forEach(option => {
+      const opt = document.createElement('option');
+      opt.value = option.id;
+      opt.textContent = option.nom;
+      if (selectedValue && option.id === selectedValue) {
+        opt.selected = true;
+      }
+      select.appendChild(opt);
+    });
+  }
+
+  function updateImagePreview(url) {
+    if (url) {
+      animalPreviewImage.src = `pictures/${url}`;
+      animalPreviewImage.style.display = 'block';
+    } else {
+      animalPreviewImage.style.display = 'none';
+    }
+  }
 
   // === UTILISATEURS ===
   function loadUsers() {
@@ -156,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <td>${animal.quantite}</td>
             <td>${animal.soins || '-'}</td>
             <td>
-              <button onclick="editAnimal('${animal.id}', '${animal.nom}', '${animal.sante}', ${animal.poids}, '${animal.nourriture}')">Modifier</button>
+              <button onclick="editAnimal('${animal.id}')">Modifier</button>
               <button onclick="deleteAnimal('${animal.id}')">Supprimer</button>
             </td>
           `;
@@ -169,54 +203,61 @@ document.addEventListener('DOMContentLoaded', () => {
     addAnimalForm.classList.toggle('hidden');
   });
 
-  addAnimalForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const data = {
-      nom: document.getElementById('newAnimalName').value,
-      sante: document.getElementById('newAnimalHealth').value,
-      poids: parseFloat(document.getElementById('newAnimalWeight').value),
-      nourriture: document.getElementById('newAnimalFood').value,
-      quantite: parseFloat(document.getElementById('newAnimalQuantity').value),
-      url: document.getElementById('newAnimalUrl').value
-    };
-
-    fetch(`${apiUrl}/api/admin/animals`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(data)
-    }).then(() => {
-      addAnimalForm.reset();
-      addAnimalForm.classList.add('hidden');
-      loadAnimals();
-    });
-  });
-
-  window.editAnimal = function (id, nom, sante, poids, nourriture) {
+  window.editAnimal = function (id) {
     currentAnimalId = id;
-    editAnimalName.value = nom;
-    editAnimalHealth.value = sante;
-    editAnimalWeight.value = poids;
-    editAnimalFood.value = nourriture;
-    editAnimalModal.classList.remove('hidden');
+    const habitatOptions = [
+      { id: '66d362ccd3c7dc07f59ad8fb', nom: 'Savane' },
+      { id: '66d362ccd3c7dc07f59ad8fc', nom: 'Jungle' },
+      { id: '66d362ccd3c7dc07f59ad8fd', nom: 'Marais' }
+    ];
+    const vetOptions = [
+      { id: 'veterinaire@zoo.com', nom: 'veterinaire@zoo.com' }
+    ];
+
+    fetch(`${apiUrl}/api/admin/animals/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(animal => {
+        editAnimalName.value = animal.nom;
+        editAnimalHealth.value = animal.sante;
+        editAnimalWeight.value = animal.poids;
+        editAnimalFood.value = animal.nourriture;
+        editAnimalQuantity.value = animal.quantite || 0;
+        editAnimalSoins.value = animal.soins || '';
+        editAnimalConsultations.value = animal.consultations || 0;
+        editAnimalImage.value = animal.url || '';
+        editAnimalIsDeleted.checked = animal.isDeleted === 1;
+        populateSelectOptions("editAnimalHabitat", habitatOptions, animal.habitat_id);
+        populateSelectOptions("editAnimalVet", vetOptions, animal.vet_id);
+        updateImagePreview(animal.url);
+        editAnimalModal.classList.remove('hidden');
+      });
   };
 
   editAnimalForm?.addEventListener('submit', (e) => {
     e.preventDefault();
+    const updatedAnimal = {
+      nom: editAnimalName.value,
+      sante: editAnimalHealth.value,
+      poids: parseFloat(editAnimalWeight.value),
+      nourriture: editAnimalFood.value,
+      quantite: parseFloat(editAnimalQuantity.value),
+      soins: editAnimalSoins.value,
+      consultations: parseInt(editAnimalConsultations.value),
+      url: editAnimalImage.value,
+      habitat_id: editAnimalHabitat.value,
+      vet_id: editAnimalVet.value || null,
+      isDeleted: editAnimalIsDeleted.checked ? 1 : 0
+    };
+
     fetch(`${apiUrl}/api/admin/animals/${currentAnimalId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({
-        nom: editAnimalName.value,
-        sante: editAnimalHealth.value,
-        poids: parseFloat(editAnimalWeight.value),
-        nourriture: editAnimalFood.value
-      })
+      body: JSON.stringify(updatedAnimal)
     }).then(() => {
       editAnimalModal.classList.add('hidden');
       loadAnimals();
@@ -225,6 +266,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   cancelEditAnimalBtn?.addEventListener('click', () => {
     editAnimalModal.classList.add('hidden');
+  });
+
+  editAnimalImage.addEventListener('input', (e) => {
+    updateImagePreview(e.target.value);
   });
 
   window.deleteAnimal = function (id) {
@@ -236,7 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // === Visiteurs, logs et stock ===
   function loadContactMessages() {
     const tableBody = document.querySelector('#contactMessagesTable tbody');
     fetch(`${apiUrl}/api/employee/messages`, {
@@ -256,7 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
   }
-  
 
   function loadFoodLogs() {
     const tableBody = document.querySelector('#foodLogsTable tbody');
@@ -278,13 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
           `;
           tableBody.appendChild(row);
         });
-      })
-      .catch(err => {
-        console.error("Erreur chargement des logs employés :", err);
       });
   }
-  
-  
 
   function loadFoodStock() {
     const tableBody = document.querySelector('#foodStockTable tbody');
@@ -304,8 +342,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
   }
-  
+
 });
+
 
 
   

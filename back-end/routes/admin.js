@@ -2,6 +2,17 @@ const express = require('express');
 const router = express.Router();
 const { User, Animal, Habitat, UserLog, Employee, FoodStock, ContactMessage, FoodConsumption } = require('../config/mysqlConnection');
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
+const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt');
+
+// Transporteur Nodemailer
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
+    }
+});
 
 // Ajouter un utilisateur
 router.post('/users', authenticateToken, authorizeRoles('admin'), async (req, res) => {
@@ -12,11 +23,36 @@ router.post('/users', authenticateToken, authorizeRoles('admin'), async (req, re
         const exists = await User.findOne({ where: { email } });
         if (exists) return res.status(409).json({ message: 'Utilisateur déjà existant.' });
 
-        const bcrypt = require('bcrypt');
-        const hashedPassword = await bcrypt.hash('password', 10);
+        const generatedPassword = Math.random().toString(36).slice(-10);
+        const hashedPassword = await bcrypt.hash(generatedPassword, 10);
 
-        const newUser = await User.create({ email, role, password: hashedPassword, isDeleted: false });
-        res.status(201).json({ message: 'Utilisateur créé.', user: newUser });
+        const newUser = await User.create({
+            email,
+            role,
+            password: hashedPassword,
+            isDeleted: false
+        });
+
+        try {
+            await transporter.sendMail({
+                from: process.env.GMAIL_USER,
+                to: email,
+                subject: 'Bienvenue - Vos identifiants',
+                text: `Bonjour,\n\nVotre compte a été créé avec succès.\nVoici votre mot de passe temporaire : ${generatedPassword}\nMerci de le changer après votre première connexion.\n\nCordialement,\nL'équipe Zoo`
+            });
+        } catch (mailErr) {
+            console.error("Erreur d'envoi de l'email :", mailErr);
+            return res.status(500).json({ message: "Utilisateur créé mais l'e-mail n'a pas pu être envoyé." });
+        }
+
+        res.status(201).json({
+            message: 'Utilisateur créé et email envoyé.',
+            user: {
+                id: newUser.id,
+                email: newUser.email,
+                role: newUser.role
+            }
+        });
     } catch (error) {
         console.error('Erreur création utilisateur:', error);
         res.status(500).json({ message: 'Erreur serveur.' });
@@ -158,10 +194,10 @@ router.get('/food-logs', authenticateToken, authorizeRoles('admin'), async (req,
       console.error("Erreur récupération des logs :", err);
       res.status(500).json({ message: "Erreur serveur" });
     }
-  });
-  
-  // Route : Récupération des messages visiteurs
-  router.get('/visitor-messages', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+});
+
+// Route : Récupération des messages visiteurs
+router.get('/visitor-messages', authenticateToken, authorizeRoles('admin'), async (req, res) => {
     try {
       const messages = await ContactMessage.findAll({ order: [['createdAt', 'DESC']] });
       res.json(messages);
@@ -169,10 +205,10 @@ router.get('/food-logs', authenticateToken, authorizeRoles('admin'), async (req,
       console.error("Erreur récupération messages :", err);
       res.status(500).json({ message: "Erreur serveur" });
     }
-  });
-  
-  // Route : Récupération du stock
-  router.get('/food-stock', authenticateToken, authorizeRoles('admin'), async (req, res) => {
+});
+
+// Route : Récupération du stock
+router.get('/food-stock', authenticateToken, authorizeRoles('admin'), async (req, res) => {
     try {
       const stock = await FoodStock.findAll();
       res.json(stock);
@@ -180,7 +216,7 @@ router.get('/food-logs', authenticateToken, authorizeRoles('admin'), async (req,
       console.error("Erreur récupération stock :", err);
       res.status(500).json({ message: "Erreur serveur" });
     }
-  });
+});
 
 module.exports = router;
 

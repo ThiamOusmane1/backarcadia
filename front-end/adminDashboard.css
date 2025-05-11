@@ -1,230 +1,185 @@
-/* === GLOBAL === */
+
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: url('pictures/Jungle.jpg') no-repeat center center fixed;
   background-size: cover;
-  min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #084a1e;
+  padding: 1rem;
+  min-height: 100vh;
   overflow-x: hidden;
-  position: relative;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3); /* dark overlay */
-  z-index: -1;
-}
-
-/* === HEADER === */
+/* ========== HEADER ========== */
 header {
-  background: linear-gradient(to right, rgba(85, 107, 47, 0.4), rgba(143, 188, 143, 0.4));
-  padding: 10px 20px;
+  background-color: rgba(85, 107, 47, 0.85);
+  padding: 1rem;
+  border-radius: 10px;
   display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   align-items: center;
-  justify-content: space-between;
-  border-bottom: 4px solid #3b5323;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 header .logo {
-  height: 50px;
+  height: 40px;
 }
 
 header h1 {
-  font-size: 1.8rem;
   color: #fff;
-  flex-grow: 1;
-  text-align: center;
+  font-size: 1.2rem;
 }
 
-/* === BUTTONS === */
-button,
 .logout-btn {
-  padding: 6px 12px;
+  background-color: #d9534f;
+  color: #fff;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
+  font-size: 0.9rem;
   cursor: pointer;
-  margin: 2px;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-button:focus,
-.logout-btn:focus {
-  outline: 2px solid #ffdc00;
-  outline-offset: 2px;
-}
-
-.logout-btn {
-  background-color: #ff4136;
-  color: white;
-  border-radius: 8px;
-}
-
-.logout-btn:hover {
-  background-color: #e03429;
-}
-
-button[onclick*="edit"] {
-  background-color: #2980b9;
-  color: white;
-}
-
-button[onclick*="delete"] {
-  background-color: #c0392b;
-  color: white;
-}
-
-button[type="submit"] {
-  background-color: #27ae60;
-  color: white;
-}
-
-.btn {
-  background-color: #3d9970;
-  color: white;
-  font-weight: bold;
-}
-
-/* === MAIN === */
-main {
-  padding: 30px;
-  background-color: rgba(255, 255, 255, 0.7);
+/* ========== MAIN CONTAINER ========== */
+main.container {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 1rem;
   border-radius: 10px;
-  margin: 20px auto 0 auto;
-  max-width: 1200px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  margin-top: 1rem;
 }
 
-/* Section Titles */
-h2 {
-  margin-bottom: 20px;
-  font-size: 1.6rem;
-  color: #006400;
+/* ========== SECTIONS ========== */
+section {
+  margin-bottom: 2rem;
 }
 
-/* === TABLES === */
-.table-responsive {
-  overflow-x: auto;
-  background-color: rgba(255, 255, 255, 0.85);
-  border-radius: 10px;
-  margin-bottom: 30px;
+section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #2e5f2e;
 }
 
+/* ========== FORMS ========== */
+form {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+input,
+select,
+textarea,
+button {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #4cae4c;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ========== TABLES ========== */
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px;
+  margin-top: 1rem;
+  overflow-x: auto;
+  display: block;
 }
 
 th, td {
-  padding: 12px;
-  text-align: left;
   border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: left;
+  font-size: 0.9rem;
 }
 
 th {
-  background-color: #3d9970;
-  color: white;
+  background-color: #eee;
 }
 
-td img {
-  max-width: 80px;
-  height: auto;
-  border-radius: 5px;
-}
-
-/* === FORMS === */
-form {
-  background-color: rgba(255, 255, 255, 0.85);
-  padding: 20px;
+/* ========== MODAL ========== */
+.modal {
+  background-color: rgba(255, 255, 255, 0.98);
+  padding: 1rem;
+  border: 2px solid #ccc;
   border-radius: 10px;
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
-form input,
-form select {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-  width: 100%;
+.modal img {
+  max-width: 100%;
+  margin-top: 0.5rem;
 }
 
-/* === MESSAGES VISITEURS === */
-.list-group-item {
-  background-color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 10px;
-  padding: 15px;
-  border-radius: 10px;
-  border-left: 6px solid #3d9970;
+/* ========== FORM BUTTONS GROUP ========== */
+.form-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
-/* === STOCK CARDS === */
-#adminStockContainer .card {
-  background-color: rgba(255, 255, 255, 0.85);
-  border-radius: 10px;
-  padding: 10px;
-  margin: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* === FOOTER === */
-footer {
-  text-align: center;
-  padding: 20px;
-  color: #fff;
-  background: linear-gradient(to right, rgba(59, 83, 35, 0.8), rgba(85, 107, 47, 0.8));
-  border-top: 4px solid #3b5323;
-  margin-top: 30px;
-  font-size: 14px;
-}
-
-/* === RESPONSIVE DESIGN === */
-@media (max-width: 768px) {
-  header h1 {
-    font-size: 1.4rem;
-  }
-
-  main {
-    padding: 20px;
-  }
-
-  th, td {
-    font-size: 0.95rem;
-    padding: 8px;
-  }
-
-  button,
-  .logout-btn {
-    padding: 5px 10px;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
+/* ========== RESPONSIVE (TABLET & DESKTOP) ========== */
+@media (min-width: 768px) {
   header {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
   }
 
   header h1 {
-    text-align: left;
-    font-size: 1.2rem;
-    margin-top: 10px;
+    font-size: 1.5rem;
+  }
+
+  .logout-btn {
+    font-size: 1rem;
+  }
+
+  form {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  form input,
+  form select,
+  form textarea {
+    flex: 1 1 200px;
+  }
+
+  .modal form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .form-buttons {
+    grid-column: span 2;
+    justify-content: flex-start;
   }
 
   table {
-    min-width: 100%;
+    display: table;
   }
 }
 

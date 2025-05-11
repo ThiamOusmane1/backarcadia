@@ -27,11 +27,16 @@
           <option value="vet">Vétérinaire</option>
           <option value="admin">Administrateur</option>
         </select>
+        <select id="newUserStatus">
+          <option value="active">Actif</option>
+          <option value="inactive">Inactif</option>
+        </select>
+        <label><input type="checkbox" id="newUserIsDeleted" /> Supprimé</label>
         <button type="submit">Ajouter</button>
       </form>
       <table id="userTable">
         <thead>
-          <tr><th>ID</th><th>Email</th><th>Rôle</th><th>Actions</th></tr>
+          <tr><th>ID</th><th>Email</th><th>Rôle</th><th>Status</th><th>Supprimé</th><th>Actions</th></tr>
         </thead>
         <tbody></tbody>
       </table>
@@ -43,6 +48,11 @@
             <option value="vet">Vétérinaire</option>
             <option value="admin">Administrateur</option>
           </select>
+          <select id="editUserStatus">
+            <option value="active">Actif</option>
+            <option value="inactive">Inactif</option>
+          </select>
+          <label><input type="checkbox" id="editUserIsDeleted" /> Supprimé</label>
           <button type="submit">Enregistrer</button>
         </form>
       </div>
@@ -52,31 +62,79 @@
     <section>
       <h2>Animaux</h2>
       <button id="showAddAnimalForm">+ Ajouter un animal</button>
-      <form id="addAnimalForm" class="hidden">
-        <input type="text" id="newAnimalName" placeholder="Nom" required />
-        <input type="text" id="newAnimalHealth" placeholder="Santé" required />
-        <input type="number" id="newAnimalWeight" placeholder="Poids (kg)" required />
-        <input type="text" id="newAnimalFood" placeholder="Nourriture" required />
-        <input type="number" id="newAnimalQuantity" placeholder="Quantité" required />
-        <input type="text" id="newAnimalUrl" placeholder="Image (nom de fichier)" />
-        <button type="submit">Ajouter</button>
+      <form id="editAnimalForm" class="hidden">
+        <input type="text" id="editAnimalName">
+        <input type="text" id="editAnimalHealth">
+        <input type="number" id="editAnimalWeight">
+        <input type="text" id="editAnimalFood">
+        <input type="number" id="editAnimalQuantity">
+        <input type="text" id="editAnimalSoins">
+        <input type="number" id="editAnimalConsultations">
+        <input type="text" id="editAnimalImage">
+        <select id="editAnimalHabitat"></select>
+        <select id="editAnimalVet"></select>
+        <input type="checkbox" id="editAnimalIsDeleted">
+        <img id="animalPreviewImage" style="display:none; max-height:100px;">
+        <button type="submit">Sauvegarder</button>
+        <button type="button" id="cancelEditAnimal">Annuler</button>
       </form>
+      
       <table id="animalTable">
         <thead>
           <tr><th>ID</th><th>Image</th><th>Nom</th><th>Habitat</th><th>Santé</th><th>Poids</th><th>Nourriture</th><th>Quantité</th><th>Soins</th><th>Actions</th></tr>
         </thead>
         <tbody></tbody>
       </table>
+
       <div id="editAnimalForm" class="modal hidden">
-        <form>
+        <form id="animalEditForm">
+          <h2>Modifier un animal</h2>
+      
+          <label for="editAnimalName">Nom :</label>
           <input type="text" id="editAnimalName" required />
+      
+          <label for="editAnimalHealth">Santé :</label>
           <input type="text" id="editAnimalHealth" required />
-          <input type="number" id="editAnimalWeight" required />
+      
+          <label for="editAnimalWeight">Poids (kg) :</label>
+          <input type="number" id="editAnimalWeight" step="0.1" required />
+      
+          <label for="editAnimalFood">Nourriture :</label>
           <input type="text" id="editAnimalFood" required />
-          <button type="submit">Mettre à jour</button>
-          <button type="button" id="cancelEditAnimal">Annuler</button>
+      
+          <label for="editAnimalQuantity">Quantité de nourriture :</label>
+          <input type="number" id="editAnimalQuantity" required />
+      
+          <label for="editAnimalSoins">Soins :</label>
+          <textarea id="editAnimalSoins"></textarea>
+      
+          <label for="editAnimalConsultations">Consultations :</label>
+          <input type="number" id="editAnimalConsultations" required />
+      
+          <label for="editAnimalImage">Nom de l'image :</label>
+          <input type="text" id="editAnimalImage" placeholder="ex: Lion.jpg" required />
+          <img id="animalPreviewImage" src="" alt="Aperçu" style="max-width: 200px; display: none;" />
+      
+          <label for="editAnimalHabitat">Habitat :</label>
+          <select id="editAnimalHabitat" required></select>
+      
+          <label for="editAnimalVet">Vétérinaire :</label>
+          <select id="editAnimalVet">
+            <option value="">Aucun</option>
+          </select>
+      
+          <label>
+            <input type="checkbox" id="editAnimalIsDeleted" />
+            Marquer comme supprimé
+          </label>
+      
+          <div class="form-buttons">
+            <button type="submit">Mettre à jour</button>
+            <button type="button" id="cancelEditAnimal">Annuler</button>
+          </div>
         </form>
       </div>
+      
     </section>
 
     <section>

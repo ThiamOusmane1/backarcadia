@@ -1,5 +1,5 @@
 {
-  "name": "back-arcadia",
+  "name": "backarcadia",
   "version": "1.0.0",
   "description": "Back-end for Zoo Arcadia",
   "main": "app.js",
@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.0.0",
     "mysql2": "^3.11.4",
+    "nodemailer": "^7.0.3",
     "sequelize": "^6.37.5",
     "uuid": "^10.0.0"
   },

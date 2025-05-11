@@ -19,7 +19,7 @@ const port = process.env.PORT || 3000;
 
 //  Nouvelle configuration CORS 
 const corsOptions = {
-    origin: ['https://arcadia-front-tau.vercel.app', 'http://localhost:3000'],
+    origin: ['https://arcadia-front-tau.vercel.app', 'http://localhost:3000', 'http://127.0.0.1:5500'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
