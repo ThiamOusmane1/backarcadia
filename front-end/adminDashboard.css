@@ -1,187 +1,147 @@
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+/* Body */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: url('pictures/Jungle.jpg') no-repeat center center fixed;
   background-size: cover;
-  color: #084a1e;
-  padding: 1rem;
   min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ========== HEADER ========== */
-header {
-  background-color: rgba(85, 107, 47, 0.85);
-  padding: 1rem;
-  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
-  text-align: center;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  color: #289321;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
-header .logo {
-  height: 40px;
+/* Header */
+header {
+  background: linear-gradient(to right, rgba(85, 107, 47, 0.3), rgba(143, 188, 143, 0.3));
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 4px solid #3b5323;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 header h1 {
+  font-size: 2rem;
+  font-weight: bold;
   color: #fff;
-  font-size: 1.2rem;
 }
 
-.logout-btn {
-  background-color: #d9534f;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-/* ========== MAIN CONTAINER ========== */
-main.container {
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 1rem;
+/* Main */
+main {
+  flex: 1;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 10px;
-  margin-top: 1rem;
+  margin: 20px auto;
+  max-width: 1400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* ========== SECTIONS ========== */
-section {
-  margin-bottom: 2rem;
-}
-
-section h2 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  color: #2e5f2e;
-}
-
-/* ========== FORMS ========== */
-form {
-  margin-top: 1rem;
+/* Cards */
+.dashboard-cards {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
 }
 
-input,
-select,
-textarea,
-button {
-  padding: 0.5rem;
+.card {
+  flex: 1 1 calc(33% - 20px);
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  transition: 0.3s ease;
+  text-align: center;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.card h3 {
+  color: #069d01;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.card p {
   font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  color: #333;
 }
 
-button {
-  background-color: #5cb85c;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #4cae4c;
-}
-
-.hidden {
-  display: none;
-}
-
-/* ========== TABLES ========== */
-table {
+/* Tables */
+.admin-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
-  overflow-x: auto;
-  display: block;
-}
-
-th, td {
-  border: 1px solid #ccc;
-  padding: 0.5rem;
-  text-align: left;
-  font-size: 0.9rem;
-}
-
-th {
-  background-color: #eee;
-}
-
-/* ========== MODAL ========== */
-.modal {
-  background-color: rgba(255, 255, 255, 0.98);
-  padding: 1rem;
-  border: 2px solid #ccc;
+  margin-top: 30px;
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
-  margin-top: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.modal img {
-  max-width: 100%;
-  margin-top: 0.5rem;
+.admin-table th, .admin-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
-/* ========== FORM BUTTONS GROUP ========== */
-.form-buttons {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
+.admin-table th {
+  background-color: #3b5323;
+  color: white;
 }
 
-/* ========== RESPONSIVE (TABLET & DESKTOP) ========== */
-@media (min-width: 768px) {
-  header {
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: left;
+.admin-table tr:hover {
+  background-color: rgba(0, 100, 0, 0.1);
+}
+
+/* Buttons */
+.btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #388e3c;
+}
+
+/* Footer */
+footer {
+  background: linear-gradient(to right, rgba(59, 83, 35, 0.8), rgba(85, 107, 47, 0.8));
+  color: blanchedalmond;
+  text-align: center;
+  padding: 15px;
+  margin-top: auto;
+  border-top: 4px solid #556b2f;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-cards {
+      flex-direction: column;
   }
 
-  header h1 {
-    font-size: 1.5rem;
+  .card {
+      flex: 1 1 100%;
   }
 
-  .logout-btn {
-    font-size: 1rem;
-  }
-
-  form {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  form input,
-  form select,
-  form textarea {
-    flex: 1 1 200px;
-  }
-
-  .modal form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-  }
-
-  .form-buttons {
-    grid-column: span 2;
-    justify-content: flex-start;
-  }
-
-  table {
-    display: table;
+  main {
+      padding: 20px;
   }
 }
+
 
 
   

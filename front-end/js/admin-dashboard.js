@@ -1,10 +1,15 @@
-// admin-dashboard.js
-
 document.addEventListener('DOMContentLoaded', () => {
   const apiUrl = 'https://arcadia-zoo-vcms.onrender.com';
   const token = localStorage.getItem('authToken');
 
   const logoutBtn = document.getElementById('logoutBtn');
+
+  // Onglets Bootstrap (liens)
+  const userTabLink = document.querySelector('a[href="#tab-users"]');
+  const animalTabLink = document.querySelector('a[href="#tab-animals"]');
+  const contactTabLink = document.querySelector('a[href="#tab-contact"]');
+  const foodLogTabLink = document.querySelector('a[href="#tab-food-logs"]');
+  const foodStockTabLink = document.querySelector('a[href="#tab-food-stock"]');
 
   // Utilisateurs
   const showAddUserFormBtn = document.getElementById('showAddUserForm');
@@ -42,6 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const contact_messageContainer = document.getElementById('contactMessages');
   const foodLogsContainer = document.getElementById('foodLogs');
   const foodStockContainer = document.getElementById('foodStock');
+
+  // Fonction pour activer un onglet Bootstrap 5
+  function showTab(tabLink) {
+    const tab = new bootstrap.Tab(tabLink);
+    tab.show();
+  }
 
   fetch(`${apiUrl}/api/auth/getUserRole`, {
     headers: { Authorization: `Bearer ${token}` }
@@ -98,21 +109,25 @@ document.addEventListener('DOMContentLoaded', () => {
         userTableBody.innerHTML = '';
         users.forEach(user => {
           const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${user.id}</td>
-            <td>${user.email}</td>
-            <td>${user.role}</td>
-            <td>
-              <button onclick="editUser('${user.id}', '${user.email}', '${user.role}')">Modifier</button>
-              <button onclick="deleteUser('${user.id}')">Supprimer</button>
-            </td>
-          `;
+          row.innerHTML =
+            `<td>${user.id}</td>
+             <td>${user.email}</td>
+             <td>${user.role}</td>
+             <td>${user.status}</td>
+             <td>
+               <button onclick="editUser('${user.id}', '${user.email}', '${user.role}')">Modifier</button>
+               <button onclick="deleteUser('${user.id}')">Supprimer</button>
+             </td>`;
           userTableBody.appendChild(row);
         });
       });
   }
 
   showAddUserFormBtn.addEventListener('click', () => {
+    // Afficher l'onglet utilisateurs
+    showTab(userTabLink);
+
+    // Afficher / masquer le formulaire d'ajout utilisateur
     addUserForm.classList.toggle('hidden');
   });
 
@@ -139,6 +154,11 @@ document.addEventListener('DOMContentLoaded', () => {
     currentUserId = id;
     editUserEmail.value = email;
     editUserRole.value = role;
+
+    // Afficher l'onglet utilisateurs
+    showTab(userTabLink);
+
+    // Afficher le formulaire d'édition
     editUserFormModal.classList.remove('hidden');
   };
 
@@ -179,32 +199,39 @@ document.addEventListener('DOMContentLoaded', () => {
         animalTableBody.innerHTML = '';
         animals.forEach(animal => {
           const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${animal.id}</td>
-            <td><img src="pictures/${animal.url}" alt="${animal.nom}" class="img-fluid" /></td>
-            <td>${animal.nom}</td>
-            <td>${animal.habitat?.nom || 'Inconnu'}</td>
-            <td>${animal.sante}</td>
-            <td>${animal.poids} kg</td>
-            <td>${animal.nourriture}</td>
-            <td>${animal.quantite}</td>
-            <td>${animal.soins || '-'}</td>
-            <td>
-              <button onclick="editAnimal('${animal.id}')">Modifier</button>
-              <button onclick="deleteAnimal('${animal.id}')">Supprimer</button>
-            </td>
-          `;
+          row.innerHTML =
+            `<td>${animal.id}</td>
+             <td><img src="pictures/${animal.url}" alt="${animal.nom}" class="img-fluid" /></td>
+             <td>${animal.nom}</td>
+             <td>${animal.habitat?.nom || 'Inconnu'}</td>
+             <td>${animal.sante}</td>
+             <td>${animal.poids} kg</td>
+             <td>${animal.nourriture}</td>
+             <td>${animal.quantite}</td>
+             <td>${animal.soins || '-'}</td>
+             <td>
+               <button onclick="editAnimal('${animal.id}')">Modifier</button>
+               <button onclick="deleteAnimal('${animal.id}')">Supprimer</button>
+             </td>`;
           animalTableBody.appendChild(row);
         });
       });
   }
 
   showAddAnimalFormBtn.addEventListener('click', () => {
+    // Afficher l'onglet animaux
+    showTab(animalTabLink);
+
+    // Afficher / masquer formulaire ajout animal
     addAnimalForm.classList.toggle('hidden');
   });
 
   window.editAnimal = function (id) {
     currentAnimalId = id;
+
+    // Afficher l'onglet animaux
+    showTab(animalTabLink);
+
     const habitatOptions = [
       { id: '66d362ccd3c7dc07f59ad8fb', nom: 'Savane' },
       { id: '66d362ccd3c7dc07f59ad8fc', nom: 'Jungle' },
@@ -281,6 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // === MESSAGES CONTACT ===
   function loadContactMessages() {
     const tableBody = document.querySelector('#contactMessagesTable tbody');
     fetch(`${apiUrl}/api/employee/messages`, {
@@ -291,16 +319,16 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.innerHTML = '';
         messages.forEach(msg => {
           const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${msg.nom}</td>
-            <td>${msg.email}</td>
-            <td>${msg.message}</td>
-          `;
+          row.innerHTML =
+            `<td>${msg.nom}</td>
+             <td>${msg.email}</td>
+             <td>${msg.message}</td>`;
           tableBody.appendChild(row);
         });
       });
   }
 
+  // === LOGS NOURRITURE ===
   function loadFoodLogs() {
     const tableBody = document.querySelector('#foodLogsTable tbody');
     fetch(`${apiUrl}/api/employee/food-log`, {
@@ -311,19 +339,19 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.innerHTML = '';
         logs.forEach(log => {
           const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${log.date}</td>
-            <td>${log.time}</td>
-            <td>${log.employee?.email || 'Inconnu'}</td>
-            <td>${log.animal?.nom || 'Inconnu'}</td>
-            <td>${log.nourriture}</td>
-            <td>${log.quantite}</td>
-          `;
+          row.innerHTML =
+            `<td>${log.date}</td>
+             <td>${log.time}</td>
+             <td>${log.employee?.email || 'Inconnu'}</td>
+             <td>${log.animal?.nom || 'Inconnu'}</td>
+             <td>${log.nourriture}</td>
+             <td>${log.quantite}</td>`;
           tableBody.appendChild(row);
         });
       });
   }
 
+  // === STOCK NOURRITURE ===
   function loadFoodStock() {
     const tableBody = document.querySelector('#foodStockTable tbody');
     fetch(`${apiUrl}/api/employee/food-stock`, {
@@ -334,18 +362,12 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.innerHTML = '';
         stock.forEach(item => {
           const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${item.nourriture}</td>
-            <td>${item.quantite}</td>
-          `;
+          row.innerHTML =
+            `<td>${item.nourriture}</td>
+             <td>${item.quantite}</td>`;
           tableBody.appendChild(row);
         });
       });
   }
 
 });
-
-
-
-  
-  

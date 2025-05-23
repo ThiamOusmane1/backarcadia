@@ -4,177 +4,212 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin - Zoo Arcadia</title>
-  <link rel="stylesheet" href="adminDashboard.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
+  <header class="d-flex align-items-center justify-content-between p-3 border-bottom">
     <a href="index.html">
       <img src="pictures/logo.png" alt="logo-Zoo-Arcadia" class="logo" />
     </a>
-    <h1>Tableau de bord Admin</h1>
-    <button id="logoutBtn" class="logout-btn">Déconnexion</button>
+    <h1 class="m-0">Tableau de bord Admin</h1>
+    <button id="logoutBtn" class="logout-btn btn btn-outline-danger">Déconnexion</button>
   </header>
 
-  <main class="container">
-    <!-- Utilisateurs -->
-    <section>
-      <h2>Utilisateurs</h2>
-      <button id="showAddUserForm">+ Ajouter un utilisateur</button>
-      <form id="addUserForm" class="hidden">
-        <input type="email" id="newUserEmail" placeholder="Email" required />
-        <select id="newUserRole" required>
-          <option value="employee">Employé</option>
-          <option value="vet">Vétérinaire</option>
-          <option value="admin">Administrateur</option>
-        </select>
-        <select id="newUserStatus">
-          <option value="active">Actif</option>
-          <option value="inactive">Inactif</option>
-        </select>
-        <label><input type="checkbox" id="newUserIsDeleted" /> Supprimé</label>
-        <button type="submit">Ajouter</button>
-      </form>
-      <table id="userTable">
-        <thead>
-          <tr><th>ID</th><th>Email</th><th>Rôle</th><th>Status</th><th>Supprimé</th><th>Actions</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <div id="editUserForm" class="modal hidden">
-        <form>
-          <input type="email" id="editUserEmail" required />
-          <select id="editUserRole">
-            <option value="employee">Employé</option>
-            <option value="vet">Vétérinaire</option>
-            <option value="admin">Administrateur</option>
-          </select>
-          <select id="editUserStatus">
-            <option value="active">Actif</option>
-            <option value="inactive">Inactif</option>
-          </select>
-          <label><input type="checkbox" id="editUserIsDeleted" /> Supprimé</label>
-          <button type="submit">Enregistrer</button>
-        </form>
-      </div>
-    </section>
+  <main class="container mt-4">
 
-    <!-- Animaux -->
-    <section>
-      <h2>Animaux</h2>
-      <button id="showAddAnimalForm">+ Ajouter un animal</button>
-      <form id="editAnimalForm" class="hidden">
-        <input type="text" id="editAnimalName">
-        <input type="text" id="editAnimalHealth">
-        <input type="number" id="editAnimalWeight">
-        <input type="text" id="editAnimalFood">
-        <input type="number" id="editAnimalQuantity">
-        <input type="text" id="editAnimalSoins">
-        <input type="number" id="editAnimalConsultations">
-        <input type="text" id="editAnimalImage">
-        <select id="editAnimalHabitat"></select>
-        <select id="editAnimalVet"></select>
-        <input type="checkbox" id="editAnimalIsDeleted">
-        <img id="animalPreviewImage" style="display:none; max-height:100px;">
-        <button type="submit">Sauvegarder</button>
-        <button type="button" id="cancelEditAnimal">Annuler</button>
-      </form>
-      
-      <table id="animalTable">
-        <thead>
-          <tr><th>ID</th><th>Image</th><th>Nom</th><th>Habitat</th><th>Santé</th><th>Poids</th><th>Nourriture</th><th>Quantité</th><th>Soins</th><th>Actions</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="users-tab" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">Utilisateurs</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="animals-tab" data-toggle="tab" href="#animals" role="tab" aria-controls="animals" aria-selected="false">Animaux</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Messages des visiteurs</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="foodlogs-tab" data-toggle="tab" href="#foodlogs" role="tab" aria-controls="foodlogs" aria-selected="false">Historique de nourriture</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="stock-tab" data-toggle="tab" href="#stock" role="tab" aria-controls="stock" aria-selected="false">Stock de nourriture</a>
+      </li>
+    </ul>
 
-      <div id="editAnimalForm" class="modal hidden">
-        <form id="animalEditForm">
-          <h2>Modifier un animal</h2>
-      
-          <label for="editAnimalName">Nom :</label>
-          <input type="text" id="editAnimalName" required />
-      
-          <label for="editAnimalHealth">Santé :</label>
-          <input type="text" id="editAnimalHealth" required />
-      
-          <label for="editAnimalWeight">Poids (kg) :</label>
-          <input type="number" id="editAnimalWeight" step="0.1" required />
-      
-          <label for="editAnimalFood">Nourriture :</label>
-          <input type="text" id="editAnimalFood" required />
-      
-          <label for="editAnimalQuantity">Quantité de nourriture :</label>
-          <input type="number" id="editAnimalQuantity" required />
-      
-          <label for="editAnimalSoins">Soins :</label>
-          <textarea id="editAnimalSoins"></textarea>
-      
-          <label for="editAnimalConsultations">Consultations :</label>
-          <input type="number" id="editAnimalConsultations" required />
-      
-          <label for="editAnimalImage">Nom de l'image :</label>
-          <input type="text" id="editAnimalImage" placeholder="ex: Lion.jpg" required />
-          <img id="animalPreviewImage" src="" alt="Aperçu" style="max-width: 200px; display: none;" />
-      
-          <label for="editAnimalHabitat">Habitat :</label>
-          <select id="editAnimalHabitat" required></select>
-      
-          <label for="editAnimalVet">Vétérinaire :</label>
-          <select id="editAnimalVet">
-            <option value="">Aucun</option>
-          </select>
-      
-          <label>
-            <input type="checkbox" id="editAnimalIsDeleted" />
-            Marquer comme supprimé
-          </label>
-      
-          <div class="form-buttons">
-            <button type="submit">Mettre à jour</button>
-            <button type="button" id="cancelEditAnimal">Annuler</button>
+    <!-- Tab panes -->
+    <div class="tab-content mt-3" id="adminTabsContent">
+
+      <!-- Utilisateurs -->
+      <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+        <section>
+          <h2>Utilisateurs</h2>
+          <button id="showAddUserForm" class="btn btn-primary mb-2">+ Ajouter un utilisateur</button>
+          <form id="addUserForm" class="hidden mb-3">
+            <input type="email" id="newUserEmail" placeholder="Email" required class="form-control mb-2" />
+            <select id="newUserRole" required class="form-control mb-2">
+              <option value="employee">Employé</option>
+              <option value="vet">Vétérinaire</option>
+              <option value="admin">Administrateur</option>
+            </select>
+            <select id="newUserStatus" class="form-control mb-2">
+              <option value="active">Actif</option>
+              <option value="inactive">Inactif</option>
+            </select>
+            <label class="mb-2"><input type="checkbox" id="newUserIsDeleted" /> Supprimé</label><br/>
+            <button type="submit" class="btn btn-success">Ajouter</button>
+          </form>
+          <table id="userTable" class="table table-bordered table-striped">
+            <thead>
+              <tr><th>ID</th><th>Email</th><th>Rôle</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div id="editUserForm" class="modal hidden">
+            <form>
+              <input type="email" id="editUserEmail" required class="form-control mb-2" />
+              <select id="editUserRole" class="form-control mb-2">
+                <option value="employee">Employé</option>
+                <option value="vet">Vétérinaire</option>
+                <option value="admin">Administrateur</option>
+              </select>
+              <select id="editUserStatus" class="form-control mb-2">
+                <option value="active">Actif</option>
+                <option value="inactive">Inactif</option>
+              </select>
+              <label><input type="checkbox" id="editUserIsDeleted" /> Supprimé</label>
+              <button type="submit" class="btn btn-primary mt-2">Enregistrer</button>
+            </form>
           </div>
-        </form>
+        </section>
       </div>
-      
-    </section>
 
-    <section>
-      <h2>Messages des visiteurs</h2>
-      <table id="contactMessagesTable">
-        <thead>
-          <tr><th>Nom</th><th>Email</th><th>Message</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
-    
-    <section>
-      <h2>Historique de nourriture</h2>
-      <table id="foodLogsTable">
-        <thead>
-          <tr><th>Date</th><th>Heure</th><th>Employé</th><th>Animal</th><th>Nourriture</th><th>Quantité (kg)</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
-    
-    <section>
-      <h2>Stock de nourriture</h2>
-      <table id="foodStockTable">
-        <thead>
-          <tr><th>Nourriture</th><th>Quantité (kg)</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
-    
+      <!-- Animaux -->
+      <div class="tab-pane fade" id="animals" role="tabpanel" aria-labelledby="animals-tab">
+        <section>
+          <h2>Animaux</h2>
+          <button id="showAddAnimalForm" class="btn btn-primary mb-2">+ Ajouter un animal</button>
+          <form id="editAnimalForm" class="hidden mb-3">
+            <input type="text" id="editAnimalName" class="form-control mb-2" placeholder="Nom" />
+            <input type="text" id="editAnimalHealth" class="form-control mb-2" placeholder="Santé" />
+            <input type="number" id="editAnimalWeight" class="form-control mb-2" placeholder="Poids" />
+            <input type="text" id="editAnimalFood" class="form-control mb-2" placeholder="Nourriture" />
+            <input type="number" id="editAnimalQuantity" class="form-control mb-2" placeholder="Quantité" />
+            <input type="text" id="editAnimalSoins" class="form-control mb-2" placeholder="Soins" />
+            <input type="number" id="editAnimalConsultations" class="form-control mb-2" placeholder="Consultations" />
+            <input type="text" id="editAnimalImage" class="form-control mb-2" placeholder="Nom de l'image" />
+            <select id="editAnimalHabitat" class="form-control mb-2"></select>
+            <select id="editAnimalVet" class="form-control mb-2"></select>
+            <label><input type="checkbox" id="editAnimalIsDeleted" /> Marquer comme supprimé</label><br/>
+            <img id="animalPreviewImage" style="display:none; max-height:100px;" alt="Aperçu" />
+            <button type="submit" class="btn btn-success">Sauvegarder</button>
+            <button type="button" id="cancelEditAnimal" class="btn btn-secondary">Annuler</button>
+          </form>
+
+          <table id="animalTable" class="table table-bordered table-striped">
+            <thead>
+              <tr><th>ID</th><th>Image</th><th>Nom</th><th>Habitat</th><th>Santé</th><th>Poids</th><th>Nourriture</th><th>Quantité</th><th>Soins</th><th>Actions</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <div id="editAnimalForm" class="modal hidden">
+            <form id="animalEditForm">
+              <h2>Modifier un animal</h2>
+
+              <label for="editAnimalName">Nom :</label>
+              <input type="text" id="editAnimalName" required class="form-control mb-2" />
+
+              <label for="editAnimalHealth">Santé :</label>
+              <input type="text" id="editAnimalHealth" required class="form-control mb-2" />
+
+              <label for="editAnimalWeight">Poids (kg) :</label>
+              <input type="number" id="editAnimalWeight" step="0.1" required class="form-control mb-2" />
+
+              <label for="editAnimalFood">Nourriture :</label>
+              <input type="text" id="editAnimalFood" required class="form-control mb-2" />
+
+              <label for="editAnimalQuantity">Quantité de nourriture :</label>
+              <input type="number" id="editAnimalQuantity" required class="form-control mb-2" />
+
+              <label for="editAnimalSoins">Soins :</label>
+              <textarea id="editAnimalSoins" class="form-control mb-2"></textarea>
+
+              <label for="editAnimalConsultations">Consultations :</label>
+              <input type="number" id="editAnimalConsultations" required class="form-control mb-2" />
+
+              <label for="editAnimalImage">Nom de l'image :</label>
+              <input type="text" id="editAnimalImage" placeholder="ex: Lion.jpg" required class="form-control mb-2" />
+              <img id="animalPreviewImage" src="" alt="Aperçu" style="max-width: 200px; display: none;" />
+
+              <label for="editAnimalHabitat">Habitat :</label>
+              <select id="editAnimalHabitat" required class="form-control mb-2"></select>
+
+              <label for="editAnimalVet">Vétérinaire :</label>
+              <select id="editAnimalVet" class="form-control mb-2">
+                <option value="">Aucun</option>
+              </select>
+
+              <label>
+                <input type="checkbox" id="editAnimalIsDeleted" />
+                Marquer comme supprimé
+              </label>
+
+              <div class="form-buttons mt-2">
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                <button type="button" id="cancelEditAnimal" class="btn btn-secondary">Annuler</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+
+      <!-- Messages des visiteurs -->
+      <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+        <section>
+          <h2>Messages des visiteurs</h2>
+          <table id="contactMessagesTable" class="table table-bordered table-striped">
+            <thead>
+              <tr><th>Nom</th><th>Email</th><th>Message</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+      </div>
+
+      <!-- Historique de nourriture -->
+      <div class="tab-pane fade" id="foodlogs" role="tabpanel" aria-labelledby="foodlogs-tab">
+        <section>
+          <h2>Historique de nourriture</h2>
+          <table id="foodLogsTable" class="table table-bordered table-striped">
+            <thead>
+              <tr><th>Date</th><th>Heure</th><th>Employé</th><th>Animal</th><th>Nourriture</th><th>Quantité (kg)</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+      </div>
+
+      <!-- Stock de nourriture -->
+      <div class="tab-pane fade" id="stock" role="tabpanel" aria-labelledby="stock-tab">
+        <section>
+          <h2>Stock de nourriture</h2>
+          <table id="foodStockTable" class="table table-bordered table-striped">
+            <thead>
+              <tr><th>Nourriture</th><th>Quantité (kg)</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+      </div>
+
+    </div>
 
   </main>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="js/admin-dashboard.js"></script>
 
 </body>
 </html>
-
-
-
-
