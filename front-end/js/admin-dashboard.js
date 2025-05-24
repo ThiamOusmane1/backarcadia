@@ -43,12 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const editAnimalIsDeleted = document.getElementById('editAnimalIsDeleted');
   const animalPreviewImage = document.getElementById('animalPreviewImage');
 
-  // Visiteurs, logs et stock
   const contact_messageContainer = document.getElementById('contactMessages');
   const foodLogsContainer = document.getElementById('foodLogs');
   const foodStockContainer = document.getElementById('foodStock');
 
-  // Fonction pour activer un onglet Bootstrap 5
   function showTab(tabLink) {
     const tab = new bootstrap.Tab(tabLink);
     tab.show();
@@ -99,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // === UTILISATEURS ===
   function loadUsers() {
     fetch(`${apiUrl}/api/admin/users`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -115,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
              <td>${user.role}</td>
              <td>${user.status}</td>
              <td>
-               <button onclick="editUser('${user.id}', '${user.email}', '${user.role}')">Modifier</button>
-               <button onclick="deleteUser('${user.id}')">Supprimer</button>
+               <button class="btn btn-sm btn-primary me-1" onclick="editUser('${user.id}', '${user.email}', '${user.role}')">Modifier</button>
+               <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.id}')">Supprimer</button>
              </td>`;
           userTableBody.appendChild(row);
         });
@@ -124,10 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   showAddUserFormBtn.addEventListener('click', () => {
-    // Afficher l'onglet utilisateurs
     showTab(userTabLink);
-
-    // Afficher / masquer le formulaire d'ajout utilisateur
     addUserForm.classList.toggle('hidden');
   });
 
@@ -154,11 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentUserId = id;
     editUserEmail.value = email;
     editUserRole.value = role;
-
-    // Afficher l'onglet utilisateurs
     showTab(userTabLink);
-
-    // Afficher le formulaire d'édition
     editUserFormModal.classList.remove('hidden');
   };
 
@@ -189,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // === ANIMAUX ===
   function loadAnimals() {
     fetch(`${apiUrl}/api/admin/animals`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -210,8 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
              <td>${animal.quantite}</td>
              <td>${animal.soins || '-'}</td>
              <td>
-               <button onclick="editAnimal('${animal.id}')">Modifier</button>
-               <button onclick="deleteAnimal('${animal.id}')">Supprimer</button>
+               <button class="btn btn-sm btn-primary me-1" onclick="editAnimal('${animal.id}')">Modifier</button>
+               <button class="btn btn-sm btn-danger" onclick="deleteAnimal('${animal.id}')">Supprimer</button>
              </td>`;
           animalTableBody.appendChild(row);
         });
@@ -219,10 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   showAddAnimalFormBtn.addEventListener('click', () => {
-    // Afficher l'onglet animaux
     showTab(animalTabLink);
-
-    // Afficher / masquer formulaire ajout animal
     addAnimalForm.classList.toggle('hidden');
   });
 
