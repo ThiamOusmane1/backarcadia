@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const logoutBtn = document.getElementById('logoutBtn');
 
-  // Onglets Bootstrap (liens)
+  // Onglets Bootstrap
   const userTabLink = document.querySelector('a[href="#tab-users"]');
   const animalTabLink = document.querySelector('a[href="#tab-animals"]');
   const contactTabLink = document.querySelector('a[href="#tab-contact"]');
@@ -47,9 +47,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const foodLogsContainer = document.getElementById('foodLogs');
   const foodStockContainer = document.getElementById('foodStock');
 
+  // Options vétérinaires (à adapter selon vos données)
+  const vetOptions = [
+    { id: '1', nom: 'Dr. Martin' },
+    { id: '2', nom: 'Dr. Dupont' }
+  ];
+
   function showTab(tabLink) {
-    const tab = new bootstrap.Tab(tabLink);
-    tab.show();
+    // Utiliser l'API Bootstrap native au lieu de jQuery
+    if (tabLink) {
+      const tab = new bootstrap.Tab(tabLink);
+      tab.show();
+    }
   }
 
   fetch(`${apiUrl}/api/auth/getUserRole`, {
@@ -67,15 +76,21 @@ document.addEventListener('DOMContentLoaded', () => {
         loadFoodLogs();
         loadFoodStock();
       }
+    })
+    .catch(error => {
+      console.error('Erreur:', error);
+      alert('Erreur de connexion');
+      window.location.href = 'index.html';
     });
 
-  logoutBtn.addEventListener('click', () => {
+  logoutBtn?.addEventListener('click', () => {
     localStorage.removeItem('authToken');
     window.location.href = 'index.html';
   });
 
   function populateSelectOptions(selectId, options, selectedValue) {
     const select = document.getElementById(selectId);
+    if (!select) return;
     select.innerHTML = '';
     options.forEach(option => {
       const opt = document.createElement('option');
@@ -89,11 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateImagePreview(url) {
-    if (url) {
-      animalPreviewImage.src = `pictures/${url}`;
-      animalPreviewImage.style.display = 'block';
-    } else {
-      animalPreviewImage.style.display = 'none';
+    if (animalPreviewImage) {
+      if (url) {
+        animalPreviewImage.src = `pictures/${url}`;
+        animalPreviewImage.style.display = 'block';
+      } else {
+        animalPreviewImage.style.display = 'none';
+      }
     }
   }
 
@@ -103,71 +120,85 @@ document.addEventListener('DOMContentLoaded', () => {
     })
       .then(res => res.json())
       .then(users => {
-        userTableBody.innerHTML = '';
-        users.forEach(user => {
-          const row = document.createElement('tr');
-          row.innerHTML =
-            `<td>${user.id}</td>
-             <td>${user.email}</td>
-             <td>${user.role}</td>
-             <td>${user.status}</td>
-             <td>
-               <button class="btn btn-sm btn-primary me-1" onclick="editUser('${user.id}', '${user.email}', '${user.role}')">Modifier</button>
-               <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.id}')">Supprimer</button>
-             </td>`;
-          userTableBody.appendChild(row);
-        });
-      });
+        if (userTableBody) {
+          userTableBody.innerHTML = '';
+          users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML =
+              `<td>${user.id}</td>
+               <td>${user.email}</td>
+               <td>${user.role}</td>
+               <td>${user.status}</td>
+               <td>
+                 <button class="btn btn-sm btn-primary me-1" onclick="editUser('${user.id}', '${user.email}', '${user.role}')">Modifier</button>
+                 <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.id}')">Supprimer</button>
+               </td>`;
+            userTableBody.appendChild(row);
+          });
+        }
+      })
+      .catch(error => console.error('Erreur chargement utilisateurs:', error));
   }
 
-  showAddUserFormBtn.addEventListener('click', () => {
+  showAddUserFormBtn?.addEventListener('click', () => {
     showTab(userTabLink);
-    addUserForm.classList.toggle('hidden');
+    if (addUserForm) {
+      addUserForm.classList.toggle('d-none');
+      addUserForm.reset();
+    }
   });
 
-  addUserForm.addEventListener('submit', (e) => {
+  addUserForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const email = document.getElementById('newUserEmail').value;
-    const role = document.getElementById('newUserRole').value;
+    const email = document.getElementById('newUserEmail')?.value;
+    const role = document.getElementById('newUserRole')?.value;
 
-    fetch(`${apiUrl}/api/admin/users`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ email, role })
-    }).then(() => {
-      addUserForm.reset();
-      addUserForm.classList.add('hidden');
-      loadUsers();
-    });
+    if (email && role) {
+      fetch(`${apiUrl}/api/admin/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ email, role })
+      }).then(() => {
+        addUserForm.reset();
+        addUserForm.classList.add('d-none');
+        alert('Utilisateur créé avec succès !');
+        loadUsers();
+      }).catch(error => console.error('Erreur création utilisateur:', error));
+    }
   });
 
   window.editUser = function (id, email, role) {
     currentUserId = id;
-    editUserEmail.value = email;
-    editUserRole.value = role;
-    showTab(userTabLink);
-    editUserFormModal.classList.remove('hidden');
+    if (editUserEmail && editUserRole && editUserFormModal) {
+      editUserEmail.value = email;
+      editUserRole.value = role;
+      showTab(userTabLink);
+      editUserFormModal.classList.remove('d-none');
+    }
   };
 
   editUserForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    fetch(`${apiUrl}/api/admin/users/${currentUserId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        email: editUserEmail.value,
-        role: editUserRole.value
-      })
-    }).then(() => {
-      editUserFormModal.classList.add('hidden');
-      loadUsers();
-    });
+    if (editUserEmail && editUserRole && currentUserId) {
+      fetch(`${apiUrl}/api/admin/users/${currentUserId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          email: editUserEmail.value,
+          role: editUserRole.value
+        })
+      }).then(() => {
+        editUserFormModal.classList.add('d-none');
+        alert('Utilisateur mis à jour avec succès !');
+        loadUsers();
+      }).catch(error => console.error('Erreur modification utilisateur:', error));
+    }
   });
 
   window.deleteUser = function (id) {
@@ -175,7 +206,8 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch(`${apiUrl}/api/admin/users/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
-      }).then(() => loadUsers());
+      }).then(() => loadUsers())
+        .catch(error => console.error('Erreur suppression utilisateur:', error));
     }
   };
 
@@ -185,37 +217,41 @@ document.addEventListener('DOMContentLoaded', () => {
     })
       .then(res => res.json())
       .then(animals => {
-        animalTableBody.innerHTML = '';
-        animals.forEach(animal => {
-          const row = document.createElement('tr');
-          row.innerHTML =
-            `<td>${animal.id}</td>
-             <td><img src="pictures/${animal.url}" alt="${animal.nom}" class="img-fluid" /></td>
-             <td>${animal.nom}</td>
-             <td>${animal.habitat?.nom || 'Inconnu'}</td>
-             <td>${animal.sante}</td>
-             <td>${animal.poids} kg</td>
-             <td>${animal.nourriture}</td>
-             <td>${animal.quantite}</td>
-             <td>${animal.soins || '-'}</td>
-             <td>
-               <button class="btn btn-sm btn-primary me-1" onclick="editAnimal('${animal.id}')">Modifier</button>
-               <button class="btn btn-sm btn-danger" onclick="deleteAnimal('${animal.id}')">Supprimer</button>
-             </td>`;
-          animalTableBody.appendChild(row);
-        });
-      });
+        if (animalTableBody) {
+          animalTableBody.innerHTML = '';
+          animals.forEach(animal => {
+            const row = document.createElement('tr');
+            row.innerHTML =
+              `<td>${animal.id}</td>
+               <td><img src="pictures/${animal.url}" alt="${animal.nom}" class="img-fluid" style="max-width: 50px;" /></td>
+               <td>${animal.nom}</td>
+               <td>${animal.habitat?.nom || 'Inconnu'}</td>
+               <td>${animal.sante}</td>
+               <td>${animal.poids} kg</td>
+               <td>${animal.nourriture}</td>
+               <td>${animal.quantite}</td>
+               <td>${animal.soins || '-'}</td>
+               <td>
+                 <button class="btn btn-sm btn-primary me-1" onclick="editAnimal('${animal.id}')">Modifier</button>
+                 <button class="btn btn-sm btn-danger" onclick="deleteAnimal('${animal.id}')">Supprimer</button>
+               </td>`;
+            animalTableBody.appendChild(row);
+          });
+        }
+      })
+      .catch(error => console.error('Erreur chargement animaux:', error));
   }
 
-  showAddAnimalFormBtn.addEventListener('click', () => {
+  showAddAnimalFormBtn?.addEventListener('click', () => {
     showTab(animalTabLink);
-    addAnimalForm.classList.toggle('hidden');
+    if (addAnimalForm) {
+      addAnimalForm.classList.toggle('d-none');
+      addAnimalForm.reset();
+    }
   });
 
   window.editAnimal = function (id) {
     currentAnimalId = id;
-
-    // Afficher l'onglet animaux
     showTab(animalTabLink);
 
     const habitatOptions = [
@@ -223,65 +259,79 @@ document.addEventListener('DOMContentLoaded', () => {
       { id: '66d362ccd3c7dc07f59ad8fc', nom: 'Jungle' },
       { id: '66d362ccd3c7dc07f59ad8fd', nom: 'Marais' }
     ];
-    const vetOptions = [
-      { id: 'veterinaire@zoo.com', nom: 'veterinaire@zoo.com' }
-    ];
 
     fetch(`${apiUrl}/api/admin/animals/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
       .then(animal => {
-        editAnimalName.value = animal.nom;
-        editAnimalHealth.value = animal.sante;
-        editAnimalWeight.value = animal.poids;
-        editAnimalFood.value = animal.nourriture;
-        editAnimalQuantity.value = animal.quantite || 0;
-        editAnimalSoins.value = animal.soins || '';
-        editAnimalConsultations.value = animal.consultations || 0;
-        editAnimalImage.value = animal.url || '';
-        editAnimalIsDeleted.checked = animal.isDeleted === 1;
-        populateSelectOptions("editAnimalHabitat", habitatOptions, animal.habitat_id);
-        populateSelectOptions("editAnimalVet", vetOptions, animal.vet_id);
-        updateImagePreview(animal.url);
-        editAnimalModal.classList.remove('hidden');
-      });
+        if (editAnimalName && editAnimalHealth && editAnimalWeight && editAnimalFood) {
+          editAnimalName.value = animal.nom;
+          editAnimalHealth.value = animal.sante;
+          editAnimalWeight.value = animal.poids;
+          editAnimalFood.value = animal.nourriture;
+          
+          if (editAnimalQuantity) editAnimalQuantity.value = animal.quantite || 0;
+          if (editAnimalSoins) editAnimalSoins.value = animal.soins || '';
+          if (editAnimalConsultations) editAnimalConsultations.value = animal.consultations || 0;
+          if (editAnimalImage) editAnimalImage.value = animal.url || '';
+          if (editAnimalIsDeleted) editAnimalIsDeleted.checked = animal.isDeleted === 1;
+          
+          populateSelectOptions("editAnimalHabitat", habitatOptions, animal.habitat_id);
+          populateSelectOptions("editAnimalVet", vetOptions, animal.vet_id);
+          updateImagePreview(animal.url);
+          
+          if (editAnimalModal) {
+            editAnimalModal.classList.remove('hidden');
+            editAnimalModal.classList.remove('d-none');
+          }
+        }
+      })
+      .catch(error => console.error('Erreur chargement animal:', error));
   };
 
   editAnimalForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const updatedAnimal = {
-      nom: editAnimalName.value,
-      sante: editAnimalHealth.value,
-      poids: parseFloat(editAnimalWeight.value),
-      nourriture: editAnimalFood.value,
-      quantite: parseFloat(editAnimalQuantity.value),
-      soins: editAnimalSoins.value,
-      consultations: parseInt(editAnimalConsultations.value),
-      url: editAnimalImage.value,
-      habitat_id: editAnimalHabitat.value,
-      vet_id: editAnimalVet.value || null,
-      isDeleted: editAnimalIsDeleted.checked ? 1 : 0
-    };
+    if (editAnimalName && editAnimalHealth && editAnimalWeight && editAnimalFood && currentAnimalId) {
+      const updatedAnimal = {
+        nom: editAnimalName.value,
+        sante: editAnimalHealth.value,
+        poids: parseFloat(editAnimalWeight.value),
+        nourriture: editAnimalFood.value,
+        quantite: parseFloat(editAnimalQuantity?.value || 0),
+        soins: editAnimalSoins?.value || '',
+        consultations: parseInt(editAnimalConsultations?.value || 0),
+        url: editAnimalImage?.value || '',
+        habitat_id: editAnimalHabitat?.value || null,
+        vet_id: editAnimalVet?.value || null,
+        isDeleted: editAnimalIsDeleted?.checked ? 1 : 0
+      };
 
-    fetch(`${apiUrl}/api/admin/animals/${currentAnimalId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(updatedAnimal)
-    }).then(() => {
-      editAnimalModal.classList.add('hidden');
-      loadAnimals();
-    });
+      fetch(`${apiUrl}/api/admin/animals/${currentAnimalId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(updatedAnimal)
+      }).then(() => {
+        if (editAnimalModal) {
+          editAnimalModal.classList.add('hidden');
+          editAnimalModal.classList.add('d-none');
+        }
+        loadAnimals();
+      }).catch(error => console.error('Erreur modification animal:', error));
+    }
   });
 
   cancelEditAnimalBtn?.addEventListener('click', () => {
-    editAnimalModal.classList.add('hidden');
+    if (editAnimalModal) {
+      editAnimalModal.classList.add('hidden');
+      editAnimalModal.classList.add('d-none');
+    }
   });
 
-  editAnimalImage.addEventListener('input', (e) => {
+  editAnimalImage?.addEventListener('input', (e) => {
     updateImagePreview(e.target.value);
   });
 
@@ -290,70 +340,75 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch(`${apiUrl}/api/admin/animals/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
-      }).then(() => loadAnimals());
+      }).then(() => loadAnimals())
+        .catch(error => console.error('Erreur suppression animal:', error));
     }
   };
 
-  // === MESSAGES CONTACT ===
   function loadContactMessages() {
     const tableBody = document.querySelector('#contactMessagesTable tbody');
-    fetch(`${apiUrl}/api/employee/messages`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => res.json())
-      .then(messages => {
-        tableBody.innerHTML = '';
-        messages.forEach(msg => {
-          const row = document.createElement('tr');
-          row.innerHTML =
-            `<td>${msg.nom}</td>
-             <td>${msg.email}</td>
-             <td>${msg.message}</td>`;
-          tableBody.appendChild(row);
-        });
-      });
+    if (tableBody) {
+      fetch(`${apiUrl}/api/employee/messages`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(messages => {
+          tableBody.innerHTML = '';
+          messages.forEach(msg => {
+            const row = document.createElement('tr');
+            row.innerHTML =
+               `<td>${msg.email}</td>
+               <td>${msg.message}</td>`;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Erreur chargement messages:', error));
+    }
   }
 
-  // === LOGS NOURRITURE ===
   function loadFoodLogs() {
     const tableBody = document.querySelector('#foodLogsTable tbody');
-    fetch(`${apiUrl}/api/employee/food-log`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => res.json())
-      .then(logs => {
-        tableBody.innerHTML = '';
-        logs.forEach(log => {
-          const row = document.createElement('tr');
-          row.innerHTML =
-            `<td>${log.date}</td>
-             <td>${log.time}</td>
-             <td>${log.employee?.email || 'Inconnu'}</td>
-             <td>${log.animal?.nom || 'Inconnu'}</td>
-             <td>${log.nourriture}</td>
-             <td>${log.quantite}</td>`;
-          tableBody.appendChild(row);
-        });
-      });
+    if (tableBody) {
+      fetch(`${apiUrl}/api/employee/food-log`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(logs => {
+          tableBody.innerHTML = '';
+          logs.forEach(log => {
+            const row = document.createElement('tr');
+            row.innerHTML =
+              `<td>${log.date}</td>
+               <td>${log.time}</td>
+               <td>${log.employee?.email || 'Inconnu'}</td>
+               <td>${log.animal?.nom || 'Inconnu'}</td>
+               <td>${log.nourriture}</td>
+               <td>${log.quantite}</td>`;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Erreur chargement logs:', error));
+    }
   }
 
-  // === STOCK NOURRITURE ===
   function loadFoodStock() {
     const tableBody = document.querySelector('#foodStockTable tbody');
-    fetch(`${apiUrl}/api/employee/food-stock`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => res.json())
-      .then(stock => {
-        tableBody.innerHTML = '';
-        stock.forEach(item => {
-          const row = document.createElement('tr');
-          row.innerHTML =
-            `<td>${item.nourriture}</td>
-             <td>${item.quantite}</td>`;
-          tableBody.appendChild(row);
-        });
-      });
+    if (tableBody) {
+      fetch(`${apiUrl}/api/employee/food-stock`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(stock => {
+          tableBody.innerHTML = '';
+          stock.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML =
+              `<td>${item.nourriture}</td>
+               <td>${item.quantite_stock}</td>`;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Erreur chargement stock:', error));
+    }
   }
-
 });
