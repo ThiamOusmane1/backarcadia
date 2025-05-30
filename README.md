@@ -138,14 +138,6 @@ MySQL (AlwaysData)
 | **Vétérinaire** | vet@arcadia-zoo.fr | vet123 | Rapports médicaux |
 | **Employé** | employee@arcadia-zoo.fr | emp123 | Gestion quotidienne |
 
-## 📊 Métriques du projet
-
-- **Lignes de code** : ~5,000 (Backend + Frontend)
-- **Endpoints API** : 25+ routes sécurisées
-- **Tables de base de données** : 8 tables relationnelles
-- **Temps de développement** : 3 mois
-- **Technologies maîtrisées** : 10+
-
 ## 🚀 Déploiement
 
 ### Production
