@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const data = await response.json(); // Récupérer les données JSON de la réponse
-            console.log('Historique de l\'animal:', data);
+           // console.log('Historique de l\'animal:', data);
 
             const modalBody = document.getElementById('modal-body');
             modalBody.innerHTML = ''; // Réinitialise la modale

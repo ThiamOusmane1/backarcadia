@@ -10,7 +10,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
 // Connexion
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log('Requête de connexion reçue :', { email });
+  //console.log('Requête de connexion reçue :', { email });
 
   try {
     const user = await User.findOne({ where: { email } });

@@ -84,7 +84,7 @@ UserLog.belongsTo(User, { as: 'user', foreignKey: 'user_id' })
 const connectMySQLDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log(' Connexion à la base de données MySQL réussie.');
+       // console.log(' Connexion à la base de données MySQL réussie.');
     } catch (error) {
         console.error(' Impossible de se connecter à la base de données :', error);
     }

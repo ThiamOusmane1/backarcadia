@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { User, Animal, Habitat, UserLog, Employee, FoodStock, ContactMessage, FoodConsumption } = require('../config/mysqlConnection');
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
+const { filterFields, isValidEmail, sanitizeUserData } = require('../utils/sanitize');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 
 // Transporteur Nodemailer
-const transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransporter({
     service: 'gmail',
     auth: {
         user: process.env.GMAIL_USER,
@@ -16,10 +17,16 @@ const transporter = nodemailer.createTransport({
 
 // Ajouter un utilisateur
 router.post('/users', authenticateToken, authorizeRoles('admin'), async (req, res) => {
-    const { email, role } = req.body;
-    if (!email || !role) return res.status(400).json({ message: 'Email et rôle requis.' });
-
     try {
+        // Validation et nettoyage des données
+        const validatedData = sanitizeUserData(req.body, {
+            allowedFields: ['email', 'role'],
+            required: ['email', 'role'],
+            allowedRoles: ['user', 'admin', 'veterinaire', 'employe']
+        });
+
+        const { email, role } = validatedData;
+
         const exists = await User.findOne({ where: { email } });
         if (exists) return res.status(409).json({ message: 'Utilisateur déjà existant.' });
 
@@ -55,6 +62,10 @@ router.post('/users', authenticateToken, authorizeRoles('admin'), async (req, re
         });
     } catch (error) {
         console.error('Erreur création utilisateur:', error);
+        // Retourne l'erreur de validation ou une erreur générique
+        if (error.message.includes('Email invalide') || error.message.includes('Champs manquants') || error.message.includes('rôle doit être')) {
+            return res.status(400).json({ message: error.message });
+        }
         res.status(500).json({ message: 'Erreur serveur.' });
     }
 });
@@ -77,7 +88,30 @@ router.put('/users/:id', authenticateToken, authorizeRoles('admin'), async (req,
         const user = await User.findByPk(id);
         if (!user || user.isDeleted) return res.status(404).json({ message: 'Utilisateur non trouvé.' });
 
-        await User.update(req.body, { where: { id } });
+        // Filtrage et validation des données
+        const allowedFields = ['email', 'role', 'password'];
+        const filteredBody = filterFields(req.body, allowedFields, {
+            sanitize: true
+        });
+
+        // Validations spécifiques
+        if (filteredBody.email && !isValidEmail(filteredBody.email)) {
+            return res.status(400).json({ message: 'Email invalide.' });
+        }
+
+        if (filteredBody.role && !['user', 'admin', 'vet', 'employee'].includes(filteredBody.role)) {
+            return res.status(400).json({ message: 'Rôle invalide.' });
+        }
+
+        // Hash du mot de passe si fourni
+        if (filteredBody.password) {
+            if (filteredBody.password.length < 8) {
+                return res.status(400).json({ message: 'Le mot de passe doit contenir au moins 8 caractères.' });
+            }
+            filteredBody.password = await bcrypt.hash(filteredBody.password, 10);
+        }
+
+        await User.update(filteredBody, { where: { id, isDeleted: false } });
         res.json({ message: 'Utilisateur mis à jour.' });
     } catch (error) {
         console.error("Erreur MAJ utilisateur:", error);
@@ -103,17 +137,35 @@ router.delete('/users/:id', authenticateToken, authorizeRoles('admin'), async (r
 
 // Ajouter un animal
 router.post('/animals', authenticateToken, authorizeRoles('admin'), async (req, res) => {
-    const { nom, habitat_id, sante, poids, nourriture, quantite, vet_id, url, soins } = req.body;
-    if (!nom || !habitat_id) return res.status(400).json({ message: 'Nom et habitat requis.' });
-
     try {
-        const newAnimal = await Animal.create({
-            nom, habitat_id, sante, poids, nourriture, quantite, vet_id, url, soins,
-            consultations: 0, isDeleted: false
+        // Filtrage des champs autorisés
+        const allowedFields = ['nom', 'habitat_id', 'sante', 'poids', 'nourriture', 'quantite', 'vet_id', 'url', 'soins'];
+        const filteredBody = filterFields(req.body, allowedFields, {
+            sanitize: true,
+            required: ['nom', 'habitat_id']
         });
+
+        // Validations spécifiques
+        if (filteredBody.poids && (isNaN(filteredBody.poids) || filteredBody.poids <= 0)) {
+            return res.status(400).json({ message: 'Le poids doit être un nombre positif.' });
+        }
+
+        if (filteredBody.quantite && (isNaN(filteredBody.quantite) || filteredBody.quantite < 0)) {
+            return res.status(400).json({ message: 'La quantité doit être un nombre positif ou nul.' });
+        }
+
+        const newAnimal = await Animal.create({
+            ...filteredBody,
+            consultations: 0,
+            isDeleted: false
+        });
+
         res.status(201).json(newAnimal);
-    } catch (err) {
-        console.error('Erreur création animal:', err);
+    } catch (error) {
+        console.error('Erreur création animal:', error);
+        if (error.message.includes('Champs manquants')) {
+            return res.status(400).json({ message: error.message });
+        }
         res.status(500).json({ message: 'Erreur serveur.' });
     }
 });
@@ -140,7 +192,22 @@ router.put('/animals/:id', authenticateToken, authorizeRoles('admin'), async (re
         const animal = await Animal.findByPk(id);
         if (!animal || animal.isDeleted) return res.status(404).json({ message: 'Animal non trouvé.' });
 
-        await Animal.update(req.body, { where: { id } });
+        // Filtrage des champs autorisés
+        const allowedFields = ['nom', 'habitat_id', 'sante', 'poids', 'nourriture', 'quantite', 'vet_id', 'url', 'soins'];
+        const filteredBody = filterFields(req.body, allowedFields, {
+            sanitize: true
+        });
+
+        // Validations spécifiques
+        if (filteredBody.poids && (isNaN(filteredBody.poids) || filteredBody.poids <= 0)) {
+            return res.status(400).json({ message: 'Le poids doit être un nombre positif.' });
+        }
+
+        if (filteredBody.quantite && (isNaN(filteredBody.quantite) || filteredBody.quantite < 0)) {
+            return res.status(400).json({ message: 'La quantité doit être un nombre positif ou nul.' });
+        }
+
+        await Animal.update(filteredBody, { where: { id, isDeleted: false } });
         res.json({ message: 'Animal mis à jour.' });
     } catch (error) {
         console.error('Erreur MAJ animal:', error);
@@ -219,9 +286,3 @@ router.get('/food-stock', authenticateToken, authorizeRoles('admin'), async (req
 });
 
 module.exports = router;
-
-
-
-
-
-

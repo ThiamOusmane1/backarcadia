@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ id: animalId })
       });
       const data = await response.json();
-      console.log('[Consultations] Nouvelle valeur :', data.consultations);
+      //console.log('[Consultations] Nouvelle valeur :', data.consultations);
     } catch (err) {
       console.error('Erreur mise à jour compteur:', err);
     }

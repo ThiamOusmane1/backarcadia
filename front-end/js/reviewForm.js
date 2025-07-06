@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("Script chargé et DOM prêt.");
+    //console.log("Script chargé et DOM prêt.");
 
     const apiUrl = 'https://arcadia-zoo-vcms.onrender.com';// URL de l'API
 

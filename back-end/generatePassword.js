@@ -12,7 +12,7 @@ const generateHashes = async () => {
             const hash = await bcrypt.hash(password, salt);
             
             // Afficher le mot de passe et son hachage
-            console.log(`Password: ${password}, Hash: ${hash}`);
+           // console.log(`Password: ${password}, Hash: ${hash}`);
         } catch (error) {
             console.error('Error generating hash:', error);
         }

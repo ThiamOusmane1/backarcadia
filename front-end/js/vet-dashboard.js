@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('[DEBUG] vet-dashboard.js chargé');
+ // console.log('[DEBUG] vet-dashboard.js chargé');
 
   const apiUrl = 'https://arcadia-zoo-vcms.onrender.com';
 
@@ -33,11 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('animalFood').value = animal.nourriture || '';
     document.getElementById('animalCare').value = animal.soins || '';
     editModal.classList.remove('hidden');
-    console.log('[DEBUG] Ouverture modale pour :', animal.nom);
+   // console.log('[DEBUG] Ouverture modale pour :', animal.nom);
   }
 
   function loadAnimals() {
-    console.log('[DEBUG] Envoi GET vers /api/vet/animals');
+   // console.log('[DEBUG] Envoi GET vers /api/vet/animals');
     showStatusMessage('Chargement des animaux...');
 
     fetch(`${apiUrl}/api/vet/animals`, {
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(response => {
       const animals = response.animals;
-      console.log('[DEBUG] Données API :', animals);
+     // console.log('[DEBUG] Données API :', animals);
 
       if (!Array.isArray(animals)) return;
 
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   // historique
 	function openHistoriqueModal(animalId) {
-    console.log('[DEBUG] Récupération historique pour animal ID :', animalId);
+    //console.log('[DEBUG] Récupération historique pour animal ID :', animalId);
   
     fetch(`${apiUrl}/api/vet/historique/${animalId}`, {
       headers: {

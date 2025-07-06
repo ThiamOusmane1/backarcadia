@@ -22,7 +22,7 @@ const updateDB = async () => {
       }
     );
 
-    console.log('Historique mis à jour avec succès pour tous les animaux.');
+   // console.log('Historique mis à jour avec succès pour tous les animaux.');
   } catch (err) {
     console.error('Erreur lors de la mise à jour de la base de données:', err);
   } finally {

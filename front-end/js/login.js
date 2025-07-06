@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        console.log("Formulaire soumis avec", { email, password }); // Ajout d'un message de débogage
+       // console.log("Formulaire soumis avec", { email, password }); // Ajout d'un message de débogage
 
         // Requête pour se connecter et recevoir un token JWT
         fetch(`${apiUrl}/api/auth/login`, {
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             // Stocker le token JWT dans le localStorage
             localStorage.setItem('authToken', data.token);
-            console.log("Token JWT reçu:", data.token); // Ajout d'un message de débogage
+            //console.log("Token JWT reçu:", data.token); // Ajout d'un message de débogage
 
             // demander le rôle de l'utilisateur avec le token
             return fetch(`${apiUrl}/api/auth/getUserRole`, {
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json(); // Convertit la réponse en JSON
         })
         .then(data => {
-            console.log("Rôle de l'utilisateur récupéré:", data.role); // Ajout d'un message de débogage
+            //console.log("Rôle de l'utilisateur récupéré:", data.role); // Ajout d'un message de débogage
 
             // Rediriger l'utilisateur vers la page appropriée en fonction de son rôle
             if (data.role === 'vet') {
